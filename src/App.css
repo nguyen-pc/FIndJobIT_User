@@ -1,42 +1,665 @@
+
+
+/* Giữ nguyên các kiểu cơ bản từ file cũ */
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
 }
 
 .logo {
-  height: 6em;
+  height: 2em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
 
 .card {
-  padding: 2em;
+  padding: 1em;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0.5em;
+  text-align: center;
+  position: relative;
 }
 
-.read-the-docs {
-  color: #888;
+/* Thêm kiểu mới cho header */
+.header {
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
 }
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 1rem;
+}
+
+.header-top .logo {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #1C9EAF;
+  margin-right: 0rem;
+}
+
+.header-top .nav-select {
+  padding: 0.5em 1em;
+  font-size: 1em;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffffff;
+  cursor: pointer;
+  color: #2c3e50;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%232c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.5em center;
+  width: 150px;
+  text-decoration: none;
+}
+
+.header-top .nav-select:hover {
+  background-color: #f0f4f8;
+  color: #1ad510;
+  text-decoration: underline;
+  text-decoration-color: #0acb20;
+}
+
+.header-top .nav-select:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.header-top .filters11 {
+  display: flex;
+  gap: 1rem;
+}
+
+.header-top .filters11 select {
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 4px;
+  background-color: #f4f1f100;
+  cursor: pointer;
+  font-size: 1.0em;
+  color: #333;
+  text-decoration: none;
+}
+
+.header-top .filters11 select:hover {
+  background-color: #f0f4f8;
+  color: #0fd83b;
+  text-decoration: underline;
+  text-decoration-color: #07ea48;
+}
+
+.header-top .filters11 select:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.header-top .user-button {
+  background-color: #3498db;
+  color: white;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-top .user-button:hover {
+  background-color: #2980b9;
+}
+
+.header-search {
+  background-image: url("../src/assets/picture/nen.jpg");
+  background-size: cover;
+  border-radius: 21px;
+  padding: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, #ffffff 0%, #f0f4f8 100%);
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 70%;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-bar:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: 0.5em;
+  font-size: 1.1em;
+  flex-grow: 1;
+  color: #333;
+  background: transparent;
+}
+
+.search-bar input::placeholder {
+  color: #7f8c8d;
+}
+
+.search-bar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5em;
+  color: #3498db;
+  padding: 0 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.search-bar button:hover {
+  color: #2980b9;
+}
+
+.filter-toggle {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.filter-toggle:hover {
+  background-color: #1C9EAF;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filters select {
+  padding: 0.5em;
+  border: none;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #333;
+  text-decoration: none;
+}
+
+.filters select:hover {
+  background-color: #f0f4f8;
+  color: #2980b9;
+  text-decoration: underline;
+  text-decoration-color: #1C9EAF;
+}
+
+.filters select:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.filters button {
+  padding: 0.5em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #e74c3c;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.filters button:hover {
+  background-color: #c0392b;
+}
+
+/* Các kiểu khác cho main và footer (giữ nguyên từ trước) */
+.featured-section {
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.featured-section h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 0 1rem;
+  max-width: 100%;
+}
+
+.company-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 1em;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.company-card h3 {
+  margin: 0.5em 0;
+  color: #2c3e50;
+  font-size: 1.2em;
+}
+
+.company-card p {
+  margin: 0.2em 0;
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+.company-card::before {
+  content: '❤️';
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  color: #e74c3c;
+  font-size: 1.2em;
+}
+
+.job-card {
+  border: 1px solid #1C9EAF;
+  border-radius: 8px;
+  background-color: #e6f0fa;
+  padding: 1em;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.job-card h3 {
+  margin: 0.5em 0;
+  color: #2c3e50;
+  font-size: 1.2em;
+}
+
+.job-card p {
+  margin: 0.2em 0;
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+.job-card ul {
+  list-style: none;
+  padding: 0;
+  color: #7f8c8d;
+  font-size: 0.8em;
+}
+
+.job-card::before {
+  content: '❤️';
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  color: #e74c3c;
+  font-size: 1.2em;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  color: #7f8c8d;
+}
+
+.pagination span {
+  cursor: pointer;
+}
+
+.footer {
+  background: linear-gradient(to right, #a3e4db, #e0f7fa);
+  padding: 1.5rem;
+  text-align: center;
+  margin-top: 2rem;
+  border-top: 1px solid #ddd;
+}
+
+.footer-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.footer h3 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.footer p {
+  color: #7f8c8d;
+  margin: 0.2rem 0;
+}
+
+.social-links a {
+  margin: 0 0.5rem;
+  color: #3498db;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.social-links a:hover {
+  color: #2980b9;
+}
+
+/* New styles for CandidateProfile */
+.candidate-profile-container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  gap: 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  background-color: #f5f6fa;
+  font-family: Arial, sans-serif;
+}
+
+.top-info-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
+}
+
+.profile-section,
+.general-info-section {
+  flex: 1;
+}
+
+.additional-info-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  width: 100%;
+}
+
+.detail-info-section,
+.general-info-section-extra {
+  flex: 1;
+}
+
+.profile-card,
+.info-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-card h2,
+.info-card h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.5em;
+}
+
+.profile-card p,
+.info-card p {
+  margin: 0.5rem 0;
+  color: #7f8c8d;
+}
+
+.job-details {
+  margin: 1rem 0;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.job-details .icon {
+  margin-right: 0.5rem;
+}
+
+.deadline-icon {
+  margin-right: 0.5rem;
+}
+
+.skill-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.skill-button {
+  background-color: #1C9EAF;
+  color: white;
+  border: 1px #1C9EAF;
+  border-radius: 4px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.skill-button:hover {
+  background-color: #1C9EAF;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: flex-end;
+}
+
+.review-cv {
+  background-color: #ffff;
+  color: #1C9EAF;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.review-cv:hover {
+  border-color: #1C9EAF;
+}
+
+.apply-button {
+  background-color: #ffff;
+  border: 1px solid #1C9EAF;
+  border-radius: 4px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.apply-button:hover:not(:disabled) {
+  background-color: #ced4d1;
+  border-color: #1C9EAF;
+}
+
+.apply-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.info-card p strong {
+  color: #2c3e50;
+}
+
+/* Thêm CSS cho các section */
+.detail-info-section .info-card ul,
+.general-info-section-extra .info-card ul {
+  list-style-type: disc;
+  padding-left: 2rem;
+  margin: 0.5rem 0;
+}
+
+.detail-info-section .info-card ul ul,
+.general-info-section-extra .info-card ul ul {
+  list-style-type: circle;
+  padding-left: 2rem;
+}
+
+.detail-info-section .info-card li,
+.general-info-section-extra .info-card li {
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.detail-info-section .info-card button,
+.general-info-section-extra .info-card button {
+  margin-top: 1rem;
+}
+
+/* Cập nhật kiểu dáng cho "Chi Tiết Tuyển Dụng" */
+.detail-info-section .info-card {
+  border: 1px solid #e0f7fa;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.detail-info-section .info-card h2 {
+  background-color: #e0f7fa;
+  padding: 0.5rem;
+  margin: -1.5rem -1.5rem 1rem -1.5rem;
+  border-bottom: 1px solid #ddd;
+  color: #2c3e50;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.recruitment-details {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0.5rem 0;
+}
+
+.recruitment-details li {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.recruitment-details li strong {
+  color: #2c3e50;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.recruitment-details ul {
+  padding-left: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+.recruitment-details ul li {
+  margin-bottom: 0.25rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.skill-buttons-container {
+  margin-top: 0.5rem;
+  display: block;
+  gap: 0.5rem;
+}
+
+.skill-buttons-container .skill-button {
+  padding: 0.5em 0.8em;
+  font-size: 1.0em;
+  border: 2px solid #1C9EAF;
+  border-radius: 6px;
+  background-color: #1C9EAF;
+  color: #ffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.skill-buttons-container .skill-button.selected {
+  background-color: #1C9EAF;
+  color: #ffffff;
+}
+
+.skill-buttons-container .skill-button:hover {
+  background-color: #e6f0fa;
+}
+
+.action-buttons {
+  margin-top: 1.5rem;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.action-buttons button {
+  padding: 0.75em 1.5em;
+  font-size: 1em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.review-cv {
+  background-color: #ffffff;
+  color: #1C9EAF;
+  border: 1px solid #1C9EAF;
+}
+
+.review-cv:hover {
+  background-color: #e6f0fa;
+}
+
+.apply-button {
+  background-color: #1C9EAF;
+  color: #ffffff;
+  border: none;
+}
+
+.apply-button:hover:not(:disabled) {
+  background-color: #1695a3;
+}
+
+.apply-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.apply-button::after {
+  display: inline-block;
+  vertical-align: middle;
+}
+
