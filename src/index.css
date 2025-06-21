@@ -1,68 +1,209 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Wrapper chính chia 2 cột */
+.login_wrapper {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
+/* Cột bên trái chứa form */
+.left_col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* căn giữa dọc */
+    align-items: center;
+    /* căn giữa ngang */
+    padding-top     : 40px;
     background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+/* Cột bên phải chứa ảnh */
+.right_col {
+    flex: 1;
+    height: 100%;
+}
+
+.img_login {
+    width: 100%;
+    height: 50%;
+    object-fit: cover;
+}
+
+/* Tiêu đề đăng nhập */
+.title_login {
+    color: #1C9EAF;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Form container */
+.form_container {
+    width: 100%;
+    max-width: 340px;
+}
+
+/* Input Group (bao gồm icon và input) */
+.input_group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input_group input {
+    width: 100%;
+    height: 42px;
+    padding-left: 40px;
+    border: 1.5px solid #1C9EAF;
+    border-radius: 8px;
+    font-size: 14px;
+    font-style: italic;
+    margin-right: 200px;
+}
+
+/* Icon trong input */
+.input_icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+}
+
+/* Toggle eye icon */
+.toggle_icon {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: gray;
+    font-size: 16px;
+}
+
+/* Quên mật khẩu */
+.forgotpass_nav {
+    display: block;
+    text-align: right;
+    font-size: 13px;
+    color: #1C9EAF;
+    cursor: pointer;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+/* Nút đăng nhập */
+.button_login {
+    background-color: #1C9EAF;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    height: 42px;
+    cursor: pointer;
+    margin-bottom: 15px;
+   
+}
+
+/* Google login */
+.google {
+    border: 2px solid #1C9EAF;
+    border-radius: 8px;
+    height: 42px;
+    position: relative;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 10px;
+    width: 300px;
+    text-align:center;
+    padding-top: 10px;
+    padding-left: 35px;
+}
+
+.googleicon {
+    position: absolute;
+    top: 42%;
+    left: 80px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+}
+
+/* Link đăng ký */
+.google2 {
+    font-size: 14px;
+}
+
+.signup_nav {
+    color: #1C9EAF;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Chọn vai trò */
+.role_login {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.role_item {
+    padding: 8px 16px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font-size: 15px;
+    color: #444;
+}
+
+.role_item.active {
+    color: #1C9EAF;
+    font-weight: bold;
+    border-bottom: 2px solid #1C9EAF;
+}
+.slogan{
+    display: block;
+    position: absolute;
+}
+.slogan .slogan_title{
+    color: #ffffff;
+    font-family:'Courier New', Courier, monospace;
+    font-size: 4rem;
+    position: absolute;
+    top: 100px;
+    left: 80px;
+}
+.slogan .slogan_description {
+    color: #ffffff;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    position: absolute;
+    top: 190px;
+    left: 80px;
+    width: 300px;
+}
+/* Responsive */
+@media (max-width: 991.98px) {
+    .login_wrapper {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .right_col {
+        display: none;
+        position: relative;
+    }
+
+    .left_col {
+        padding: 20px;
+        height: auto;
+    }
+
+    .form_container {
+        max-width: 100%;
+    }
 }
