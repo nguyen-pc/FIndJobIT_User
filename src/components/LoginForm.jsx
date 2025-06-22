@@ -43,9 +43,12 @@ function LoginForm() {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
-            <a className="forgotpass_nav" onClick={handleSignUp}>
+            <div
+              className="forgotpass_nav"
+              onClick={() => navigate("/forgotpassword")}
+            >
               Quên mật khẩu?
-            </a>
+            </div>
             <button className="button_login" type="submit">
               ĐĂNG NHẬP
             </button>

@@ -3,17 +3,17 @@ import MailIcon from "../assets/emailicon.png";
 import PasswordIcon from "../assets/padlockicon.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useState } from "react";
-function RecruiterForm() {
+function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  //truyền id vào đường dẫn
+  /////////////////////////////
+  const handleSwitchResetPass = (e) => {
     e.preventDefault();
-    navigate("/");
+    navigate("/resetpassword");
   };
-  const handleSignUp = (e) => {
-    navigate("/");
-  };
+
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
   };
@@ -21,15 +21,18 @@ function RecruiterForm() {
     <>
       <div className="page_container">
         <div className="form_container">
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleSwitchResetPass}>
             <div className="input_group">
-              <img src={MailIcon} alt="" className="input_icon" />
+              <img src={PasswordIcon} alt="" className="input_icon" />
               <input
-                type="text"
-                name=""
-                id="email_input"
-                placeholder="Nhập email"
+                type={showPassword ? "text" : "password"}
+                name="password"
+                id="password_input"
+                placeholder="Nhập mật khẩu"
               />
+              <span className="toggle_icon" onClick={togglePassword}>
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
             </div>
             <div className="input_group">
               <img src={PasswordIcon} alt="" className="input_icon" />
@@ -43,14 +46,12 @@ function RecruiterForm() {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
-            <div
-              className="forgotpass_nav"
-              onClick={() => navigate("/forgotpassword")}
+            <button
+              className="button_login"
+              type="submit"
+              onClick={handleSwitchResetPass}
             >
-              Quên mật khẩu?
-            </div>
-            <button className="button_login" type="submit">
-              ĐĂNG NHẬP
+              Tạo lại mật khẩu
             </button>
           </form>
         </div>
@@ -58,4 +59,4 @@ function RecruiterForm() {
     </>
   );
 }
-export default RecruiterForm;
+export default ResetPasswordForm;
