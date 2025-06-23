@@ -34,12 +34,12 @@ function Login() {
           </div>
           {role === "candidate" ? <LoginForm /> : <RecruiterForm />}
 
-          <div className="input_group">
+          {/* <div className="input_group">
             <img src={GoogleIcon} alt="" className="input_icon googleicon" />
             <div className="google" onClick={handleGoogle}>
               Tiếp tục với Google
             </div>
-          </div>
+          </div> */}
           <div className="google2">
             Bạn chưa có tài khoản?{" "}
             <a className="signup_nav" onClick={handleSignUp}>
