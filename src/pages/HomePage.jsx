@@ -1,3 +1,4 @@
+
 // HomePage.jsx
 import React, { useState } from 'react';
 import Header from '../components/Header';
@@ -147,5 +148,6 @@ const HomePage = () => {
     </div>
   );
 };
+
 
 export default HomePage;

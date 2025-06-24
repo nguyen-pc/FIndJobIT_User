@@ -39,12 +39,12 @@ function SignUp() {
             <RecruiterSignUpForm />
           )}
 
-          <div className="input_group">
+          {/* <div className="input_group">
             <img src={GoogleIcon} alt="" className="input_icon googleicon" />
             <div className="google" onClick={handleGoogle}>
               Tiếp tục với Google
             </div>
-          </div>
+          </div> */}
           <div className="google2">
             Bạn đã có tài khoản?{" "}
             <a className="signup_nav" onClick={handleSignIn}>
