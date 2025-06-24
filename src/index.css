@@ -144,6 +144,7 @@
 
 /* Link đăng ký */
 .google2 {
+    margin-top: 5px;
     font-size: 14px;
 }
 
@@ -189,6 +190,15 @@
     left: 80px;
 }
 
+
+=======
+.slogan2 .slogan_title {
+    color: #1C9EAF;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
 .slogan .slogan_description {
     color: #ffffff;
     font-family: 'Courier New', Courier, monospace;
@@ -197,6 +207,35 @@
     top: 190px;
     left: 80px;
     width: 300px;
+}
+
+
+=======
+.ForgotPasswordForm1{
+  
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+        /* căn giữa dọc */
+    align-items: center;
+        /* căn giữa ngang */
+    padding-top: 40px;
+    background-color: #ffffff;
+}
+.ForgotPasswordForm1 h5{
+    font-size: medium;
+    color: #1C9EAF;
+}
+.return_to_signin{
+   display: flex;
+}
+.return_to_signin h5{
+    font-style: italic;
+    font-weight: 100;
+    font-size: small;
+    padding-left: 35px;
+    width: 200px;
+    cursor: pointer;
 }
 
 /* Responsive */
