@@ -124,7 +124,7 @@ function LoginForm() {
                 onChange={(e) => setPassword(e.target.value)}
               />
               <span className="toggle_icon" onClick={togglePassword}>
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
               </span>
             </div>
             <div
@@ -136,17 +136,16 @@ function LoginForm() {
             <button className="button_login" type="submit">
               ĐĂNG NHẬP
             </button>
-               {/* Nút Đăng nhập với Google */}
-              <GoogleLogin
-                onSuccess={handleGoogleLoginSuccess}
-                onError={() => {
-                  notification.error({
-                    message: "Đăng nhập bằng Google thất bại",
-                    duration: 5,
-                  });
-                }}
-              />
-
+            {/* Nút Đăng nhập với Google */}
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={() => {
+                notification.error({
+                  message: "Đăng nhập bằng Google thất bại",
+                  duration: 5,
+                });
+              }}
+            />
           </form>
         </div>
       </div>
