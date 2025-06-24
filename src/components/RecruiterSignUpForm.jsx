@@ -9,7 +9,15 @@ import PhoneIcon from "../assets/phone.png";
 import CompanyIcon from "../assets/enterprise.png";
 import TaxIcon from "../assets/tax.png";
 function RecruiterSignUpForm() {
+  const [isSubmit, setIsSubmit] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [taxCode, setTaxCode] = useState("");
   const navigate = useNavigate();
 
   const handleSignUp = (e) => {

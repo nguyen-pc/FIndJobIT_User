@@ -11,7 +11,10 @@ export const callRegister = (
   password: string,
   age: number,
   gender: string,
-  address: string
+  address: string,
+  phoneNumber?: string,
+  taxNumber?: string,
+  companyName?: string
 ) => {
   console.log("callRegister", {
     name,
@@ -20,6 +23,8 @@ export const callRegister = (
     age,
     gender,
     address,
+    // phoneNumber,
+    // taxNumber
   });
   return axios.post<IBackendRes<IUser>>("/api/v1/auth/register", {
     name,
@@ -28,6 +33,9 @@ export const callRegister = (
     age,
     gender,
     address,
+    phoneNumber,
+    taxNumber,
+    companyName,
   });
 };
 

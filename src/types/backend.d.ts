@@ -44,6 +44,9 @@ export interface IUser {
   age: number;
   gender: string;
   address: string;
+  phoneNumber?: string;
+  taxNumber?: string;
+  companyName?: string;
   role?: {
     id: string;
     name: string;
