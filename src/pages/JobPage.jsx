@@ -9,6 +9,19 @@ import location from '../assets/location.png';
 import skill from '../assets/skill.png';
 import tim from '../assets/tim.png';
 
+// Danh sách việc làm mẫu (tạm thời lấy từ HomePage.jsx)
+const allJobs = [
+  { id: 1, company: 'FPT IS', title: 'Kiểm thử phần mềm - Tester', description: 'Quận 4, TP.HCM | SQL | Tester, Automation Tester', img: fptLogo },
+  { id: 2, company: 'FPT IS', title: 'Nhà phát triển Frontend', description: 'Quận 1, TP.HCM | React, JavaScript', img: fptLogo },
+  { id: 3, company: 'FPT IS', title: 'Kỹ sư AI', description: 'Hà Nội | Python, TensorFlow', img: fptLogo },
+  { id: 4, company: 'FPT IS', title: 'Phân tích dữ liệu', description: 'Đà Nẵng | Python, R, SQL', img: fptLogo },
+  { id: 5, company: 'FPT IS', title: 'Chuyên viên BA', description: 'Hà Nội | Business Analysis, Agile', img: fptLogo },
+  { id: 6, company: 'FPT IS', title: 'Backend Developer', description: 'Quận 7, TP.HCM | Node.js, Express, MongoDB', img: fptLogo },
+  { id: 7, company: 'FPT IS', title: 'DevOps Engineer', description: 'Bình Thạnh, TP.HCM | AWS, Docker, Kubernetes', img: fptLogo },
+  { id: 8, company: 'FPT IS', title: 'UI/UX Designer', description: 'Quận 3, TP.HCM | Figma, Sketch, Adobe XD', img: fptLogo },
+  { id: 9, company: 'FPT IS', title: 'Game Developer', description: 'Thủ Đức, TP.HCM | Unity, C#', img: fptLogo },
+];
+
 const JobPage = () => {
   const { jobId } = useParams();
   const [isApplied, setIsApplied] = useState(false);
@@ -26,6 +39,29 @@ const JobPage = () => {
 
   const handleReviewCV = () => {
     console.log('Reviewing CV for job ID:', jobId);
+  };
+
+  // Pagination cho việc làm nổi bật
+  const [currentJobPage, setCurrentJobPage] = useState(1);
+  const jobsPerPage = 6;
+  const totalJobPages = Math.ceil(allJobs.length / jobsPerPage);
+
+  const currentJobs = allJobs.slice(
+    (currentJobPage - 1) * jobsPerPage,
+    currentJobPage * jobsPerPage,
+  );
+
+  const handleJobPageChange = (page) => {
+    const validPage = Math.min(Math.max(page, 1), totalJobPages);
+    setCurrentJobPage(validPage);
+  };
+
+  const renderPageNumbers = (total, current, onChange) => {
+    return Array.from({ length: total }, (_, i) => i + 1).map((num) => (
+      <span key={num} className={current === num ? 'active' : ''} onClick={() => onChange(num)}>
+        {num}
+      </span>
+    ));
   };
 
   if (jobId && jobId !== '1') {
@@ -100,58 +136,6 @@ const JobPage = () => {
           <div className="job-section-card detail-recruitment-card">
             <h3>Chi tiết tuyển dụng</h3>
 
-            {/* Mục con: Thông tin cơ bản 2 cột */}
-            {/* <ul className="job-info-list">
-              <li>
-                <div className="info-item">
-                  <strong>Vị trí:</strong> <span>Nhân viên kinh doanh</span>
-                </div>
-                <div className="info-item">
-                  <strong>Số lượng:</strong> <span>05</span>
-                </div>
-              </li>
-              <li>
-                <div className="info-item">
-                  <strong>Thời gian thử việc:</strong> <span>02 tháng</span>
-                </div>
-                <div className="info-item">
-                  <strong>Hình thức làm việc:</strong> <span>Toàn thời gian cố định</span>
-                </div>
-              </li>
-              <li>
-                <div className="info-item">
-                  <strong>Chức vụ:</strong> <span>Nhân viên</span>
-                </div>
-                <div className="info-item">
-                  <strong>Giới tính:</strong> <span>Không yêu cầu</span>
-                </div>
-              </li>
-              <li>
-                <div className="info-item">
-                  <strong>Độ tuổi:</strong> <span>18 - 35</span>
-                </div>
-                <div className="info-item">
-                  <strong>Học vấn:</strong> <span>Trung cấp trở lên</span>
-                </div>
-              </li>
-              <li>
-                <div className="info-item">
-                  <strong>Ngoại ngữ:</strong> <span>Không yêu cầu</span>
-                </div>
-                <div className="info-item">
-                  <strong>Tin học:</strong> <span>Cơ bản</span>
-                </div>
-              </li>
-              <li>
-                <div className="info-item">
-                  <strong>Kinh nghiệm:</strong> <span>Không yêu cầu</span>
-                </div>
-                <div className="info-item">
-                  <strong>Yêu cầu khác:</strong> <span>Không</span>
-                </div>
-              </li>
-            </ul> */}
-
             {/* Mục con: Mô tả công việc */}
             <h4>Mô tả công việc</h4>
             <ul>
@@ -174,42 +158,58 @@ const JobPage = () => {
 
             {/* Mục con: Yêu cầu kỹ năng */}
             <h4>Yêu cầu kỹ năng</h4>
-
             <div className="job-skills-and-deadline-info">
-                  <div className="job-skills-container">
-                    <span className="skill-tag">SQL</span>
-                    <span className="skill-tag">Tester</span>
-                    <span className="skill-tag">Automation Tester</span>
-                  </div>
-                </div>
+              <div className="job-skills-container">
+                <span className="skill-tag">SQL</span>
+                <span className="skill-tag">Tester</span>
+                <span className="skill-tag">Automation Tester</span>
+              </div>
+            </div>
 
-          </div> {/* End of KHUNG LỚN: Chi tiết tuyển dụng */}
-
-          {/* KHUNG: Quyền lợi (được thêm lại dựa trên hình ảnh) */}
-          <div className="job-section-card">
-            <h3>Quyền lợi</h3>
+            {/* Mục con: Thu nhập */}
+            <h4>Thu nhập</h4>
             <ul>
-              <li>Lương cơ bản: 15 - 60 Triệu + hoa hồng</li>
-              <li>Thưởng nóng khi đạt KPI (15 - 60 triệu VND)</li>
-              <li>Được đào tạo bài bản, hỗ trợ chi phí học tập</li>
-              <li>Tham gia các hoạt động team building, du lịch hàng năm.</li>
-              <li>Môi trường làm việc chuyên nghiệp, cơ hội thăng tiến cao.</li>
-              <li>Được hưởng đầy đủ các chế độ phúc lợi theo quy định của pháp luật (BHXH, BHYT, BHTN...).</li>
+              <li>Thu nháp khi đạt 100% KPI: 15 - 60 triệu VND</li>
+              <li>Thu nháp tính theo tỷ lệ đạt KPI</li>
+              <li>Lương cứng: 10.2 - 37.2 triệu VND</li>
+              <li>Lương cứng phụ thuộc vào doanh số</li>
             </ul>
-          </div>
 
-          {/* KHUNG: Thông tin khác (được thêm lại dựa trên hình ảnh) */}
-          <div className="job-section-card">
-            <h3>Thông tin khác</h3>
+            {/* Mục con: Quyền lợi */}
+            <h4>Quyền lợi</h4>
+            <ul>
+              <li>Mức lương 15 - 60tr (lương cứng từ 10.200.000 - 37.200.000đ + hoa hồng)</li>
+              <li>Được tham gia các chương trình đào tạo bài bản về kỹ năng bán hàng, săn phầm dịch vụ viên thông.</li>
+              <li>Môi trường làm việc năng động, chuyên nghiệp, có hỗ trợ thân thiện trong range.</li>
+              <li>Được đóng bảo hiểm xã hội, bảo hiểm y tế, bảo hiểm thất nghiệp theo quy định của pháp luật.</li>
+              <li>Thưởng cuối năm lễ, tết theo quy định của công ty.</li>
+              <li>Có hỗ tham gia các hoạt động team building, du lịch thường xuyên.</li>
+              <li>Bảo hiểm xã hội, Bảo hiểm sức khỏe, Bảo hiểm sức khỏe người thân, Khám sức khỏe định kỳ, Du lịch hàng năm, Thưởng tháng 13</li>
+            </ul>
+
+            {/* Mục con: Địa điểm làm việc */}
+            <h4>Địa điểm làm việc</h4>
+            <ul>
+              <li>Các văn phòng FPT Telecom tại TP.HCM</li>
+              <li>Hồ Chí Minh: Quận 1</li>
+            </ul>
+
+            {/* Mục con: Thời gian làm việc */}
+            <h4>Thời gian làm việc</h4>
             <ul>
               <li>Thời gian làm việc: 08:00 - 17:30 (Thứ 2 - Thứ 6)</li>
-              <li>Ngày nghỉ: Thứ 7, Chủ nhật và các ngày lễ theo quy định.</li>
-              <li>Thời gian cập nhật: 08:52 PM +07, 23/06/2025</li>
-              <li>Địa điểm làm việc: Các văn phòng FPT Telecom tại TP.HCM.</li>
-              <li>Yêu cầu hồ sơ: CV, đơn xin việc, bản sao các bằng cấp liên quan.</li>
+              <li>Ngày nghỉ: Thứ 7, Chủ nhật và các ngày lễ theo quy định</li>
             </ul>
-          </div>
 
+            {/* Mục con: Cách thức ứng tuyển */}
+            <h4>Cách thức ứng tuyển</h4>
+            <ul>
+              <li>Gửi CV qua email: tuyendung@fpttelecom.com.vn</li>
+              <li>Nộp trực tiếp tại văn phòng FPT Telecom TP.HCM</li>
+              <li>Ứng tuyển trực tuyến qua website: www.fpttelecom.com.vn/career</li>
+              <li>Nhanh tay ứng tuyển ngay hôm nay để không bỏ lỡ cơ hội!</li>
+            </ul>
+          </div> {/* End of KHUNG LỚN: Chi tiết tuyển dụng */}
         </div> {/* End of left-panel */}
 
         <div className="right-panel">
@@ -230,43 +230,48 @@ const JobPage = () => {
           <div className="company-info-card general-info-card">
             <h3>Thông tin chung</h3>
             <ul className="job-info-list">
-              <li>
-                <div className="info-item">
-                  <strong>Phòng ban:</strong> <span>Kinh doanh</span>
-                </div>
-                <div className="info-item">
-                  <strong>Nơi làm việc:</strong> <span>TP.Hồ Chí Minh</span>
-                </div>
-              </li>
-              <li>
-                <div className="info-item">
-                  <strong>Ngày cập nhật:</strong> <span>23/06/2025</span>
-                </div>
-                <div className="info-item">
-                  <strong>Ngành nghề:</strong> <span>Bán hàng / Kinh doanh</span>
-                </div>
-              </li>
-              <li>
-                <div className="info-item">
-                  <strong>Cấp bậc:</strong> <span>Nhân viên</span>
-                </div>
-                <div className="info-item">
-                  <strong>Lương:</strong> <span>15 - 60 triệu</span>
-                </div>
-              </li>
-              <li>
-                <div className="info-item">
-                  <strong>Lĩnh vực:</strong> <span>Công nghệ thông tin</span>
-                </div>
-                <div className="info-item">
-                  <strong>Hết hạn nộp:</strong> <span>28/05/2025</span>
-                </div>
-              </li>
+              <li><strong>Phòng ban:</strong> Kinh doanh</li>
+              <li><strong>Nơi làm việc:</strong> TP. Hồ Chí Minh</li>
+              <li><strong>Ngày cập nhật:</strong> 23/06/2025</li>
+              <li><strong>Ngành nghề:</strong> Bán hàng / Kinh doanh</li>
+              <li><strong>Cấp bậc:</strong> Nhân viên</li>
+              <li><strong>Lương:</strong> 15 - 60 triệu</li>
+              <li><strong>Lĩnh vực:</strong> Công nghệ thông tin</li>
+              <li><strong>Hạn nộp hồ sơ:</strong> 28/05/2025</li>
             </ul>
           </div>
-
         </div> {/* End of right-panel */}
       </div> {/* End of job-detail-content-container */}
+
+      {/* KHUNG: Việc làm nổi bật (thêm vào phía dưới cùng) */}
+      <div className="main-content">
+        <section className="featured-jobs" id="jobs">
+          <h2>Việc làm đề xuất</h2>
+          <div className="jobs-list">
+            {currentJobs.map((job) => (
+              <div className="job-card" key={job.id}>
+                {/* Header gồm logo + tên công ty + nút yêu thích */}
+                <div className="job-card-header">
+                  <img className="job-company-logo" src={job.img} alt={job.company} />
+                  <span className="job-company-name">{job.company}</span>
+                  <span className="favorite-icon">♡</span>
+                </div>
+                <h3>{job.title}</h3>
+                <p>{job.description}</p>
+                <button>Ứng tuyển ngay</button>
+              </div>
+            ))}
+          </div>
+          {totalJobPages > 1 && (
+            <div className="pagination">
+              <span onClick={() => handleJobPageChange(currentJobPage - 1)}>⬅️</span>
+              {renderPageNumbers(totalJobPages, currentJobPage, handleJobPageChange)}
+              <span onClick={() => handleJobPageChange(currentJobPage + 1)}>➡️</span>
+            </div>
+          )}
+        </section>
+      </div>
+
       <Footer />
     </div>
   );

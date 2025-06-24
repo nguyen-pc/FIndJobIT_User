@@ -620,6 +620,7 @@ section h2::after {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border: 3px solid #1C9EAF;
 }
 
 .category-item:hover {
@@ -663,6 +664,7 @@ section h2::after {
     flex-direction: column;
     justify-content: space-between;
     /* Đẩy button xuống cuối */
+    border: 3px solid #1C9EAF;
 }
 
 .job-card:hover {
@@ -1403,6 +1405,22 @@ footer {
     border-bottom: 1px solid #eee;
 }
 
+.logo-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+}
+.footer-logo {
+    font-size: 28px; /* Tăng kích thước logo */
+    padding: 10px 20px;
+    background-color: #ffffff; /* Nền trắng cho logo nếu cần */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+
 .company-logo-card {
     width: 80px;
     height: 80px;
@@ -1466,7 +1484,7 @@ footer {
 }
 
 .skill-tag {
-    background-color: #2b8864; /* Màu nền nhẹ cho tag */
+    background-color: #ffff; /* Màu nền nhẹ cho tag */
     color: #ffff; /* Màu chữ xanh đậm */
     padding: 8px 15px;
     border-radius: 20px;
@@ -1496,12 +1514,13 @@ footer {
 }
 
 .apply-button {
-    background-color: #007bff; /* Màu xanh dương */
-    color: white;
+    background-color: #f0f0f0;
+    color: #1C9EAF;
+     border: 1px solid #1C9EAF;
 }
 
 .apply-button:hover {
-    background-color: #0056b3;
+    background-color: #257a3b;
     transform: translateY(-2px);
 }
 
@@ -1557,7 +1576,7 @@ footer {
     border-radius: 12px;
     padding: 25px;
     margin-bottom: 20px;
-    border: 1px solid #f0f0f0; /* Viền nhẹ */
+    border: 3px solid #1C9EAF;
 }
 
 .section-title-h2 {
@@ -1854,8 +1873,9 @@ footer {
 }
 
 .apply-button {
-    background-color: #1C9EAF;
-    color: white;
+    background-color: #f0f0f0;
+        color: #1C9EAF;
+        border: 1px solid #1C9EAF;
 }
 
 .apply-button:hover {
@@ -2074,6 +2094,7 @@ footer {
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     padding: 30px;
+    border: 3px solid #1C9EAF;
 }
 
 .job-header h2 {
@@ -2137,8 +2158,8 @@ footer {
 }
 
 .skill-tag {
-    background-color: #e0f2f7;
-    color: #1C9EAF;
+    background-color: #1C9EAF;
+    color: #ffff;
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 0.9em;
@@ -2186,7 +2207,8 @@ footer {
 
 .review-cv {
     background-color: #f0f0f0;
-    color: #555;
+    color: #1C9EAF;
+    border: 1px solid #1C9EAF;
 }
 
 .review-cv:hover {
@@ -2281,6 +2303,7 @@ footer {
     text-align: center;
     padding-bottom: 25px;
     /* Adjust for button */
+    border: 3px solid #1C9EAF;
 }
 
 .company-header {
@@ -2428,6 +2451,9 @@ footer {
         /* Make buttons full width on smaller screens */
         max-width: unset;
         /* Remove max-width restriction */
+        background-color: #f0f0f0;
+        color: #1C9EAF;
+        border: 1px solid #1C9EAF;
     }
 }
 
@@ -2457,6 +2483,7 @@ footer {
 
     .job-section-card {
         padding: 20px;
+        border: 3px solid #1C9EAF;
     }
 
     .job-section-card h3,
