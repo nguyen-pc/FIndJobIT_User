@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LOCATION_LIST } from "../config/utils";
+import { callFetchAllSkill } from "../config/api";
+import { notification, Select } from "antd";
+
+const { Option } = Select;
 
 const Header = () => {
   const navigate = useNavigate();
-  // State cho opacity phần header search
+  const location = useLocation();
+  const optionsLocation = LOCATION_LIST; // Ví dụ: [{ value: "hanoi", label: "Hà Nội" }, ...]
+  const [optionsSkills, setOptionsSkills] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
   const [searchOpacity, setSearchOpacity] = useState(1);
-  // State cho chiều cao header (giả sử ban đầu là 200px)
-  const [headerHeight, setHeaderHeight] = useState(200);
+  const [headerHeight, setHeaderHeight] = useState(250);
 
   const handleSelectChange = (e) => {
     const value = e.target.value;
@@ -21,26 +29,38 @@ const Header = () => {
     e.target.value = "";
   };
 
-  // Lắng nghe sự kiện scroll và cập nhật opacity cũng như chiều cao header
+  // Fetch danh sách skill từ backend
+  useEffect(() => {
+    const fetchSkill = async () => {
+      let query = `page=1&size=100&sort=createdAt,desc`;
+      const res = await callFetchAllSkill(query);
+      if (res && res.data) {
+        const arr =
+          res.data.result?.map((item) => ({
+            label: item.name,
+            value: item.id + "",
+          })) || [];
+        setOptionsSkills(arr);
+      }
+    };
+    fetchSkill();
+  }, []);
+
+  // Lắng nghe scroll để thay đổi opacity header search và chiều cao header
   useEffect(() => {
     const handleScroll = () => {
-      const threshold = 100; // khoảng cách cuộn bắt đầu giảm opacity và thu gọn header
-      const fadeDistance = 150; // khoảng cách cuộn từ threshold đến khi opacity = 0
-      const initialHeaderHeight = 250; // chiều cao ban đầu của header
-      const minHeaderHeight = 80; // chiều cao tối thiểu khi đã thu gọn
+      const threshold = 100;
+      const fadeDistance = 150;
+      const initialHeaderHeight = 250;
+      const minHeaderHeight = 80;
       const scrollY = window.scrollY;
-
-      // Tính opacity cho header search
       let newOpacity = 1;
       if (scrollY > threshold) {
         newOpacity = Math.max(0, 1 - (scrollY - threshold) / fadeDistance);
       }
       setSearchOpacity(newOpacity);
-
-      // Tính chiều cao header dựa trên scroll
       let newHeight = initialHeaderHeight;
       if (scrollY > threshold) {
-        // Giảm chiều cao dần, không nhỏ hơn minHeaderHeight
         newHeight = Math.max(
           minHeaderHeight,
           initialHeaderHeight - (scrollY - threshold) * 0.5
@@ -54,17 +74,34 @@ const Header = () => {
   }, []);
 
   const handleClearFilters = () => {
-    console.log("Đã click 'Xóa bộ lọc'");
-    const searchInput = document.querySelector(
-      '.search-bar input[type="text"]'
-    );
-    if (searchInput) {
-      searchInput.value = "";
+    setSelectedLocation([]);
+    setSelectedSkills([]);
+  };
+
+  // Hàm onFinish nhận query được build từ các lựa chọn
+  const onFinish = (query) => {
+    if (!query) {
+      notification.error({
+        message: "Có lỗi xảy ra",
+        description: "Vui lòng chọn tiêu chí để search",
+      });
+      return;
     }
-    const filterSelects = document.querySelectorAll(".filters .filter-select");
-    filterSelects.forEach((select) => {
-      select.value = "";
-    });
+    navigate(`/job?${query}`);
+  };
+
+  // Xây dựng query và truyền cho onFinish khi click search button
+  const handleSearch = () => {
+    let query = "";
+    if (selectedLocation.length) {
+      query = `location=${selectedLocation.join(",")}`;
+    }
+    if (selectedSkills.length) {
+      query = query
+        ? query + `&skills=${selectedSkills.join(",")}`
+        : `skills=${selectedSkills.join(",")}`;
+    }
+    onFinish(query);
   };
 
   return (
@@ -80,6 +117,7 @@ const Header = () => {
         <Link to="/" className="logo">
           NextDev
         </Link>
+        {/* Các phần Navigation khác */}
         <nav className="nav-menu">
           <select
             className="filter-select"
@@ -124,6 +162,7 @@ const Header = () => {
             <option value="events">Sự kiện</option>
           </select>
         </nav>
+
         <button className="user-button" onClick={() => navigate("/signin")}>
           <span className="user-icon">👤</span> Chí Thiện
         </button>
@@ -135,33 +174,41 @@ const Header = () => {
       >
         <div className="search-bar">
           <input type="text" placeholder="Tìm kiếm theo kỹ năng, công ty..." />
-          <button className="search-button">🔍</button>
+          <button className="search-button" onClick={handleSearch}>
+            🔍
+          </button>
         </div>
-        <div className="filters">
-          <select className="filter-select" defaultValue="">
-            <option value="" disabled>
-              Địa điểm
-            </option>
-            <option value="hanoi">Hà Nội</option>
-            <option value="hcm">TP.HCM</option>
-            <option value="danang">Đà Nẵng</option>
-          </select>
-          <select className="filter-select" defaultValue="">
-            <option value="" disabled>
-              Loại công việc
-            </option>
-            <option value="it">IT</option>
-            <option value="marketing">Marketing</option>
-            <option value="finance">Finance</option>
-          </select>
-          <select className="filter-select" defaultValue="">
-            <option value="" disabled>
-              Loại hợp đồng
-            </option>
-            <option value="lt10">Hợp đồng 6 tháng</option>
-            <option value="10-20">Hợp đồng 1 năm</option>
-            <option value="gt20">Hợp đồng 4 năm</option>
-          </select>
+        <div className="filters" style={{ display: "flex", gap: "1rem", alignItems: "center"}}>
+          {/* Select đa lựa chọn cho Địa điểm */}
+          <Select
+            mode="multiple"
+            allowClear
+            placeholder="Chọn Địa điểm"
+            style={{ minWidth: 200 }}
+            value={selectedLocation}
+            onChange={(value) => setSelectedLocation(value)}
+          >
+            {optionsLocation.map((loc) => (
+              <Option key={loc.value} value={loc.value}>
+                {loc.label}
+              </Option>
+            ))}
+          </Select>
+          {/* Select đa lựa chọn cho Kỹ năng */}
+          <Select
+            mode="multiple"
+            allowClear
+            placeholder="Chọn Kỹ năng"
+            style={{ minWidth: 200 }}
+            value={selectedSkills}
+            onChange={(value) => setSelectedSkills(value)}
+          >
+            {optionsSkills.map((skill) => (
+              <Option key={skill.value} value={skill.value}>
+                {skill.label}
+              </Option>
+            ))}
+          </Select>
           <button className="filter-clear-button" onClick={handleClearFilters}>
             Xóa bộ lọc
           </button>

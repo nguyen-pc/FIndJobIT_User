@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "../pages/Login";
 import HomePage from "../pages/HomePage";
 import SignUp from "../pages/SignUp";
-
+import CompanyDetails from "../pages/CompanyDetails";
 import JobPage from "../pages/JobPage";
 
 
@@ -24,6 +24,7 @@ export default function AppRouter() {
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword/:email" element={<ResetPassword />} />
 
+        <Route path="/company/:id" element={<CompanyDetails />} />
       </Routes>
     </BrowserRouter>
   );
