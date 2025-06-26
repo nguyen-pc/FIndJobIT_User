@@ -191,7 +191,7 @@
 }
 
 
-=======
+
 .slogan2 .slogan_title {
     color: #1C9EAF;
     font-family: 'Courier New', Courier, monospace;
@@ -210,7 +210,7 @@
 }
 
 
-=======
+
 .ForgotPasswordForm1{
   
     flex: 1;
@@ -1675,7 +1675,8 @@ footer {
 .company-info-card h3 {
     font-size: 20px;
     font-weight: 700;
-    color: #333;
+    color: #1C9EAF;
+
     text-align: center;
 }
 
@@ -2118,8 +2119,8 @@ footer {
 
 .job-section-card h3,
 .company-info-card h3 {
-    font-size: 1.4em;
-    color: #333;
+    font-size: 1.9em;
+    color: #1C9EAF;
     margin-top: 0;
     margin-bottom: 20px;
     border-bottom: 2px solid #eee;
@@ -2363,7 +2364,7 @@ footer {
 }
 
 .company-info-card h3 {
-    font-size: 1.6em;
+    font-size: 1.9em;
     color: #1C9EAF;
     margin-bottom: 10px;
     border-bottom: none;
@@ -2594,3 +2595,513 @@ footer {
         height: 18px;
     }
 }
+
+
+
+
+
+/*ProfilePage*/
+.profile-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8fbfd;
+    padding: 20px;
+  }
+  
+  .profile-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+  }
+  
+  .profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-header h1 {
+    color: #1C9EAF;
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+  .role {
+    color: #555;
+    font-size: 16px;
+  }
+  
+  .profile-details {
+    margin-bottom: 20px;
+  }
+  
+  .profile-details p {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .profile-details strong {
+    color: #1C9EAF;
+  }
+  
+  .skills, .experience, .summary {
+    margin-bottom: 15px;
+  }
+  
+  .skills h3, .experience h3, .summary h3 {
+    color: #1C9EAF;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .skills ul {
+    list-style: disc;
+    padding-left: 20px;
+  }
+  
+  .skills li {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 5px;
+  }
+  
+  .profile-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .edit-button, .logout-button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edit-button {
+    background-color: #1C9EAF;
+    color: white;
+  }
+  
+  .edit-button:hover {
+    background-color: #167a87;
+  }
+  
+  .logout-button {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .logout-button:hover {
+    background-color: #e76767;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-card {
+      padding: 20px;
+    }
+    .profile-header h1 {
+      font-size: 24px;
+    }
+    .profile-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .edit-button, .logout-button {
+      width: 100%;
+    }
+  }
+
+
+
+
+/* ... (Giữ nguyên các phần CSS hiện có từ trước đó) ... */
+
+/* --- PROFILE PAGE STYLES --- */
+.profile-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.profile-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.profile-section {
+    margin-bottom: 20px;
+}
+
+.profile-section h2 {
+    color: #1C9EAF;
+    border-bottom: 2px solid #1C9EAF;
+    padding-bottom: 5px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 40px;
+}
+
+.profile-info {
+    flex-grow: 1;
+}
+
+.profile-info h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.role {
+    color: #666;
+    margin: 5px 0;
+}
+
+.profile-info p {
+    margin: 5px 0;
+}
+
+.edit-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    font-size: 18px;
+    color: #1C9EAF;
+}
+
+.profile-details .section {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.profile-details h3 {
+    margin: 0 0 10px;
+    color: #333;
+}
+
+.summary-text {
+    margin: 5px 0;
+}
+
+.skills,
+.capabilities {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.skill-tag,
+.capability-tag {
+    background: #1C9EAF;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+}
+
+.profile-actions {
+    text-align: center;
+}
+
+.edit-button {
+    background: #1C9EAF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background: #1698a9; }
+
+
+
+
+/* Styling for EditProfilePage */
+
+.edit-profile-wrapper {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f0f2f5;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+.header-edit-profile {
+    background-color: #1C9EAF;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px 8px 0 0;
+    margin: -20px -20px 20px -20px;
+    /* Adjust to cover padding */
+}
+
+.header-edit-profile .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-edit-profile .back-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.header-edit-profile .back-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.edit-profile-title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+    flex-grow: 1;
+    /* Allow title to take up available space */
+}
+
+.header-edit-profile .save-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+}
+
+.header-edit-profile .save-button:hover {
+    background-color: #218838;
+}
+
+.edit-profile-content {
+    padding: 20px;
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+}
+
+.edit-section {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.edit-section-title {
+    color: #1C9EAF;
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="url"],
+.form-group textarea {
+    width: calc(100% - 20px);
+    /* Account for padding */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    /* Include padding and border in the element's total width and height */
+}
+
+.form-group textarea {
+    resize: vertical;
+    /* Allow vertical resizing */
+    min-height: 80px;
+}
+
+/* Styling for array items (experience, education, etc.) */
+.array-item-group {
+    border: 1px dashed #c0e0e8;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #f0f8ff;
+    /* Light blue background for clarity */
+    position: relative;
+}
+
+.array-item-group h3 {
+    color: #1C9EAF;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.remove-item-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    transition: background-color 0.2s ease;
+}
+
+.remove-item-button:hover {
+    background-color: #c82333;
+}
+
+.add-item-button {
+    background-color: #1C9EAF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+    display: block;
+    /* Make it a block element to center or give full width */
+    width: fit-content;
+    /* Adjust width to content */
+    margin-left: auto;
+    /* Center the button */
+    margin-right: auto;
+    transition: background-color 0.2s ease;
+}
+
+.add-item-button:hover {
+    background-color: #167a87;
+}
+
+.edit-profile-actions-bottom {
+    display: flex;
+    justify-content: flex-end;
+    /* Align buttons to the right */
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.edit-profile-actions-bottom .cancel-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+}
+
+.edit-profile-actions-bottom .cancel-button:hover {
+    background-color: #5a6268;
+}
+
+.edit-profile-actions-bottom .save-button {
+    background-color: #1C9EAF;
+    /* Using the primary brand color for save */
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s ease;
+}
+
+.edit-profile-actions-bottom .save-button:hover {
+    background-color: #167a87;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .edit-profile-wrapper {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .header-edit-profile {
+        margin: -15px -15px 15px -15px;
+    }
+
+    .header-edit-profile .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .edit-profile-title {
+        font-size: 22px;
+        text-align: left;
+    }
+
+    .header-edit-profile .save-button {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .edit-profile-actions-bottom {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .edit-profile-actions-bottom .cancel-button,
+    .edit-profile-actions-bottom .save-button {
+        width: 100%;
+    } }

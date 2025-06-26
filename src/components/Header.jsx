@@ -7,7 +7,7 @@ const Header = () => {
   const handleSelectChange = (e) => {
     const value = e.target.value;
     if (value === 'jobs' || value === 'featured-jobs') {
-      navigate('/job-list'); // Điều hướng đến trang danh sách công việc mới
+      navigate('/job-list');
     } else if (value) {
       const section = document.getElementById(value);
       if (section) {
@@ -69,7 +69,7 @@ const Header = () => {
             <option value="events">Sự kiện</option>
           </select>
         </nav>
-        <button className="user-button" onClick={() => navigate('/signin')}>
+        <button className="user-button" onClick={() => navigate('/profile')}>
           <span className="user-icon">👤</span> Chí Thiện
         </button>
       </div>
