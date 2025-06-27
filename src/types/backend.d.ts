@@ -44,6 +44,9 @@ export interface IUser {
   age: number;
   gender: string;
   address: string;
+  phoneNumber?: string;
+  taxNumber?: string;
+  companyName?: string;
   role?: {
     id: string;
     name: string;
@@ -76,6 +79,31 @@ export interface ICompany {
 export interface ISkill {
   id?: string;
   name?: string;
+  createdBy?: string;
+  isDeleted?: boolean;
+  deletedAt?: boolean | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface IJob {
+  id?: string;
+  name: string;
+  skills: ISkill[];
+  company?: {
+    id: string;
+    name: string;
+    logo?: string;
+  };
+  location: string;
+  salary: number;
+  quantity: number;
+  level: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  active: boolean;
+
   createdBy?: string;
   isDeleted?: boolean;
   deletedAt?: boolean | null;

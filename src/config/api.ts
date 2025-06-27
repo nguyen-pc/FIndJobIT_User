@@ -1,4 +1,12 @@
-import { IBackendRes, IAccount, IUser } from "../types/backend";
+import {
+  IBackendRes,
+  IAccount,
+  IUser,
+  type IModelPaginate,
+  type ISkill,
+  type ICompany,
+  type IJob,
+} from "../types/backend";
 import axios from "config/axios-customize";
 
 /**
@@ -9,17 +17,23 @@ export const callRegister = (
   name: string,
   email: string,
   password: string,
-  age: number,
-  gender: string,
-  address: string
+  age?: number,
+  gender?: string,
+  address?: string,
+  phoneNumber?: string,
+  taxNumber?: string,
+  companyName?: string
 ) => {
   console.log("callRegister", {
     name,
     email,
     password,
-    age,
-    gender,
-    address,
+    // age,
+    // gender,
+    // address,
+    phoneNumber,
+    taxNumber,
+    companyName,
   });
   return axios.post<IBackendRes<IUser>>("/api/v1/auth/register", {
     name,
@@ -28,6 +42,35 @@ export const callRegister = (
     age,
     gender,
     address,
+    phoneNumber,
+    taxNumber,
+    companyName,
+  });
+};
+
+export const callRegisterRecruiter = (
+  name: string,
+  email: string,
+  password: string,
+  phoneNumber?: string,
+  taxNumber?: string,
+  companyName?: string
+) => {
+  console.log("callRegister", {
+    name,
+    email,
+    password,
+    phoneNumber,
+    taxNumber,
+    companyName,
+  });
+  return axios.post<IBackendRes<IUser>>("/api/v1/auth/register", {
+    name,
+    email,
+    password,
+    phoneNumber,
+    taxNumber,
+    companyName,
   });
 };
 
@@ -53,4 +96,33 @@ export const callRefreshToken = () => {
 
 export const callLogout = () => {
   return axios.post<IBackendRes<string>>("/api/v1/auth/logout");
+};
+
+//Module Skill
+
+export const callFetchAllSkill = (query: string) => {
+  return axios.get<IBackendRes<IModelPaginate<ISkill>>>(
+    `/api/v1/skills?${query}`
+  );
+};
+
+// Module Company
+export const callFetchCompany = (query: string) => {
+  return axios.get<IBackendRes<IModelPaginate<ICompany>>>(
+    `/api/v1/companies?${query}`
+  );
+};
+
+export const callFetchCompanyById = (id: string) => {
+  return axios.get<IBackendRes<ICompany>>(`/api/v1/companies/${id}`);
+};
+
+// Module Job
+
+export const callFetchJob = (query: string) => {
+  return axios.get<IBackendRes<IModelPaginate<IJob>>>(`/api/v1/jobs?${query}`);
+};
+
+export const callFetchJobByIdCompany = (id: string) => {
+  return axios.get<IBackendRes<IJob>>(`/api/v1/jobs-company/${id}`);
 };
