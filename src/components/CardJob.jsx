@@ -5,7 +5,7 @@ import { callFetchJob } from "../config/api";
 import { EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { getLocationName } from "../config/utils";
+import { convertSlug, getLocationName } from "../config/utils";
 dayjs.extend(relativeTime);
 
 // Danh sách việc làm (demo) – đều thuộc FPT nên gắn logo + tên công ty
@@ -199,7 +199,12 @@ const CardJob = (props) => {
                   }`}
                   alt={job.company}
                 />
-                <span className="job-company-name">{job.company}</span>
+                <span className="job-company-name">
+                  {" "}
+                  {typeof job.company === "object"
+                    ? job.company.name
+                    : job.company}
+                </span>
                 <span className="favorite-icon">♡</span>
               </div>
               <h3>{job.name}</h3>

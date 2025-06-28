@@ -110,3 +110,62 @@ export interface IJob {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface IResume {
+  id?: string;
+  email: string;
+  userId: string;
+  url: string;
+  status: string;
+  companyId:
+    | string
+    | {
+        id: string;
+        name: string;
+        logo: string;
+      };
+  jobId:
+    | string
+    | {
+        id: string;
+        name: string;
+      };
+  history?: {
+    status: string;
+    updatedAt: Date;
+    updatedBy: { id: string; email: string };
+  }[];
+  createdBy?: string;
+  isDeleted?: boolean;
+  deletedAt?: boolean | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface IPermission {
+  id?: string;
+  name?: string;
+  apiPath?: string;
+  method?: string;
+  module?: string;
+
+  createdBy?: string;
+  isDeleted?: boolean;
+  deletedAt?: boolean | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface IRole {
+  id?: string;
+  name: string;
+  description: string;
+  active: boolean;
+  permissions: IPermission[] | string[];
+
+  createdBy?: string;
+  isDeleted?: boolean;
+  deletedAt?: boolean | null;
+  createdAt?: string;
+  updatedAt?: string;
+}

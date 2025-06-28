@@ -6,9 +6,10 @@ import SignUp from "../pages/SignUp";
 import CompanyDetails from "../pages/CompanyDetails";
 import JobPage from "../pages/JobPage";
 
-
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
+import EditProfilePage from "../pages/EditProfilePage";
+import ProfilePage from "../pages/ProfilePage";
 
 export default function AppRouter() {
   return (
@@ -23,6 +24,9 @@ export default function AppRouter() {
 
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword/:email" element={<ResetPassword />} />
+
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/edit-profile" element={<EditProfilePage />} />
 
         <Route path="/company/:id" element={<CompanyDetails />} />
       </Routes>

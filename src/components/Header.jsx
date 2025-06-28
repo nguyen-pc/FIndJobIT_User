@@ -163,7 +163,7 @@ const Header = () => {
           </select>
         </nav>
 
-        <button className="user-button" onClick={() => navigate("/signin")}>
+        <button className="user-button" onClick={() => navigate("/profile")}>
           <span className="user-icon">👤</span> Chí Thiện
         </button>
       </div>

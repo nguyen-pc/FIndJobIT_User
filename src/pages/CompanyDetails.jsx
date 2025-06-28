@@ -3,7 +3,7 @@ import CompanyAboutUs from "../components/CompanyAboutUs";
 import CompanyContact from "../components/CompanyContact ";
 import JobListCard from "../components/CompanyListCard";
 import logo from "../assets/logofpt.png";
-import location from "../assets/location.png";
+// import location from "../assets/location_1.png";
 import Header from "../components/Header";
 import { useLocation } from "react-router-dom";
 import { callFetchCompanyById, callFetchJobByIdCompany } from "../config/api";

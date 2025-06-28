@@ -40,14 +40,16 @@ function LoginForm() {
     const res = await callLogin(email, password);
 
     setIsSubmit(false);
-    console.log("Response from server:", res.data?.user);
 
     if (res?.data) {
       // Lưu access token vào localStorage
       localStorage.setItem("access_token", res.data.access_token);
       // Cập nhật thông tin user qua Redux
-      dispatch(setUserLoginInfo(res.data.user));
-      message.success("Đăng nhập tài khoản thành công!");
+      console.log("Response from server:", res.data?.user);
+      dispatch(setUserLoginInfo(res.data?.user));
+      console.log("isAuthenticated", isAuthenticated);
+      // message.success("Đăng nhập tài khoản thành công!");
+      // navigate(callback ? callback : "/");
       window.location.href = callback ? callback : "/";
     } else {
       notification.error({

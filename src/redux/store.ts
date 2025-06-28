@@ -1,13 +1,11 @@
-import {
-  Action,
-  configureStore,
-  ThunkAction,
-} from '@reduxjs/toolkit';
-import accountReducer from './slice/accountSlide';
+import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
+import accountReducer from "./slice/accountSlide";
+import userReducer from "./slice/userReducer";
 
 export const store = configureStore({
   reducer: {
     account: accountReducer,
+    user: userReducer,
   },
 });
 
