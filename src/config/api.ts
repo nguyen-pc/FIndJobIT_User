@@ -7,6 +7,8 @@ import {
   type ICompany,
   type IJob,
   type IResume,
+  type FollowJob,
+  type FollowCompany,
 } from "../types/backend";
 import axios from "config/axios-customize";
 
@@ -104,20 +106,22 @@ export const callLogout = () => {
 Module User
  */
 export const callCreateUser = (user: IUser) => {
-    return axios.post<IBackendRes<IUser>>('/api/v1/users', { ...user })
-}
+  return axios.post<IBackendRes<IUser>>("/api/v1/users", { ...user });
+};
 
 export const callUpdateUser = (user: IUser) => {
-    return axios.put<IBackendRes<IUser>>(`/api/v1/users`, { ...user })
-}
+  return axios.put<IBackendRes<IUser>>(`/api/v1/users`, { ...user });
+};
 
 export const callDeleteUser = (id: string) => {
-    return axios.delete<IBackendRes<IUser>>(`/api/v1/users/${id}`);
-}
+  return axios.delete<IBackendRes<IUser>>(`/api/v1/users/${id}`);
+};
 
 export const callFetchUser = (query: string) => {
-    return axios.get<IBackendRes<IModelPaginate<IUser>>>(`/api/v1/users?${query}`);
-}
+  return axios.get<IBackendRes<IModelPaginate<IUser>>>(
+    `/api/v1/users?${query}`
+  );
+};
 
 //Module Skill
 
@@ -138,6 +142,31 @@ export const callFetchCompanyById = (id: string) => {
   return axios.get<IBackendRes<ICompany>>(`/api/v1/companies/${id}`);
 };
 
+export const followCompany = (payload: FollowCompany) => {
+  return axios.post<IBackendRes<FollowCompany>>(`/api/v1/companies/follow`, {
+    ...payload,
+  });
+};
+
+export const cancelFollowCompany = (payload: FollowCompany) => {
+  console.log("cancelFollowJob", payload);
+  return axios.delete<IBackendRes<FollowCompany>>(`/api/v1/companies/follow`, {
+    data: payload,
+  });
+};
+
+export const checkCompanyStatus = (companyId: number, userId: number) => {
+  return axios.get<IBackendRes<{ followed: boolean }>>(
+    `/api/v1/companies/${companyId}/follow-status?userId=${userId}`
+  );
+};
+
+export const countUserFollowCompany = (companyId: number) => {
+  return axios.get<IBackendRes<{ followerCount: number }>>(
+    `/api/v1/companies/${companyId}/follow-count`
+  );
+};
+
 // Module Job
 
 export const callFetchJob = (query: string) => {
@@ -150,6 +179,25 @@ export const callFetchJobByIdCompany = (id: string) => {
 
 export const callFetchJobById = (id: string) => {
   return axios.get<IBackendRes<IJob>>(`/api/v1/jobs/${id}`);
+};
+
+export const followJob = (payload: FollowJob) => {
+  return axios.post<IBackendRes<FollowJob>>(`/api/v1/jobs/follow`, {
+    ...payload,
+  });
+};
+
+export const cancelFollowJob = (payload: FollowJob) => {
+  console.log("cancelFollowJob", payload);
+  return axios.delete<IBackendRes<FollowJob>>(`/api/v1/jobs/follow`, {
+    data: payload,
+  });
+};
+
+export const checkFollowStatus = (jobId: number, userId: number) => {
+  return axios.get<IBackendRes<{ followed: boolean }>>(
+    `/api/v1/jobs/${jobId}/follow-status?userId=${userId}`
+  );
 };
 
 /**

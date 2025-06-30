@@ -162,7 +162,7 @@ const Header = () => {
             <option value="events">Sự kiện</option>
           </select>
         </nav>
-
+        
         <button className="user-button" onClick={() => navigate("/profile")}>
           <span className="user-icon">👤</span> Chí Thiện
         </button>
@@ -173,7 +173,7 @@ const Header = () => {
         style={{ opacity: searchOpacity, transition: "opacity 0.3s ease" }}
       >
         <div className="search-bar">
-          <input type="text" placeholder="Tìm kiếm theo kỹ năng, công ty..." />
+          <input type="text" placeholder="Tìm kiếm theo công việc, công ty..." />
           <button className="search-button" onClick={handleSearch}>
             🔍
           </button>

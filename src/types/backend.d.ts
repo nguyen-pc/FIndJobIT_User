@@ -169,3 +169,13 @@ export interface IRole {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface FollowJob {
+  jobId: number;
+  userId: number;
+}
+
+export interface FollowCompany {
+  companyId: number;
+  userId: number;
+}

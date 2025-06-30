@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { convertSlug } from "../config/utils";
 
 const JobListCard = ({ title, jobs }) => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredJobs = jobs.filter(
@@ -13,6 +15,11 @@ const JobListCard = ({ title, jobs }) => {
         skill.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
   );
+
+  const handleViewDetailJob = (item) => {
+    const slug = convertSlug(item.name);
+    navigate(`/job/${slug}?id=${item.id}`);
+  };
 
   return (
     <div className="joblist-card">
@@ -47,7 +54,12 @@ const JobListCard = ({ title, jobs }) => {
                 </div>
               </div>
             </div>
-            <button className="apply-btn">Ứng tuyển</button>
+            <button
+              className="apply-btn"
+              onClick={() => handleViewDetailJob(job)}
+            >
+              Ứng tuyển
+            </button>
           </div>
         ))}
       </div>
