@@ -1,5 +1,4 @@
-<<<<<<< Updated upstream
-=======
+
 @import "tailwindcss";
 
 .salary-icon {
@@ -12,7 +11,7 @@
 
 
 
->>>>>>> Stashed changes
+
 /* Wrapper chính chia 2 cột */
 .login_wrapper {
     display: flex;

@@ -5,9 +5,8 @@ import HomePage from "../pages/HomePage";
 import SignUp from "../pages/SignUp";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
-import EditProfilePage from "../pages/EditProfilePage";
-import ProfilePage from "../pages/ProfilePage";
-
+import CompanyList from "../pages/CompanyList";
+import CompanyDetails from "../pages/CompanyDetails";
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -18,10 +17,11 @@ export default function AppRouter() {
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/resetpassword/:email" element={<ResetPassword />} />
 
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/edit-profile" element={<EditProfilePage />} />
-
         <Route path="/company/:id" element={<CompanyDetails />} />
+
+        <Route path="/company_list" element={<CompanyList />} />
+
+        {/* Catch-all route for 404 Not Found */}
       </Routes>
     </BrowserRouter>
   );

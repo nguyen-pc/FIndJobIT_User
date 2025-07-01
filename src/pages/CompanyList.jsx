@@ -7,12 +7,10 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Input, Pagination } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+
 import { useNavigate } from "react-router-dom";
 import InfoCard from "../components/InfoCard";
 import "tailwindcss";
-import Header from "../components/Header";
 
 function CompanyList() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -172,8 +170,6 @@ function CompanyList() {
   };
   return (
     <>
-      <Header />
-
       {/* THANH TÌM KIẾM
       <div className="search flex justify-center mt-6 relative">
         <img src={banner} alt="" className="w-3/4" />
