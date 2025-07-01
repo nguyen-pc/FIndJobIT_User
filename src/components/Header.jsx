@@ -117,6 +117,14 @@ const Header = () => {
         <Link to="/" className="logo">
           NextDev
         </Link>
+        <div className=" ml-10  w-60 rounded   text-center pt-1 h-10 border text-sm">
+          <input
+            type="text"
+            placeholder="Tìm kiếm theo công việc, công ty..."
+            className="w-60 p-1  focus:outline-none text-[13px]"
+          />
+        </div>
+
         {/* Các phần Navigation khác */}
         <nav className="nav-menu">
           <select
@@ -162,9 +170,12 @@ const Header = () => {
             <option value="events">Sự kiện</option>
           </select>
         </nav>
-        
-        <button className="user-button" onClick={() => navigate("/profile")}>
-          <span className="user-icon">👤</span> Chí Thiện
+
+        <button
+          className="user-button bg-transparent rounded-full text-black text-[12px] border"
+          onClick={() => navigate("/profile")}
+        >
+          <span className="user-icon text-black">👤</span> Chí Thiện
         </button>
       </div>
       {/* Phần header search */}
@@ -173,12 +184,20 @@ const Header = () => {
         style={{ opacity: searchOpacity, transition: "opacity 0.3s ease" }}
       >
         <div className="search-bar">
-          <input type="text" placeholder="Tìm kiếm theo công việc, công ty..." />
+          <input
+            type="text"
+            placeholder="Tìm kiếm theo công việc, công ty..."
+          />
+
           <button className="search-button" onClick={handleSearch}>
             🔍
           </button>
         </div>
-        <div className="filters" style={{ display: "flex", gap: "1rem", alignItems: "center"}}>
+
+        <div
+          className="filters"
+          style={{ display: "flex", gap: "1rem", alignItems: "center" }}
+        >
           {/* Select đa lựa chọn cho Địa điểm */}
           <Select
             mode="multiple"

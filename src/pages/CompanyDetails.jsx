@@ -1,5 +1,6 @@
 import CompanyBanner from "../components/CompanyBanner";
 import CompanyAboutUs from "../components/CompanyAboutUs";
+
 import CompanyContact from "../components/CompanyContact ";
 import JobListCard from "../components/CompanyListCard";
 import logo from "../assets/logofpt.png";

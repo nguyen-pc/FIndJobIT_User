@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { convertSlug } from "../config/utils";
 
@@ -54,6 +55,7 @@ const JobListCard = ({ title, jobs }) => {
                 </div>
               </div>
             </div>
+
             <button
               className="apply-btn"
               onClick={() => handleViewDetailJob(job)}

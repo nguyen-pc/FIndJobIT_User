@@ -8,11 +8,12 @@ import JobPage from "../pages/JobPage";
 
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
+
 import EditProfilePage from "../pages/EditProfilePage";
 import ProfilePage from "../pages/ProfilePage";
 import TestTailwind from "../components/testtailwind";
 import RecommendJob from "../pages/RecommendJob";
-
+import CompanyList from "../pages/CompanyList";
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -31,8 +32,10 @@ export default function AppRouter() {
         <Route path="/edit-profile" element={<EditProfilePage />} />
 
         <Route path="/company/:id" element={<CompanyDetails />} />
+        <Route path="/company_list" element={<CompanyList />} />
+
         <Route path="/recommend-job" element={<RecommendJob />} />
-        
+
         {/* Catch-all route for 404 Not Found */}
       </Routes>
     </BrowserRouter>

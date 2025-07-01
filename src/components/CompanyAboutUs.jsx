@@ -1,9 +1,9 @@
 import React from "react";
 import { Card, Button } from "antd";
+
 import parse from "html-react-parser";
 
 const CompanyAboutUs = ({ title, description, bulletPoints, onSeeMore }) => {
-
   return (
     <Card
       className="aboutus-card"

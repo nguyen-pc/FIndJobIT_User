@@ -4,6 +4,7 @@ import Background2 from "../assets/background2.png";
 import LogoCompany from "../assets/logofpt.png";
 import Heart from "../assets/heart.png";
 import HeartFilled from "../assets/heart-filled.png"; // Giả sử bạn có icon trái tim đã tô màu
+
 import parse from "html-react-parser";
 import { useAppSelector } from "../redux/hooks";
 import {
@@ -22,6 +23,7 @@ function CompanyBanner({ company }) {
     "Công ty cổ phần viễn thông FPT"
   );
   const [companyStaff, setCompanyStaff] = useState(0);
+
   const [follower, setFollower] = useState(false); // Có thể dùng state này để tăng số lượng người theo dõi
   const [isFollowing, setIsFollowing] = useState(false); // Trạng thái mới: theo dõi hay chưa
   const [counter, setCounter] = useState(0); // Biến đếm số người theo dõi
