@@ -124,6 +124,7 @@ const Header = () => {
             className="w-60 p-1  focus:outline-none text-[13px]"
           />
         </div>
+
         {/* Các phần Navigation khác */}
         <nav className="nav-menu">
           <select
@@ -187,10 +188,12 @@ const Header = () => {
             type="text"
             placeholder="Tìm kiếm theo công việc, công ty..."
           />
+
           <button className="search-button" onClick={handleSearch}>
             🔍
           </button>
         </div>
+
         <div
           className="filters"
           style={{ display: "flex", gap: "1rem", alignItems: "center" }}

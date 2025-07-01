@@ -1,10 +1,15 @@
 import CompanyBanner from "../components/CompanyBanner";
 import CompanyAboutUs from "../components/CompanyAboutUs";
-import CompanyContact from "../components/CompanyContact";
+
+import CompanyContact from "../components/CompanyContact ";
 import JobListCard from "../components/CompanyListCard";
 import logo from "../assets/logofpt.png";
-import location from "../assets/location.png";
-function Company() {
+// import location from "../assets/location_1.png";
+import Header from "../components/Header";
+import { useLocation } from "react-router-dom";
+import { callFetchCompanyById, callFetchJobByIdCompany } from "../config/api";
+import { useEffect, useState } from "react";
+function CompanyDetails() {
   const description = `Công ty Cổ phần Viễn thông FPT (tên gọi tắt là FPT Telecom) hiện là một trong những nhà cung cấp dịch vụ viễn thông và Internet hàng đầu khu vực.`;
 
   const bulletPoints = [
@@ -17,44 +22,61 @@ function Company() {
   const handleSeeMore = () => {
     console.log("Xem thêm clicked");
   };
+
+  const [companyDetail, setCompanyDetail] = useState(null);
+  const [jobOfCompany, setJobOfCompany] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  let location = useLocation();
+  let params = new URLSearchParams(location.search);
+  const id = params?.get("id"); // job id
+  // Lọc công việc dựa trên title hoặc tags
+
+  useEffect(() => {
+    const init = async () => {
+      if (id) {
+        setIsLoading(true);
+        const res = await callFetchCompanyById(id);
+        const resJob = await callFetchJobByIdCompany(id);
+        console.log("res", res);
+        console.log("resjob", resJob);
+        if (res?.data) {
+          setCompanyDetail(res.data);
+        }
+        if (resJob?.data) {
+          setJobOfCompany(resJob.data);
+        }
+        setIsLoading(false);
+      }
+    };
+    init();
+  }, [id]);
+
   return (
     <div>
-      <CompanyBanner></CompanyBanner>
+      <Header />
+      <CompanyBanner company={companyDetail} />
       <div className="company-info-row">
         <CompanyAboutUs
           title="Về chúng tôi"
-          description={description}
+          description={companyDetail?.description}
           bulletPoints={bulletPoints}
           onSeeMore={handleSeeMore}
         />
         <CompanyContact
           title="Thông tin liên hệ"
-          address="Chợ Mới, An Giang"
-          mapImage={location}
+          address={companyDetail?.address}
+          // mapImage={companyDetail?.address}
         />
       </div>
-      <JobListCard
-        title="Tuyển dụng"
-        jobs={[
-          {
-            logo: `${logo}`,
-            title: "1 Nhân viên kỹ thuật viễn thông",
-            tags: ["5G", "Tester", "Automation Tester"],
-          },
-          {
-            logo: `${logo}`,
-            title: "2 Nhân viên kỹ thuật viễn thông",
-            tags: ["5G", "Tester", "Automation Tester"],
-          },
-          {
-            logo: `${logo}`,
-            title: "3 Nhân viên kỹ thuật viễn thông",
-            tags: ["5G", "Tester", "Automation Tester"],
-          },
-        ]}
-      />
+      {jobOfCompany && jobOfCompany.length > 0 ? (
+        <JobListCard title="Tuyển dụng" jobs={jobOfCompany} />
+      ) : (
+        <div className="no-jobs-message">
+          <p>Hiện tại công ty chưa có công việc nào được đăng tuyển.</p>
+        </div>
+      )}
     </div>
   );
 }
 
-export default Company;
+export default CompanyDetails;

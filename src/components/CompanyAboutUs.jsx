@@ -1,6 +1,8 @@
 import React from "react";
 import { Card, Button } from "antd";
 
+import parse from "html-react-parser";
+
 const CompanyAboutUs = ({ title, description, bulletPoints, onSeeMore }) => {
   return (
     <Card
@@ -8,12 +10,12 @@ const CompanyAboutUs = ({ title, description, bulletPoints, onSeeMore }) => {
       title={<span>{title}</span>}
       bordered={false}
     >
-      <p>{description}</p>
-      <ul>
+      <p> {parse(description ?? "")}</p>
+      {/* <ul>
         {bulletPoints.map((item, index) => (
           <li key={index}>{item}</li>
         ))}
-      </ul>
+      </ul> */}
       <Button type="link" onClick={onSeeMore}>
         Xem thêm <span style={{ fontSize: "14px" }}>▼</span>
       </Button>

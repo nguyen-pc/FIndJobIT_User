@@ -2,17 +2,25 @@ import React, { useState } from "react";
 import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
+import { useLocation, useNavigate } from "react-router-dom";
+import { convertSlug } from "../config/utils";
+
 const JobListCard = ({ title, jobs }) => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Lọc công việc dựa trên title hoặc tags
   const filteredJobs = jobs.filter(
     (job) =>
-      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.tags.some((tag) =>
-        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      job.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      job.skills.some((skill) =>
+        skill.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
   );
+
+  const handleViewDetailJob = (item) => {
+    const slug = convertSlug(item.name);
+    navigate(`/job/${slug}?id=${item.id}`);
+  };
 
   return (
     <div className="joblist-card">
@@ -29,19 +37,31 @@ const JobListCard = ({ title, jobs }) => {
         {filteredJobs.map((job, index) => (
           <div key={index} className="job-item">
             <div className="job-info">
-              <img src={job.logo} alt="logo" className="job-logo" />
+              <img
+                src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
+                  job?.company?.logo
+                }`}
+                alt="logo"
+                className="job-logo"
+              />
               <div>
-                <div className="job-title">{job.title}</div>
+                <div className="job-title">{job.name}</div>
                 <div className="job-tags">
-                  {job.tags.map((tag, i) => (
+                  {job.skills.map((skill, i) => (
                     <span key={i} className="job-tag">
-                      {tag}
+                      {skill.name}
                     </span>
                   ))}
                 </div>
               </div>
             </div>
-            <button className="apply-btn">Ứng tuyển</button>
+
+            <button
+              className="apply-btn"
+              onClick={() => handleViewDetailJob(job)}
+            >
+              Ứng tuyển
+            </button>
           </div>
         ))}
       </div>
