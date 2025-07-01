@@ -8,83 +8,16 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { convertSlug, getLocationName } from "../config/utils";
 dayjs.extend(relativeTime);
 
-// Danh sách việc làm (demo) – đều thuộc FPT nên gắn logo + tên công ty
-const allJobs = [
-  {
-    id: 1,
-    company: "FPT IS",
-    title: "Kiểm thử phần mềm - Tester",
-    description: "Quận 4, TP.HCM | SQL | Tester, Automation Tester",
-    img: fptLogo,
-  },
-  {
-    id: 2,
-    company: "FPT IS",
-    title: "Nhà phát triển Frontend",
-    description: "Quận 1, TP.HCM | React, JavaScript",
-    img: fptLogo,
-  },
-  {
-    id: 3,
-    company: "FPT IS",
-    title: "Kỹ sư AI",
-    description: "Hà Nội | Python, TensorFlow",
-    img: fptLogo,
-  },
-  {
-    id: 4,
-    company: "FPT IS",
-    title: "Phân tích dữ liệu",
-    description: "Đà Nẵng | Python, R, SQL",
-    img: fptLogo,
-  },
-  {
-    id: 5,
-    company: "FPT IS",
-    title: "Chuyên viên BA",
-    description: "Hà Nội | Business Analysis, Agile",
-    img: fptLogo,
-  },
-  {
-    id: 6,
-    company: "FPT IS",
-    title: "Backend Developer",
-    description: "Quận 7, TP.HCM | Node.js, Express, MongoDB",
-    img: fptLogo,
-  },
-  {
-    id: 7,
-    company: "FPT IS",
-    title: "DevOps Engineer",
-    description: "Bình Thạnh, TP.HCM | AWS, Docker, Kubernetes",
-    img: fptLogo,
-  },
-  {
-    id: 8,
-    company: "FPT IS",
-    title: "UI/UX Designer",
-    description: "Quận 3, TP.HCM | Figma, Sketch, Adobe XD",
-    img: fptLogo,
-  },
-  {
-    id: 9,
-    company: "FPT IS",
-    title: "Game Developer",
-    description: "Thủ Đức, TP.HCM | Unity, C#",
-    img: fptLogo,
-  },
-];
-
 const CardJob = (props) => {
   /* ------ Pagination: JOBS ------ */
   const [currentJobPage, setCurrentJobPage] = useState(1);
   const jobsPerPage = 6;
-  const totalJobPages = Math.ceil(allJobs.length / jobsPerPage);
+  // const totalJobPages = Math.ceil(allJobs.length / jobsPerPage);
 
-  const currentJobs = allJobs.slice(
-    (currentJobPage - 1) * jobsPerPage,
-    currentJobPage * jobsPerPage
-  );
+  // const currentJobs = allJobs.slice(
+  //   (currentJobPage - 1) * jobsPerPage,
+  //   currentJobPage * jobsPerPage
+  // );
 
   const handleJobPageChange = (page) => {
     const validPage = Math.min(Math.max(page, 1), totalJobPages);

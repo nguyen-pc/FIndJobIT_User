@@ -1,5 +1,10 @@
 import {
   IBackendRes,
+  type IPermission,
+  type IRole,
+} from "./../types/backend.d";
+import {
+  IBackendRes,
   IAccount,
   IUser,
   type IModelPaginate,
@@ -125,6 +130,22 @@ export const callFetchUser = (query: string) => {
 
 //Module Skill
 
+export const callCreateSkill = (name: string) => {
+  return axios.post<IBackendRes<ISkill>>("/api/v1/skills", {
+    name,
+  });
+};
+export const callUpdateSkill = (id: string, name: string) => {
+  return axios.put<IBackendRes<ISkill>>("/api/v1/skills", {
+    id,
+    name,
+  });
+};
+
+export const callDeleteSkill = (id: string) => {
+  return axios.put<IBackendRes<ISkill>>(`/api/v1/skills/${id}`);
+};
+
 export const callFetchAllSkill = (query: string) => {
   return axios.get<IBackendRes<IModelPaginate<ISkill>>>(
     `/api/v1/skills?${query}`
@@ -140,6 +161,40 @@ export const callFetchCompany = (query: string) => {
 
 export const callFetchCompanyById = (id: string) => {
   return axios.get<IBackendRes<ICompany>>(`/api/v1/companies/${id}`);
+};
+
+export const callCreateCompany = (
+  name: string,
+  address: string,
+  description: string,
+  logo: string
+) => {
+  return axios.post<IBackendRes<ICompany>>("/api/v1/companies", {
+    name,
+    address,
+    description,
+    logo,
+  });
+};
+
+export const callUpdateCompany = (
+  id: string,
+  name: string,
+  address: string,
+  description: string,
+  logo: string
+) => {
+  return axios.post<IBackendRes<ICompany>>("/api/v1/companies", {
+    id,
+    name,
+    address,
+    description,
+    logo,
+  });
+};
+
+export const callDeleteCompany = (id: string) => {
+  return axios.delete<IBackendRes<ICompany>>(`/api/v1/companies/${id}`);
 };
 
 export const followCompany = (payload: FollowCompany) => {
@@ -168,6 +223,20 @@ export const countUserFollowCompany = (companyId: number) => {
 };
 
 // Module Job
+
+export const callCreateJob = (job: IJob) => {
+  return axios.post<IBackendRes<IJob>>("/api/v1/jobs", {
+    ...job,
+  });
+};
+
+export const callUpdateJob = (job: IJob, id: string) => {
+  return axios.post<IBackendRes<IJob>>("/api/v1/jobs", { id, ...job });
+};
+
+export const callDeleteJob = (id: string) => {
+  return axios.delete<IBackendRes<IJob>>(`/api/v1/jobs/${id}`);
+};
 
 export const callFetchJob = (query: string) => {
   return axios.get<IBackendRes<IModelPaginate<IJob>>>(`/api/v1/jobs?${query}`);
@@ -200,6 +269,10 @@ export const checkFollowStatus = (jobId: number, userId: number) => {
   );
 };
 
+export const recommendJob = () => {
+  return axios.post<IBackendRes<>>(`/api/v1/jobs/recommend`);
+};
+
 /**
  * 
 Module Resume
@@ -223,9 +296,34 @@ export const callCreateResume = (
   });
 };
 
-/**
- * Upload single file
- */
+export const callUpdateResumeStatus = (id: any, status: string) => {
+  return axios.put<IBackendRes<IResume>>(`/api/v1/resumes/${id}`, {
+    id,
+    status,
+  });
+};
+
+export const callDeleteResume = (id: string) => {
+  return axios.delete<IBackendRes<IResume>>(`/api/v1/resumes/${id}`);
+};
+
+export const callFetchResume = (query: string) => {
+  return axios.get<IBackendRes<IModelPaginate<IResume>>>(
+    `/api/v1/resumes?${query}`
+  );
+};
+
+export const callFetchResumeById = (id: string) => {
+  return axios.get<IBackendRes<IResume>>(`/api/v1/resumes/${id}`);
+};
+
+export const callFetchResumeByUser = () => {
+  return axios.get<IBackendRes<IModelPaginate<IResume>>>(
+    "/api/v1/resumes/by-user"
+  );
+};
+
+// Upload single file
 export const callUploadSingleFile = (file: any, folderType: string) => {
   const bodyFormData = new FormData();
   bodyFormData.append("file", file);
@@ -240,3 +338,61 @@ export const callUploadSingleFile = (file: any, folderType: string) => {
     },
   });
 };
+
+// Module permission
+
+export const callCreatePermission = (permission: IPermission) => {
+  return axios.post<IBackendRes<IPermission>>("/api/v1/permissions", {
+    ...permission,
+  });
+};
+
+export const callUpdatePermission = (permission: IPermission, id: string) => {
+  return axios.put<IBackendRes<IPermission>>("/api/v1/permissions", {
+    id,
+    ...permission,
+  });
+};
+
+export const callDeletePermission = (id: string) => {
+  return axios.delete<IBackendRes<IPermission>>(`/api/v1/permissions/${id}`);
+};
+
+export const callFetchPermission = (query: string) => {
+  return axios.get<IBackendRes<IModelPaginate<IPermission>>>(
+    `/api/v1/permissions?${query}`
+  );
+};
+
+export const callFetchPermissionById = (id: string) => {
+  return axios.get<IBackendRes<IPermission>>(`/api/v1/permissions/${id}`);
+};
+
+// Module Role
+
+export const callCreateRole = (role: IRole) => {
+  return axios.post<IBackendRes<IRole>>("/api/v1/roles", {
+    ...role,
+  });
+};
+
+export const callUpdateRole = (role: IRole, id: string) => {
+  return axios.put<IBackendRes<IRole>>("/api/v1/roles", {
+    id,
+    ...role,
+  });
+};
+
+export const callDeleteRole = (id: string) => {
+  return axios.delete<IBackendRes<IRole>>(`/api/v1/roles/${id}`);
+};
+
+export const callFetchRoleById = (id: string) => {
+  return axios.get<IBackendRes<IRole>>(`/api/v1/roles/${id}`);
+}
+
+export const callFetchRole = (query: string) => {
+  return axios.get<IBackendRes<IModelPaginate<IRole>>>(
+    `/api/v1/roles?${query}`
+  );
+}

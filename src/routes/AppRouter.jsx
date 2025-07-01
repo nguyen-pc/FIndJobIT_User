@@ -10,6 +10,8 @@ import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import EditProfilePage from "../pages/EditProfilePage";
 import ProfilePage from "../pages/ProfilePage";
+import TestTailwind from "../components/testtailwind";
+import RecommendJob from "../pages/RecommendJob";
 
 export default function AppRouter() {
   return (
@@ -29,6 +31,9 @@ export default function AppRouter() {
         <Route path="/edit-profile" element={<EditProfilePage />} />
 
         <Route path="/company/:id" element={<CompanyDetails />} />
+        <Route path="/recommend-job" element={<RecommendJob />} />
+        
+        {/* Catch-all route for 404 Not Found */}
       </Routes>
     </BrowserRouter>
   );
