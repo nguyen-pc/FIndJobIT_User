@@ -20,7 +20,7 @@ const Header = () => {
     (state) => state.account.isAuthenticated
   );
   const user = useAppSelector((state) => state.account.user);
-  console.log("user", user);
+  // console.log("user", user);
 
   const handleSelectChange = (e) => {
     const value = e.target.value;
