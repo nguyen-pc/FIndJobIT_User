@@ -69,6 +69,7 @@ export interface ICompany {
   address?: string;
   logo: string;
   description?: string;
+  likeCount?: number;
   createdBy?: string;
   isDeleted?: boolean;
   deletedAt?: boolean | null;

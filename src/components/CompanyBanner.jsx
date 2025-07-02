@@ -11,7 +11,9 @@ import {
   cancelFollowCompany,
   checkCompanyStatus,
   countUserFollowCompany,
+  disLikeCompany,
   followCompany,
+  likeCompany,
 } from "../config/api";
 
 function CompanyBanner({ company }) {
@@ -60,6 +62,7 @@ function CompanyBanner({ company }) {
       if (!isFollowing) {
         console.log("Follow company payload:", payload, isFollowing);
         const response = await followCompany(payload);
+        const like = await likeCompany(company.id);
         if (response.data) {
           console.log("Follow job successful:", response.data);
           setIsFollowing(true);
@@ -68,6 +71,7 @@ function CompanyBanner({ company }) {
         }
       } else {
         const response = await cancelFollowCompany(payload);
+        const dislike = await disLikeCompany(company.id);
         setIsFollowing(false);
       }
     } catch (error) {

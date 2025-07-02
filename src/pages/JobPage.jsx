@@ -1,4 +1,5 @@
 // JobPage.jsx
+import "tailwindcss";
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
@@ -20,6 +21,8 @@ import parse from "html-react-parser";
 import ApplyModal from "../components/ApplyModal";
 import ReviewCVModal from "../components/ReviewCVModal";
 import { useAppSelector } from "../redux/hooks";
+import Heart from "../assets/heart.png";
+import HeartFilled from "../assets/heart-filled.png";
 
 const JobPage = () => {
   const navigate = useNavigate();
@@ -210,15 +213,13 @@ const JobPage = () => {
                       {isApplied ? "Đã ứng tuyển" : "Ứng tuyển"}
                     </button>
                     <button
-                      className={`favorite-button ${
-                        isFavorite ? "active" : ""
-                      }`}
+                      className={`favorite-button ${isFavorite ? "" : ""}`}
                       onClick={handleFollowJob}
                     >
                       <img
-                        src={tim}
-                        className="favorite-icon-img"
-                        alt="Yêu thích"
+                        className="w-[100%]"
+                        src={isFavorite ? HeartFilled : Heart}
+                        alt=""
                       />
                     </button>
                   </div>

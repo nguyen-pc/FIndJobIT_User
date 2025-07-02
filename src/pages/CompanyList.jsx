@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CompanyCard from "../components/CompanyCard";
 import logo from "../assets/logofpt.png";
 import background from "../assets/fpt_banner.png";
@@ -7,17 +7,89 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Input, Pagination } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
-
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import InfoCard from "../components/InfoCard";
+
 import "tailwindcss";
+import { callFetchCompany, callFetchCompanyLikest } from "../config/api";
+
 
 function CompanyList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [displayCompany, setDisplayCompany] = useState([]);
+  const [AllCompany, setAllCompany] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(8);
+  const [total, setTotal] = useState(0);
+  const [filter, setFilter] = useState("");
+  const [sortQuery, setSortQuery] = useState("sort=updatedAt,desc");
   const companiesPerPage = 10;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchCompany();
+    fetchAllCompany();
+  }, [current, pageSize, filter, sortQuery]);
+
+  const fetchCompany = async () => {
+    setIsLoading(true);
+    const res = await callFetchCompanyLikest();
+    console.log("res", res);
+    if (res && res.data) {
+      setDisplayCompany(res.data);
+    }
+
+    setIsLoading(false);
+  };
+
+  const fetchAllCompany = async () => {
+    setIsLoading(true);
+    let query = `page=${current}&size=${pageSize}`;
+    if (filter) {
+      query += `&${filter}`;
+    }
+    if (sortQuery) {
+      query += `&${sortQuery}`;
+    }
+    const res = await callFetchCompany(query);
+    console.log("res", res);
+    if (res && res.data) {
+      setAllCompany(res.data.result);
+      setTotal(res.data.meta.total);
+    }
+    setIsLoading(false);
+  };
+
+  const handleOnchangePage = (pagination) => {
+    if (pagination && pagination.current !== current) {
+      setCurrent(pagination.current);
+    }
+    if (pagination && pagination.pageSize !== pageSize) {
+      setPageSize(pagination.pageSize);
+      setCurrent(1);
+    }
+  };
+
+  // Tính tổng số trang từ dữ liệu backend
+  const totalCompanyPages = Math.ceil(total / pageSize);
+
+  // Render phân trang (ví dụ với số trang)
+  const renderPageNumbers = (totalPages, currentPage, onChange) => {
+    return Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+      <span
+        key={num}
+        className={currentPage === num ? "active" : ""}
+        onClick={() => onChange({ current: num, pageSize })}
+      >
+        {num}
+      </span>
+    ));
+  };
 
   const companies = [
     {
@@ -170,23 +242,7 @@ function CompanyList() {
   };
   return (
     <>
-      {/* THANH TÌM KIẾM
-      <div className="search flex justify-center mt-6 relative">
-        <img src={banner} alt="" className="w-3/4" />
-        <div className="flex flex-row absolute top-15">
-          <Input
-            placeholder="Tìm kiếm công ty..."
-            prefix={<SearchOutlined />}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={handleKeyDown}
-            style={{ width: 300, borderRadius: "8px" }}
-          />
-          <div className="text-center p-2 ml-6 bg-white w-[130px] h-[40px] rounded-md flex items-center justify-center cursor-pointer">
-            Tìm kiếm
-          </div>
-        </div>
-      </div> */}
+      <Header />
 
       {/* KẾT QUẢ TÌM KIẾM (chỉ hiển thị nếu searchQuery có nội dung) */}
       {searchQuery ? (
@@ -221,7 +277,7 @@ function CompanyList() {
       ) : (
         <>
           {/* CÔNG TY NỔI BẬT */}
-          <div className="HotCompany ml-20 " style={{ padding: "0px " }}>
+          {/* <div className="HotCompany ml-20 " style={{ padding: "0px " }}>
             <div className="mt-10  flex ">
               <p
                 className="text-2xl font-semibold "
@@ -243,8 +299,8 @@ function CompanyList() {
               </div>
             </div>
             <div className=" flex mb-20">
-              <div className="w-full h-[400px] flex relative">
-                {companies.slice(0, 5).map((c, i) => (
+              <div className="w-full h-[400px] flex relative ">
+                {companies.slice(0, 4).map((c, i) => (
                   <div
                     key={i}
                     className="relative mr-9"
@@ -268,14 +324,14 @@ function CompanyList() {
                 ))}
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* CÔNG TY ĐƯỢC YÊU THÍCH */}
 
           <div className="HotCompany ml-20 o" style={{ padding: "0px " }}>
             <div className="mt-10  flex">
               <p
-                className="text-2xl font-semibold "
+                className="text-2xl font-semibold text-center"
                 style={{ color: "#1C9EAF" }}
               >
                 DANH SÁCH CÔNG TY ĐƯỢC YÊU THÍCH
@@ -295,7 +351,7 @@ function CompanyList() {
             </div>
             <div className=" flex mb-20">
               <div className="w-full h-[400px] flex relative">
-                {companies.slice(6, 11).map((c, i) => (
+                {displayCompany.map((c, i) => (
                   <div
                     key={i}
                     className="relative mr-9"
@@ -305,13 +361,13 @@ function CompanyList() {
                     <CompanyCard company={c} />
                     <div
                       className={`
-        absolute top-3 -left-16 mt-2 z-50 transition-all duration-900
-        ${
-          hoveredFavoriteIndex === i
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-2 pointer-events-none"
-        }
-      `}
+                        absolute top-3 -left-16 mt-2 z-50 transition-all duration-900
+                        ${
+                          hoveredFavoriteIndex === i
+                            ? "opacity-100 translate-y-0"
+                            : "opacity-0 -translate-y-2 pointer-events-none"
+                        }
+                      `}
                     >
                       <InfoCard company={c} />
                     </div>
@@ -327,31 +383,49 @@ function CompanyList() {
           >
             <div className="mb-6">
               <p
-                className="text-center text-2xl font-semibold"
+                className="text-2xl font-semibold ml-[20px]"
                 style={{ color: "#1C9EAF" }}
               >
                 CÁC CÔNG TY KHÁC
               </p>
             </div>
             <div className="ml-10">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center">
-                {currentCompanies.map((c, i) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 justify-items-center ">
+                {AllCompany.map((c, i) => (
                   <CompanyCard key={i} company={c} />
                 ))}
               </div>
               <div className="pagination-container flex justify-center mt-8 mb-8">
-                <Pagination
-                  current={currentPage}
-                  pageSize={companiesPerPage}
-                  total={companies.length}
-                  onChange={handlePageChange}
-                  showSizeChanger={false}
-                />
+                {totalCompanyPages > 1 && (
+                  <div className="pagination">
+                    <span
+                      onClick={() =>
+                        handleOnchangePage({ current: current - 1, pageSize })
+                      }
+                    >
+                      ⬅️
+                    </span>
+                    {renderPageNumbers(
+                      totalCompanyPages,
+                      current,
+                      handleOnchangePage
+                    )}
+                    <span
+                      onClick={() =>
+                        handleOnchangePage({ current: current + 1, pageSize })
+                      }
+                    >
+                      ➡️
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </>
       )}
+
+      <Footer />
     </>
   );
 }

@@ -6,6 +6,7 @@ import { EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { convertSlug, getLocationName } from "../config/utils";
+
 dayjs.extend(relativeTime);
 
 const CardJob = (props) => {
@@ -138,7 +139,11 @@ const CardJob = (props) => {
                     ? job.company.name
                     : job.company}
                 </span>
-                <span className="favorite-icon">♡</span>
+                {/* <img
+                  className="w-[100%]"
+                  src={isFavorite ? HeartFilled : Heart}
+                  alt=""
+                /> */}
               </div>
               <h3>{job.name}</h3>
               <div>
