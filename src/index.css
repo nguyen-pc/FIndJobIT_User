@@ -327,7 +327,7 @@ header {
 .logo {
     font-family: 'Jura', sans-serif;
     /* Sử dụng font Jura */
-    font-size: 32px;
+    font-size: 10px;
     /* Kích thước lớn, dễ nhìn */
     font-weight: 700;
     text-decoration: none;
@@ -362,7 +362,7 @@ header {
     /* Padding cho mục chọn */
     color: black;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 10px;
     cursor: pointer;
     outline: none;
     /* Bỏ outline khi focus */

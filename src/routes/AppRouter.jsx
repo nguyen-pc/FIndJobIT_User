@@ -21,17 +21,19 @@ import HomeAdmin from "../pages/admin/Home";
 import Dashboard from "../pages/admin/Dashboard";
 import Bar from "../pages/admin/Bar";
 import Calendar2 from "../pages/admin/Calendar2";
-import Contact from "../pages/admin/Contact";
+import EmployerManagement from "../pages/admin/EmployerManagement";
 import Faq from "../pages/admin/Faq";
-import Form from "../pages/admin/Form";
+import FormUserAdd from "../pages/admin/FormUserAdd";
 import FormEmployerAdd from "../pages/admin/FormEmployerAdd";
 
 import Geography from "../pages/admin/Geography";
-import Invoices from "../pages/admin/Invoices";
+import JobManagement from "../pages/admin/JobManagement";
 import Line from "../pages/admin/Line";
 import Pie from "../pages/admin/Pie";
-import Team from "../pages/admin/Team";
-
+import UserManagement from "../pages/admin/UserManagement";
+import EditUser from "../pages/admin/EditUser";
+import SkillManagement from "../pages/admin/SkillManagement";
+import AddJob from "../pages/admin/AddJob";
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -54,11 +56,16 @@ export default function AppRouter() {
         {/* route admin */}
         <Route path="/admin/*" element={<HomeAdmin />}>
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="team" element={<Team />} />
-          <Route path="contacts" element={<Contact />} />
-          <Route path="invoices" element={<Invoices />} />
-          <Route path="form" element={<Form />} />
+          <Route path="userManagement" element={<UserManagement />} />
+          <Route path="employerManagement" element={<EmployerManagement />} />
+          <Route path="jobManagement" element={<JobManagement />} />
+          <Route path="skillManagement" element={<SkillManagement />} />
+
+          <Route path="addUser" element={<FormUserAdd />} />
+          <Route path="editUser/:id" element={<EditUser />} />
+
           <Route path="formEmployer" element={<FormEmployerAdd />} />
+          <Route path="addJob" element={<AddJob />} />
 
           <Route path="bar" element={<Bar />} />
           <Route path="pie" element={<Pie />} />

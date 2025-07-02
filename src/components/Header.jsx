@@ -119,7 +119,7 @@ const Header = () => {
         overflow: "hidden",
       }}
     >
-      <div className="header-top">
+      <div className="header-top ">
         <Link to="/" className="logo">
           NextDev
         </Link>
