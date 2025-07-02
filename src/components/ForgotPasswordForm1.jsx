@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import MailIcon from "../assets/emailicon.png";
 import { useState } from "react";
+import { callForgotPassword } from "../config/api";
 
 function ForgotPasswordForm1() {
   const [email, setEmail] = useState(""); // lưu email
@@ -9,9 +10,19 @@ function ForgotPasswordForm1() {
   const handleSwitchResetPass = (e) => {
     e.preventDefault();
     if (email.trim() === "") return;
-    navigate(`/resetpassword/${encodeURIComponent(email)}`);
+    handleForgotPassword(e);
+    navigate(`/resetpassword`);
   };
 
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    try {
+      await callForgotPassword(email);
+    } catch (error) {
+      console.error("Error sending forgot password request:", error);
+      // Xử lý lỗi nếu cần thiết, ví dụ: hiển thị thông báo lỗi cho người dùng
+    }
+  };
   return (
     <>
       <div className="page_container">

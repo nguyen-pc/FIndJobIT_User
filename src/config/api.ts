@@ -106,6 +106,13 @@ export const callLogout = () => {
   return axios.post<IBackendRes<string>>("/api/v1/auth/logout");
 };
 
+export const callForgotPassword = (email: string) => {
+  return axios.post<IBackendRes<string>>(`/api/v1/auth/forgot_password?email=${encodeURIComponent(email)}`, )
+  }
+
+export const callResetPassword = (token: string, newPassword: string) => {
+  return axios.post<IBackendRes<string>>(`/api/v1/auth/reset_password?token=${token}`, {newPassword})
+}
 /**
  * 
 Module User
@@ -159,6 +166,12 @@ export const callFetchCompany = (query: string) => {
   );
 };
 
+export const callFetchCompanyLikest = () => {
+  return axios.get<IBackendRes<IModelPaginate<ICompany>>>(
+    `/api/v1/companies/likest`
+  );
+}
+
 export const callFetchCompanyById = (id: string) => {
   return axios.get<IBackendRes<ICompany>>(`/api/v1/companies/${id}`);
 };
@@ -201,6 +214,14 @@ export const followCompany = (payload: FollowCompany) => {
   return axios.post<IBackendRes<FollowCompany>>(`/api/v1/companies/follow`, {
     ...payload,
   });
+};
+
+export const likeCompany = (id: string) => {
+  return axios.put<IBackendRes<ICompany>>(`/api/v1/companies/${id}/like`);
+};
+
+export const disLikeCompany = (id: string) => {
+  return axios.put<IBackendRes<ICompany>>(`/api/v1/companies/${id}/dislike`);
 };
 
 export const cancelFollowCompany = (payload: FollowCompany) => {

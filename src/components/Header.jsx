@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LOCATION_LIST } from "../config/utils";
 import { callFetchAllSkill } from "../config/api";
 import { notification, Select } from "antd";
+import { useAppSelector } from "../redux/hooks";
 
 const { Option } = Select;
 
@@ -15,6 +16,11 @@ const Header = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [searchOpacity, setSearchOpacity] = useState(1);
   const [headerHeight, setHeaderHeight] = useState(250);
+  const isAuthenticated = useAppSelector(
+    (state) => state.account.isAuthenticated
+  );
+  const user = useAppSelector((state) => state.account.user);
+  // console.log("user", user);
 
   const handleSelectChange = (e) => {
     const value = e.target.value;
@@ -117,48 +123,35 @@ const Header = () => {
         <Link to="/" className="logo">
           NextDev
         </Link>
-        <div className=" ml-10  w-60 rounded   text-center pt-1 h-10 border text-sm">
+        {/* <div className=" ml-10  w-60 rounded   text-center pt-1 h-10 border text-sm">
           <input
             type="text"
             placeholder="Tìm kiếm theo công việc, công ty..."
             className="w-60 p-1  focus:outline-none text-[13px]"
           />
-        </div>
+        </div> */}
 
         {/* Các phần Navigation khác */}
         <nav className="nav-menu">
-          <select
+          <button
+            onClick={() => navigate("/job_list")}
             className="filter-select"
-            onChange={handleSelectChange}
-            defaultValue=""
           >
-            <option value="" disabled>
-              Việc làm HOT
-            </option>
-            <option value="hot-jobs">Top việc làm HOT</option>
-          </select>
-          <select
+            {" "}
+            Việc làm HOT
+          </button>
+          <button
+            onClick={() => navigate("/job_list")}
             className="filter-select"
-            onChange={handleSelectChange}
-            defaultValue=""
           >
-            <option value="" disabled>
-              Việc làm
-            </option>
-            <option value="jobs">Tất cả việc làm</option>
-            <option value="featured-jobs">Việc làm theo ngành</option>
-          </select>
-          <select
+            Việc làm
+          </button>
+          <button
+            onClick={() => navigate("/company_list")}
             className="filter-select"
-            onChange={handleSelectChange}
-            defaultValue=""
           >
-            <option value="" disabled>
-              Công ty
-            </option>
-            <option value="companies">Công ty nổi bật</option>
-            <option value="top-companies">Top Công ty</option>
-          </select>
+            Công ty
+          </button>
           <select
             className="filter-select"
             onChange={handleSelectChange}
@@ -170,13 +163,22 @@ const Header = () => {
             <option value="events">Sự kiện</option>
           </select>
         </nav>
-
-        <button
-          className="user-button bg-transparent rounded-full text-black text-[12px] border"
-          onClick={() => navigate("/profile")}
-        >
-          <span className="user-icon text-black">👤</span> Chí Thiện
-        </button>
+        <div className="flex items-center space-x-4 ">
+          <button
+            className="user-button bg-transparent rounded-full text-black text-[12px] border"
+            onClick={() => navigate("/profile")}
+          >
+            <span className="user-icon text-black">👤</span> {user.name}
+          </button>
+          {user.role.name === "SUPER_ADMIN" && (
+            <button
+              className="user-button bg-transparent rounded-full text-black text-[12px] border ml-1 "
+              onClick={() => navigate("/admin/dashboard")}
+            >
+              Trang quản trị
+            </button>
+          )}
+        </div>
       </div>
       {/* Phần header search */}
       <div

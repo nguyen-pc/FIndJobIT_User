@@ -373,16 +373,16 @@ header {
 }
 
 /* Mũi tên tùy chỉnh cho select */
-.nav-menu .filter-select::after {
-    content: '▼';
+/* .nav-menu .filter-select::after {
+    content: '▼'; */
     /* Ký tự mũi tên xuống */
-    position: absolute;
+    /* position: absolute;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 10px;
+    font-size: 10px; */
     /* Đảm bảo click xuyên qua mũi tên đến select */
-}
+/* } */
 
 .filter-select:hover {
     color: #177a8b;
@@ -407,6 +407,7 @@ header {
     display: flex;
     align-items: center;
     gap: 8px;
+    margin-right: 6px;
     /* Khoảng cách giữa icon và chữ */
     flex-shrink: 0;
     /* Ngăn nút bị co lại */
@@ -415,6 +416,7 @@ header {
 .user-button:hover {
     /* Màu tối hơn khi hover */
     transform: translateY(-2px);
+    background-color: #177a8b;
     /* Hiệu ứng nhấc nhẹ lên */
 }
 
@@ -588,7 +590,7 @@ header {
 }
 
 /* Mũi tên tùy chỉnh cho filter-select */
-.filter-select::after {
+/* .filter-select::after {
     content: '▼';
     position: absolute;
     right: 15px;
@@ -597,7 +599,7 @@ header {
     font-size: 10px;
     color: #1C9EAF;
     pointer-events: none;
-}
+} */
 
 
 /* --- SECTIONS (Công ty nổi bật, Việc làm nổi bật) --- */
@@ -1904,7 +1906,7 @@ footer {
     background-color: transparent;
     border: 1px solid #ddd;
     color: #f44336; /* Màu đỏ cho trái tim */
-    padding: 10px;
+    padding: 10px 9px;
     border-radius: 50%; /* Nút tròn */
     width: 40px; /* Kích thước cố định */
     height: 40px;
@@ -2257,7 +2259,7 @@ footer {
 .favorite-button {
     background-color: #f0f0f0;
     color: #555;
-    padding: 12px 15px;
+    padding: 24px 9px;
     /* Adjust padding for icon button */
     border-radius: 8px;
     display: flex;
@@ -2571,7 +2573,7 @@ footer {
     .action-button,
     .apply-button,
     .favorite-button {
-        padding: 10px 15px;
+        padding: 24px 9px;
         font-size: 0.95em;
     }
 
@@ -3048,18 +3050,18 @@ header {
 }
 
 /* Mũi tên tùy chỉnh cho select */
-.nav-menu .filter-select::after {
-    content: '▼';
+/* .nav-menu .filter-select::after { */
+    /* content: '▼'; */
     /* Ký tự mũi tên xuống */
-    position: absolute;
+    /* position: absolute;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
     font-size: 10px;
     color: #1C9EAF;
-    pointer-events: none;
+    pointer-events: none; */
     /* Đảm bảo click xuyên qua mũi tên đến select */
-}
+/* } */
 
 .nav-menu .filter-select:hover {
     color: #177a8b;
@@ -3268,7 +3270,7 @@ header {
 }
 
 /* Mũi tên tùy chỉnh cho filter-select */
-.filter-select::after {
+/* .filter-select::after {
     content: '▼';
     position: absolute;
     right: 15px;
@@ -3277,7 +3279,7 @@ header {
     font-size: 10px;
     color: #1C9EAF;
     pointer-events: none;
-}
+} */
 
 
 /* --- SECTIONS (Công ty nổi bật, Việc làm nổi bật) --- */
@@ -4936,7 +4938,7 @@ footer {
 .favorite-button {
     background-color: #f0f0f0;
     color: #555;
-    padding: 12px 15px;
+    padding: 24px 9px;
     /* Adjust padding for icon button */
     border-radius: 8px;
     display: flex;

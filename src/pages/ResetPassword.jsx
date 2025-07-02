@@ -28,7 +28,7 @@ function ResetPassword() {
           </div>
           <div className="ForgotPasswordForm1">
             <h2 className="title_login">Tạo lại mật khẩu</h2>
-            <div>Email cần reset: {email}</div>
+            {/* <div>Email cần reset: {email}</div> */}
             <ResetPasswordForm />
             <div className="return_to_signin">
               <h5 onClick={() => navigate("/signin")}>Quay lại đăng nhập</h5>
