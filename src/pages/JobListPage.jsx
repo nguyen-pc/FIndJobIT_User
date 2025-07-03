@@ -1,188 +1,351 @@
-// import React from 'react';
-// import { FaMapMarkerAlt, FaBriefcase } from 'react-icons/fa'; // Cần cài đặt react-icons
-// // import fptLogo from '../assets/fpt-logo.png'; // Đảm bảo đường dẫn này đúng
-// import '../index.css'; // Import global CSS để sử dụng các class đã định nghĩa
+import React, { useEffect, useState } from "react";
+import Header from "../components/Header";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { callFetchJob, callFetchJobLatest } from "../config/api";
+import { Card } from "antd";
+import CardJob from "../components/CardJob";
 
-// const JobsListPage = () => {
-//   return (
-//     <div className="jobs-list-page-container">
-//       <div className="main-content-wrapper">
+const JobListPage = () => {
+  const [displayJob, setDisplayJob] = useState(null);
+  const [displayJobPopular, setDisplayJobPopular] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-//         {/* BẮT ĐẦU CỘT BÊN TRÁI: CHI TIẾT TUYỂN DỤNG */}
-//         <div className="left-panel">
-//           <div className="job-details-section-container">
-//             {/* Phần thông tin chung về vị trí tuyển dụng */}
-//             <h1 className="job-title">Nhân viên Kinh doanh dự án - Sales FPT Telecom - Thu Nhập Từ 15 - 80 Triệu</h1>
-//             <div className="job-info-row">
-//               <div className="info-item">
-//                 <FaBriefcase className="icon" />
-//                 <span>Thu nhập</span>
-//                 <p>15 - 30 Triệu</p>
-//               </div>
-//               <div className="info-item">
-//                 <FaMapMarkerAlt className="icon" />
-//                 <span>Địa điểm</span>
-//                 <p>Tp. HCM</p>
-//               </div>
-//               <div className="info-item">
-//                 <FaBriefcase className="icon" />
-//                 <span>Kinh nghiệm</span>
-//                 <p>Không yêu cầu</p>
-//               </div>
-//             </div>
-//             <div className="tags">
-//               <span className="tag tag-blue">SQL</span>
-//               <span className="tag tag-blue">Tester</span>
-//               <span className="tag tag-blue">Automation Tester</span>
-//             </div>
-//             <div className="actions">
-//               <button className="apply-button">Nộp hồ sơ 28/05/2025</button>
-//               <button className="review-cv-button">Review CV</button>
-//               <button className="save-button">Ứng tuyển</button>
-//               <button className="heart-button">&hearts;</button>
-//             </div>
+  const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [filter, setFilter] = useState("");
 
-//             {/* Phần Chi Tiết Tuyển Dụng */}
-//             <div className="details-content">
-//               <h2>Chi Tiết Tuyển Dụng</h2>
+  const [currentPopular, setCurrenPopular] = useState(1);
+  const [pageSizePopular, setPageSizePopular] = useState(1);
+  const [totalPopular, setTotalPopular] = useState(0);
+  const [filterPopular, setFilterPopular] = useState("");
 
-//               <div className="sub-section">
-//                 <h3>Mô tả công việc</h3>
-//                 <ul>
-//                   <li>Tìm kiếm và phát triển khách hàng mới trong lĩnh vực viễn thông.</li>
-//                   <li>Tư vấn và giới thiệu các gói dịch vụ viễn thông phù hợp với nhu cầu của khách hàng.</li>
-//                   <li>Thực hiện các cuộc gọi, gặp gỡ khách hàng để thuyết trình và chốt đơn hàng.</li>
-//                   <li>Theo dõi và báo cáo doanh số bán hàng, các chỉ tiêu kinh doanh.</li>
-//                   <li>Tham gia các hoạt động đào tạo, nâng cao nghiệp vụ kinh doanh.</li>
-//                 </ul>
-//               </div>
+  const [sortQuery, setSortQuery] = useState("sort=updatedAt,desc");
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
 
-//               <div className="sub-section">
-//                 <h3>Yêu cầu ứng viên</h3>
-//                 <ul>
-//                   <li>Không yêu cầu kinh nghiệm, được đào tạo bài bản.</li>
-//                   <li>Tốt nghiệp Trung cấp trở lên.</li>
-//                   <li>Kỹ năng giao tiếp, thuyết phục tốt.</li>
-//                   <li>Có khả năng làm việc độc lập và làm việc nhóm.</li>
-//                   <li>Khả năng sắp xếp và tổ chức công việc.</li>
-//                   <li>Trung thực, nhiệt tình, năng động.</li>
-//                   <li>Thành thạo tin học văn phòng (Word, Excel, PowerPoint).</li>
-//                   <li>Có kỹ năng đàm phán, giải quyết vấn đề.</li>
-//                 </ul>
-//               </div>
+  useEffect(() => {
+    fetchJob();
+  }, [current, pageSize, filter, sortQuery, location]);
 
-//               <div className="sub-section">
-//                 <h3>Yêu cầu kỹ năng</h3>
-//                 <div className="tags">
-//                   <span className="tag tag-blue">SQL</span>
-//                   <span className="tag tag-blue">Tester</span>
-//                   <span className="tag tag-blue">Automation Tester</span>
-//                 </div>
-//               </div>
+  useEffect(() => {
+    fetchJobPopular();
+  }, [currentPopular, pageSizePopular, filterPopular, sortQuery, location]);
+ 
+ 
+  const fetchJob = async () => {
+    setIsLoading(true);
+    let query = `page=${current}&size=${pageSize}`;
+    if (filter) {
+      query += `&${filter}`;
+    }
+    if (sortQuery) {
+      query += `&${sortQuery}`;
+    }
 
-//               <div className="sub-section">
-//                 <h3>Thu nhập</h3>
-//                 <ul>
-//                   <li>Thu nhập khi đạt KPI: 15 - 60 triệu VND</li>
-//                   <li>Thu nhập linh hoạt, theo tỷ lệ đóng góp</li>
-//                   <li>Lương cứng: 10.7 - 12.3 triệu VND</li>
-//                   <li>Lương cộng phụ thuộc vào doanh số</li>
-//                 </ul>
-//               </div>
+    // //check query string
+    // const queryLocation = searchParams.get("location");
+    // const querySkills = searchParams.get("skills");
+    // if (queryLocation || querySkills) {
+    //   let q = "";
+    //   if (queryLocation) {
+    //     q = sfIn("location", queryLocation.split(",")).toString();
+    //   }
 
-//               <div className="sub-section">
-//                 <h3>Quyền lợi</h3>
-//                 <ul>
-//                   <li>Mức lương 15 - 80tr (lương cứng từ 10.200.000 - 37.200.000đ + hoa hồng)</li>
-//                   <li>Được tham gia các chương trình đào tạo bài bản về kỹ năng bán hàng, sản phẩm, quy trình viễn thông</li>
-//                   <li>Môi trường làm việc năng động, chuyên nghiệp, cơ hội thăng tiến rõ ràng.</li>
-//                   <li>Được đóng bảo hiểm xã hội, bảo hiểm y tế, bảo hiểm thất nghiệp theo quy định của pháp luật.</li>
-//                   <li>Thưởng đầy đủ các ngày lễ tết theo quy định của công ty.</li>
-//                   <li>Cơ hội khám sức khỏe định kỳ. Du lịch hàng năm, thưởng tháng 13.</li>
-//                 </ul>
-//               </div>
+    //   if (querySkills) {
+    //     q = queryLocation
+    //       ? q + " and " + `${sfIn("skills", querySkills.split(","))}`
+    //       : `${sfIn("skills", querySkills.split(","))}`;
+    //   }
 
-//               <div className="sub-section">
-//                 <h3>Địa điểm làm việc</h3>
-//                 <ul>
-//                   <li>Hồ Chí Minh: 8/2 Hoàng Hoa Thám, Phường 06, Bình Thạnh</li>
-//                   <li>Hồ Chí Minh: Quận 1</li>
-//                   <li>Hồ Chí Minh: Tân Bình</li>
-//                 </ul>
-//               </div>
+    //   query += `&filter=${encodeURIComponent(q)}`;
+    // }
 
-//               <div className="sub-section">
-//                 <h3>Thời gian làm việc</h3>
-//                 <ul>
-//                   <li>Thứ 2 - Thứ 6 (08:00 đến 17:30)</li>
-//                   <li>Thứ 7 (từ 08:00 đến 12:00)</li>
-//                 </ul>
-//               </div>
+    const res = await callFetchJobLatest(query);
+    if (res) {
+      setDisplayJob(res.data.result);
+      console.log("res", res.data.result);
+      console.log("displayJob", displayJob);
+      setTotal(res.data.meta.total);
+    }
+    setIsLoading(false);
+  };
 
-//               <div className="sub-section">
-//                 <h3>Cách thức ứng tuyển</h3>
-//                 <p>Ứng viên nộp hồ sơ trực tuyến bằng cách bấm Ứng tuyển ngay dưới đây.</p>
-//                 <div className="actions">
-//                   <button className="apply-button">Nộp hồ sơ 28/05/2025</button>
-//                   <button className="review-cv-button">Review CV</button>
-//                   <button className="save-button">Ứng tuyển</button>
-//                   <button className="heart-button">&hearts;</button>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//         {/* KẾT THÚC CỘT BÊN TRÁI */}
+  const fetchJobPopular = async () => {
+    setIsLoading(true);
+    let query = `page=${currentPopular}&size=${pageSizePopular}`;
+    if (filter) {
+      query += `&${filterPopular}`;
+    }
+    if (sortQuery) {
+      query += `&${sortQuery}`;
+    }
 
-//         {/* BẮT ĐẦU CỘT BÊN PHẢI: THÔNG TIN CÔNG TY */}
-//         <div className="right-panel">
-//           <div className="company-info-section-container">
-//             <div className="company-header">
-//               <img src={fptLogo} alt="FPT Logo" className="company-logo" />
-//               <div className="company-name">
-//                 <h3>Công ty cổ phần viễn thông FPT</h3>
-//               </div>
-//             </div>
-//             <div className="info-row">
-//               <span className="label">Quy mô:</span>
-//               <span className="value">2000 nhân viên</span>
-//             </div>
-//             <div className="info-row">
-//               <span className="label">Lĩnh vực:</span>
-//               <span className="value">Viễn thông</span>
-//             </div>
-//             <div className="info-row">
-//               <span className="label">Địa điểm:</span>
-//               <span className="value">Tầng 2, tòa nhà FPT, Phù Đổng Thiên Vương, Cần Thơ</span>
-//             </div>
-//             <button className="view-company-button">Xem công ty</button>
+    // //check query string
+    // const queryLocation = searchParams.get("location");
+    // const querySkills = searchParams.get("skills");
+    // if (queryLocation || querySkills) {
+    //   let q = "";
+    //   if (queryLocation) {
+    //     q = sfIn("location", queryLocation.split(",")).toString();
+    //   }
 
-//             <div className="general-info-block">
-//               <h3>Thông Tin Chung</h3>
-//               <div className="info-row">
-//                 <span className="label">Cấp bậc:</span>
-//                 <span className="value">Nhân viên</span>
-//               </div>
-//               <div className="info-row">
-//                 <span className="label">Học vấn:</span>
-//                 <span className="value">Trung học phổ thông trở lên</span>
-//               </div>
-//               <div className="info-row">
-//                 <span className="label">Số lượng tuyển:</span>
-//                 <span className="value">15 người</span>
-//               </div>
-//               <div className="info-row">
-//                 <span className="label">Hình thức:</span>
-//                 <span className="value">Toàn thời gian</span>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//         {/* KẾT THÚC CỘT BÊN PHẢI */}
+    //   if (querySkills) {
+    //     q = queryLocation
+    //       ? q + " and " + `${sfIn("skills", querySkills.split(","))}`
+    //       : `${sfIn("skills", querySkills.split(","))}`;
+    //   }
 
-//       </div>
-//     </div>
-//   );
-// };
+    //   query += `&filter=${encodeURIComponent(q)}`;
+    // }
 
-// export default JobsListPage;
+    const res = await callFetchJob(query);
+    console.log("res", res);
+    if (res) {
+      setDisplayJobPopular(res.data.result);
+      console.log("res", res.data.result);
+      console.log("displayJob", displayJob);
+      setTotalPopular(res.data.meta.total);
+    }
+    setIsLoading(false);
+  };
+
+  const handleOnchangePagePopular = (pagination) => {
+    if (pagination.currentPopular < 1) return;
+
+    if (pagination && pagination.currentPopular !== currentPopular) {
+      setCurrenPopular(pagination.currentPopular);
+    }
+    if (
+      pagination &&
+      pagination.pageSizePopular !== undefined &&
+      pagination.pageSizePopular !== pageSizePopular
+    ) {
+      setPageSizePopular(pagination.pageSizePopular);
+      setCurrenPopular(1);
+    }
+  };
+
+  const handleOnchangePage = (pagination) => {
+    if (pagination.current < 1) return;
+
+    if (pagination && pagination.current !== current) {
+      setCurrent(pagination.current);
+    }
+    if (
+      pagination &&
+      pagination.pageSize !== undefined &&
+      pagination.pageSize !== pageSize
+    ) {
+      setPageSize(pagination.pageSize);
+      setCurrent(1);
+    }
+  };
+  // Tính tổng số trang từ dữ liệu backend
+  const totalJobPages = Math.ceil(total / pageSize);
+  const totalJobPagesPopular = Math.ceil(totalPopular / pageSizePopular);
+
+  // Render phân trang (ví dụ với số trang)
+  const renderPageNumbers = (totalPages, currentPage, onChange) => {
+    return Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+      <span
+        key={num}
+        className={currentPage === num ? "active" : ""}
+        onClick={() => onChange({ current: num, pageSize })}
+      >
+        {num}
+      </span>
+    ));
+  };
+
+  return (
+    <>
+      <Header />
+      <div>
+        {/* Công việc mới nhất */}
+        <div className="HotCompany ml-20 o" style={{ padding: "0px " }}>
+          <div className="mt-10  flex">
+            <p
+              className="text-2xl font-semibold text-center"
+              style={{ color: "#1C9EAF" }}
+            >
+              DANH SÁCH CÔNG VIỆC MỚI NHẤT
+            </p>
+            <div className="rounded-full border md:w-auto h-[30px] pl-2.5 ml-[10px]">
+              <div
+                className="width-30 cursor-pointer hover:text-[#1C9EAF] duration-300"
+                onClick={() => navigate("/")}
+              >
+                <span className=" text-xs mr-2 ">Xem thêm</span>
+                <FontAwesomeIcon
+                  icon={faAngleRight}
+                  className="text-xs mr-2 "
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex-grow  max-w-[1300px] my-2  mx-auto w-full  ">
+            <div className="">
+              <CardJob displayJob={displayJob} isLoading={isLoading} />
+            </div>
+            {total > pageSize && (
+              <div className="pagination">
+                {/* Nút trang trước */}
+                {current > 1 ? (
+                  <span
+                    onClick={() =>
+                      handleOnchangePage({ current: current - 1, pageSize })
+                    }
+                  >
+                    ⬅️
+                  </span>
+                ) : (
+                  <span className="disabled">⬅️</span>
+                )}
+                {/* Hiển thị số trang */}
+                {renderPageNumbers(totalJobPages, current, handleOnchangePage)}
+                {/* Nút trang sau */}
+                {current < totalJobPages ? (
+                  <span
+                    onClick={() =>
+                      handleOnchangePage({ current: current + 1, pageSize })
+                    }
+                  >
+                    ➡️
+                  </span>
+                ) : (
+                  <span className="disabled">➡️</span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Các công việc phổ biến */}
+        <div className="HotCompany ml-20 o" style={{ padding: "0px " }}>
+          <div className="mt-10  flex">
+            <p
+              className="text-2xl font-semibold text-center"
+              style={{ color: "#1C9EAF" }}
+            >
+              CÔNG VIỆC PHỔ BIẾN
+            </p>
+            <div className="rounded-full border md:w-auto h-[30px] pl-2.5 ml-[10px]">
+              <div
+                className="width-30 cursor-pointer hover:text-[#1C9EAF] duration-300"
+                onClick={() => navigate("/")}
+              >
+                <span className=" text-xs mr-2 ">Xem thêm</span>
+                <FontAwesomeIcon
+                  icon={faAngleRight}
+                  className="text-xs mr-2 "
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex-grow  max-w-[1300px] my-2  mx-auto w-full  ">
+            <div className="">
+              <CardJob displayJob={displayJobPopular} isLoading={isLoading} />
+            </div>
+            {totalPopular > pageSizePopular && (
+              <div className="pagination">
+                {/* Nút trang trước */}
+                {currentPopular > 1 ? (
+                  <span
+                    onClick={() =>
+                      handleOnchangePagePopular({
+                        currentPopular: currentPopular - 1,
+                        pageSizePopular,
+                      })
+                    }
+                  >
+                    ⬅️
+                  </span>
+                ) 
+                : (
+                  <span className="disabled">⬅️</span>
+                )}
+                {/* Hiển thị số trang */}
+                {renderPageNumbers(
+                  totalJobPagesPopular,
+                  currentPopular,
+                  handleOnchangePagePopular
+                )}
+                {/* Nút trang sau */}
+                {currentPopular < totalJobPagesPopular ? (
+                  <span
+                    onClick={() =>
+                      handleOnchangePagePopular({
+                        currentPopular: currentPopular + 1,
+                        pageSizePopular,
+                      })
+                    }
+                  >
+                    ➡️
+                  </span>
+                ) : (
+                  <span className="disabled">➡️</span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Công việc có thể phù hợp với bạn */}
+        <div className="HotCompany ml-20 o" style={{ padding: "0px " }}>
+          <div className="mt-10  flex">
+            <p
+              className="text-2xl font-semibold text-center"
+              style={{ color: "#1C9EAF" }}
+            >
+              GỢI Ý CÔNG VIỆC PHÙ HỢP VỚI BẠN
+            </p>
+            <div className="rounded-full border md:w-auto h-[30px] pl-2.5 ml-[10px]">
+              <div
+                className="width-30 cursor-pointer hover:text-[#1C9EAF] duration-300"
+                onClick={() => navigate("/")}
+              >
+                <span className=" text-xs mr-2 ">Xem thêm</span>
+                <FontAwesomeIcon
+                  icon={faAngleRight}
+                  className="text-xs mr-2 "
+                />
+              </div>
+            </div>
+          </div>
+          <div className=" flex mb-20">
+            <div className="w-full h-[400px] flex relative">
+              {/* {displayCompany.map((c, i) => (
+              <div
+                key={i}
+                className="relative mr-9"
+                onMouseEnter={() => setHoveredFavoriteIndex(i)}
+                onMouseLeave={() => setHoveredFavoriteIndex(null)}
+              >
+                <CompanyCard company={c} />
+                <div
+                  className={`
+                              absolute top-3 -left-16 mt-2 z-50 transition-all duration-900
+                              ${
+                                hoveredFavoriteIndex === i
+                                  ? "opacity-100 translate-y-0"
+                                  : "opacity-0 -translate-y-2 pointer-events-none"
+                              }
+                            `}
+                >
+                  <InfoCard company={c} />
+                </div>
+              </div>
+            ))} */}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default JobListPage;
