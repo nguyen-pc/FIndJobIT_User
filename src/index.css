@@ -4072,33 +4072,149 @@ footer {
 /* JobPage.css */
 
 /* Container chính cho toàn bộ trang */
-.job-detail-page-container {
+/* ... (Giữ nguyên các style hiện có trong index.css) ... */
+
+/* Main wrapper for Job Detail Page */
+.job-detail-page-wrapper {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Đảm bảo footer luôn ở dưới cùng */
+    min-height: 100vh;
+    background-color: #f4f7f6;
 }
 
-/* Wrapper cho nội dung chính, chia làm 2 cột */
-.main-content-wrapper {
+/* Content container with two columns and full-width section */
+.job-detail-content-container {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 30px 20px;
-    background-color: #f0f2f5; /* Màu nền nhẹ nhàng */
-    flex-grow: 1; /* Cho phép mở rộng để đẩy footer xuống */
+    flex-direction: column;
+    /* Đổi thành column để xếp chồng các phần tử */
+    gap: 30px;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    flex-grow: 1;
 }
 
-/* Panel bên trái chứa chi tiết công việc */
+/* Container for the two-column layout (job-detail-card and company-info-card) */
+.two-column-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    width: 100%;
+}
+
+/* Left Panel - Contains main job details */
 .left-panel {
-    flex: 3; /* Chiếm nhiều không gian hơn */
-    max-width: 800px; /* Giới hạn chiều rộng tối đa */
+    flex: 2.5;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-/* Panel bên phải chứa thông tin công ty */
+/* Right Panel - Contains company info */
 .right-panel {
     flex: 1;
-    max-width: 350px; /* Giới hạn chiều rộng tối đa */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
+
+/* Full-width panel for detail-recruitment-card */
+.full-width-panel {
+    width: 100%;
+    max-width: 1200px;
+    box-sizing: border-box;
+}
+
+/* Job Detail Card - Top main job info */
+.job-detail-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+}
+
+/* Detail Recruitment Card */
+.job-section-card.detail-recruitment-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .job-detail-content-container {
+        padding: 20px 15px;
+        max-width: 90%;
+    }
+
+    .two-column-container {
+        flex-direction: column;
+    }
+
+    .left-panel,
+    .right-panel,
+    .full-width-panel {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .job-detail-card,
+    .job-section-card.detail-recruitment-card {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .job-detail-content-container {
+        padding: 20px 10px;
+    }
+
+    .job-detail-card,
+    .job-section-card.detail-recruitment-card {
+        padding: 20px;
+    }
+
+    .job-header h2 {
+        font-size: 1.5em;
+    }
+
+    .job-meta-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .job-detail-card,
+    .job-section-card.detail-recruitment-card {
+        padding: 15px;
+    }
+
+    .job-header h2 {
+        font-size: 1.3em;
+    }
+
+    .job-meta-item {
+        font-size: 0.9em;
+    }
+
+    .salary-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .skill-tag {
+        font-size: 0.85em;
+        padding: 5px 10px;
+    }
+}
+
+/* ... (Giữ nguyên các style khác trong index.css) ... */
 
 /* Card chi tiết công việc */
 .job-card {

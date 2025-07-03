@@ -18,7 +18,7 @@ const CardJob = ({ displayJob, isLoading }) => {
 
   return (
     <section className="featured-jobs" id="jobs">
-      <h2>Việc làm nổi bật</h2>
+      {/* <h2>Việc làm nổi bật</h2> */}
 
       <div className="jobs-list">
         {isLoading ? (
