@@ -31,6 +31,7 @@ import Invoices from "../pages/admin/Invoices";
 import Line from "../pages/admin/Line";
 import Pie from "../pages/admin/Pie";
 import Team from "../pages/admin/Team";
+import JobListPage from "../pages/JobListPage";
 
 export default function AppRouter() {
   return (
@@ -40,7 +41,7 @@ export default function AppRouter() {
         <Route path="/signin" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
-        <Route path="/job_list" element={<JobPage />} />
+        <Route path="/job_list" element={<JobListPage />} />
         <Route path="/job/:jobId" element={<JobPage />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/reset_password" element={<ResetPassword />} />

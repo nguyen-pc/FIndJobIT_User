@@ -107,12 +107,17 @@ export const callLogout = () => {
 };
 
 export const callForgotPassword = (email: string) => {
-  return axios.post<IBackendRes<string>>(`/api/v1/auth/forgot_password?email=${encodeURIComponent(email)}`, )
-  }
+  return axios.post<IBackendRes<string>>(
+    `/api/v1/auth/forgot_password?email=${encodeURIComponent(email)}`
+  );
+};
 
 export const callResetPassword = (token: string, newPassword: string) => {
-  return axios.post<IBackendRes<string>>(`/api/v1/auth/reset_password?token=${token}`, {newPassword})
-}
+  return axios.post<IBackendRes<string>>(
+    `/api/v1/auth/reset_password?token=${token}`,
+    { newPassword }
+  );
+};
 /**
  * 
 Module User
@@ -170,7 +175,7 @@ export const callFetchCompanyLikest = () => {
   return axios.get<IBackendRes<IModelPaginate<ICompany>>>(
     `/api/v1/companies/likest`
   );
-}
+};
 
 export const callFetchCompanyById = (id: string) => {
   return axios.get<IBackendRes<ICompany>>(`/api/v1/companies/${id}`);
@@ -263,6 +268,12 @@ export const callFetchJob = (query: string) => {
   return axios.get<IBackendRes<IModelPaginate<IJob>>>(`/api/v1/jobs?${query}`);
 };
 
+export const callFetchJobLatest = (query: string) => {
+  return axios.get<IBackendRes<IModelPaginate<IJob>>>(
+    `/api/v1/jobs/latest?${query}`
+  );
+};
+
 export const callFetchJobByIdCompany = (id: string) => {
   return axios.get<IBackendRes<IJob>>(`/api/v1/jobs-company/${id}`);
 };
@@ -291,7 +302,7 @@ export const checkFollowStatus = (jobId: number, userId: number) => {
 };
 
 export const recommendJob = () => {
-  return axios.post<IBackendRes<>>(`/api/v1/jobs/recommend`);
+  return axios.post<IBackendRes<IJob>>(`/api/v1/jobs/recommend`);
 };
 
 /**
@@ -410,10 +421,10 @@ export const callDeleteRole = (id: string) => {
 
 export const callFetchRoleById = (id: string) => {
   return axios.get<IBackendRes<IRole>>(`/api/v1/roles/${id}`);
-}
+};
 
 export const callFetchRole = (query: string) => {
   return axios.get<IBackendRes<IModelPaginate<IRole>>>(
     `/api/v1/roles?${query}`
   );
-}
+};

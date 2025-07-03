@@ -99,23 +99,34 @@ const CardCompany = (props) => {
           <p>Không có công ty nào.</p>
         )}
       </div>
-      {totalCompanyPages > 1 && (
+      {total > pageSize && (
         <div className="pagination">
-          <span
-            onClick={() =>
-              handleOnchangePage({ current: current - 1, pageSize })
-            }
-          >
-            ⬅️
-          </span>
+          {/* Nút trang trước */}
+          {current > 1 ? (
+            <span
+              onClick={() =>
+                handleOnchangePage({ current: current - 1, pageSize })
+              }
+            >
+              ⬅️
+            </span>
+          ) : (
+            <span className="disabled">⬅️</span>
+          )}
+          {/* Hiển thị số trang */}
           {renderPageNumbers(totalCompanyPages, current, handleOnchangePage)}
-          <span
-            onClick={() =>
-              handleOnchangePage({ current: current + 1, pageSize })
-            }
-          >
-            ➡️
-          </span>
+          {/* Nút trang sau */}
+          {current < totalCompanyPages ? (
+            <span
+              onClick={() =>
+                handleOnchangePage({ current: current + 1, pageSize })
+              }
+            >
+              ➡️
+            </span>
+          ) : (
+            <span className="disabled">➡️</span>
+          )}
         </div>
       )}
     </section>

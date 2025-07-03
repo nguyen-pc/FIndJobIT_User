@@ -25,7 +25,7 @@ const HomePage = (props) => {
 
   useEffect(() => {
     fetchJob();
-  }, [current, pageSize, filter, sortQuery, location]);
+  }, [current, pageSize, filter, sortQuery, location, ]);
 
   const fetchJob = async () => {
     setIsLoading(true);
@@ -105,6 +105,9 @@ const HomePage = (props) => {
         <CardCompany />
 
         {/* -------- Featured Jobs -------- */}
+        <h2 className=" text-center text-[#1C9EAF]! text-[28px]!">
+          Việc làm nổi bật
+        </h2>
         <CardJob displayJob={displayJob} isLoading={isLoading} />
         {total > pageSize && (
           <div className="pagination">
