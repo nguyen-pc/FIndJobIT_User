@@ -15,7 +15,6 @@ import InfoCard from "../components/InfoCard";
 import "tailwindcss";
 import { callFetchCompany, callFetchCompanyLikest } from "../config/api";
 
-
 function CompanyList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,7 +23,7 @@ function CompanyList() {
   const [AllCompany, setAllCompany] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(8);
+  const [pageSize, setPageSize] = useState(4);
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState("");
   const [sortQuery, setSortQuery] = useState("sort=updatedAt,desc");
@@ -91,139 +90,25 @@ function CompanyList() {
     ));
   };
 
-  const companies = [
-    {
-      logo: logo,
-      background: background,
-      title: "Tập đoàn FPT",
-      follower: 220,
-      description:
-        "Công ty SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSchuyên tư vấn và đào tạo các du học sinh Nhật Bản và Hàn Quốcssssssssssssssssssssssssssskkdksa sdkjaidjasidjsaidsjduhfsdádsadsda dsadsadsadsadsds",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty ABC",
-      follower: 220,
-      description:
-        "Cung cấp dịch vụ phần mềm và giải pháp công nghệ thông tin...",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty DEF",
-      follower: 220,
-      description: "Tập trung vào nghiên cứu và phát triển trí tuệ nhân tạo...",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty GHI",
-      follower: 220,
-      description: "Chuyên về giải pháp điện toán đám mây và big data...",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty JKL",
-      follower: 220,
-      description: "Phát triển ứng dụng di động và game...",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty MNO",
-      follower: 220,
-      description: "Cung cấp dịch vụ an ninh mạng và bảo mật thông tin...",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty PQR",
-      follower: 220,
-      description: "Giải pháp ERP và quản lý doanh nghiệp...",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty STU",
-      follower: 220,
-      description:
-        "Phát triển game mobile và ứng dụng giáo dụcsssssssssssssssssssssssss.sssssjjjjjjiijijijijijiádajsdiasjdasjdoiasjdoiasjdkajsdkaskjaskjdkasjdajsdkajsdjsadjsajdasjdkasjdjijijijijjijj..",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty STU2",
-      follower: 220,
-      description:
-        "Phát triển game mobile và ứng dụng giáo dụcsssssssssssssssssssssssss.sssssjjjjjjiijijijijijiádajsdiasjdasjdoiasjdoiasjdkajsdkaskjaskjdkasjdajsdkajsdjsadjsajdasjdkasjdjijijijijjijj..",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty STU3",
-      follower: 220,
-      description:
-        "Phát triển game mobile và ứng dụng giáo dụcsssssssssssssssssssssssss.sssssjjjjjjiijijijijijiádajsdiasjdasjdoiasjdoiasjdkajsdkaskjaskjdkasjdajsdkajsdjsadjsajdasjdkasjdjijijijijjijj..",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty STU4",
-      follower: 220,
-      description:
-        "Phát triển game mobile và ứng dụng giáo dụcsssssssssssssssssssssssss.sssssjjjjjjiijijijijijiádajsdiasjdasjdoiasjdoiasjdkajsdkaskjaskjdkasjdajsdkajsdjsadjsajdasjdkasjdjijijijijjijj..",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty VWX",
-      follower: 220,
-      description: "Dịch vụ tư vấn chuyển đổi số...",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty YZA",
-      follower: 220,
-      description: "Cung cấp giải pháp IoT thông minh...",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty BCD",
-      follower: 220,
-      description: "Phát triển ứng dụng tài chính...",
-    },
-    {
-      logo: logo,
-      background: background,
-      title: "Công ty EFG",
-      follower: 220,
-      description: "Giải pháp blockchain và tiền điện tử...",
-    },
-  ];
+  // const handleSearch = () => {
+  //   setCurrentPage(1);
+  //   setSearchQuery(searchTerm);
+  // };
 
-  const handleSearch = () => {
-    setCurrentPage(1);
-    setSearchQuery(searchTerm);
-  };
+  // const handleKeyDown = (e) => {
+  //   if (e.key === "Enter") handleSearch();
+  // };
+  // const handleWatchMore = (e) => {};
+  // const filteredCompanies = companies.filter((c) =>
+  //   c.title.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") handleSearch();
-  };
-  const handleWatchMore = (e) => {};
-  const filteredCompanies = companies.filter((c) =>
-    c.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const indexOfLastCompany = currentPage * companiesPerPage;
-  const indexOfFirstCompany = indexOfLastCompany - companiesPerPage;
-  const currentCompanies = filteredCompanies.slice(
-    indexOfFirstCompany,
-    indexOfLastCompany
-  );
+  // const indexOfLastCompany = currentPage * companiesPerPage;
+  // const indexOfFirstCompany = indexOfLastCompany - companiesPerPage;
+  // const currentCompanies = filteredCompanies.slice(
+  //   indexOfFirstCompany,
+  //   indexOfLastCompany
+  // );
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -396,27 +281,38 @@ function CompanyList() {
                 ))}
               </div>
               <div className="pagination-container flex justify-center mt-8 mb-8">
-                {totalCompanyPages > 1 && (
+                {total > pageSize && (
                   <div className="pagination">
-                    <span
-                      onClick={() =>
-                        handleOnchangePage({ current: current - 1, pageSize })
-                      }
-                    >
-                      ⬅️
-                    </span>
+                    {/* Nút trang trước */}
+                    {current > 1 ? (
+                      <span
+                        onClick={() =>
+                          handleOnchangePage({ current: current - 1, pageSize })
+                        }
+                      >
+                        ⬅️
+                      </span>
+                    ) : (
+                      <span className="disabled">⬅️</span>
+                    )}
+                    {/* Hiển thị số trang */}
                     {renderPageNumbers(
                       totalCompanyPages,
                       current,
                       handleOnchangePage
                     )}
-                    <span
-                      onClick={() =>
-                        handleOnchangePage({ current: current + 1, pageSize })
-                      }
-                    >
-                      ➡️
-                    </span>
+                    {/* Nút trang sau */}
+                    {current < totalCompanyPages ? (
+                      <span
+                        onClick={() =>
+                          handleOnchangePage({ current: current + 1, pageSize })
+                        }
+                      >
+                        ➡️
+                      </span>
+                    ) : (
+                      <span className="disabled">➡️</span>
+                    )}
                   </div>
                 )}
               </div>

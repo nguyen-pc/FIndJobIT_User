@@ -3,29 +3,38 @@ import Header from "../components/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { callFetchJob, callFetchJobLatest } from "../config/api";
+import { callFetchJob, callFetchJobLatest, recommendJob } from "../config/api";
 import { Card } from "antd";
 import CardJob from "../components/CardJob";
+import { useAppSelector } from "../redux/hooks";
+import JobCardRecommend from "../components/JobCardRecommend";
 
 const JobListPage = () => {
-  const [displayJob, setDisplayJob] = useState(null);
-  const [displayJobPopular, setDisplayJobPopular] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [sortQuery, setSortQuery] = useState("sort=updatedAt,desc");
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  //Lấy công việc mới nhất
+  const [displayJob, setDisplayJob] = useState(null);
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(1);
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState("");
 
+  //Lấy công việc phổ biến
+  const [displayJobPopular, setDisplayJobPopular] = useState(null);
   const [currentPopular, setCurrenPopular] = useState(1);
   const [pageSizePopular, setPageSizePopular] = useState(1);
   const [totalPopular, setTotalPopular] = useState(0);
   const [filterPopular, setFilterPopular] = useState("");
 
-  const [sortQuery, setSortQuery] = useState("sort=updatedAt,desc");
-  const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const location = useLocation();
+  // Lấy công việc phù hợp
+  const isAuthenticated = useAppSelector(
+    (state) => state.account.isAuthenticated
+  );
+  const user = useAppSelector((state) => state.account.user);
+  const [jobRecommend, setJobRecommend] = React.useState(null);
 
   useEffect(() => {
     fetchJob();
@@ -34,8 +43,11 @@ const JobListPage = () => {
   useEffect(() => {
     fetchJobPopular();
   }, [currentPopular, pageSizePopular, filterPopular, sortQuery, location]);
- 
- 
+
+  useEffect(() => {
+    fetchJobRecommend();
+  }, []);
+
   const fetchJob = async () => {
     setIsLoading(true);
     let query = `page=${current}&size=${pageSize}`;
@@ -111,6 +123,16 @@ const JobListPage = () => {
       setTotalPopular(res.data.meta.total);
     }
     setIsLoading(false);
+  };
+
+  const fetchJobRecommend = async () => {
+    try {
+      const response = await recommendJob();
+      console.log("Recommended Jobs:", response.data.recommendations);
+      setJobRecommend(response.data.recommendations);
+    } catch (error) {
+      console.error("Error fetching recommended jobs:", error);
+    }
   };
 
   const handleOnchangePagePopular = (pagination) => {
@@ -264,8 +286,7 @@ const JobListPage = () => {
                   >
                     ⬅️
                   </span>
-                ) 
-                : (
+                ) : (
                   <span className="disabled">⬅️</span>
                 )}
                 {/* Hiển thị số trang */}
@@ -316,30 +337,9 @@ const JobListPage = () => {
               </div>
             </div>
           </div>
-          <div className=" flex mb-20">
-            <div className="w-full h-[400px] flex relative">
-              {/* {displayCompany.map((c, i) => (
-              <div
-                key={i}
-                className="relative mr-9"
-                onMouseEnter={() => setHoveredFavoriteIndex(i)}
-                onMouseLeave={() => setHoveredFavoriteIndex(null)}
-              >
-                <CompanyCard company={c} />
-                <div
-                  className={`
-                              absolute top-3 -left-16 mt-2 z-50 transition-all duration-900
-                              ${
-                                hoveredFavoriteIndex === i
-                                  ? "opacity-100 translate-y-0"
-                                  : "opacity-0 -translate-y-2 pointer-events-none"
-                              }
-                            `}
-                >
-                  <InfoCard company={c} />
-                </div>
-              </div>
-            ))} */}
+          <div className="flex-grow  max-w-[1300px] my-2  mx-auto w-full  ">
+            <div className="">
+              <JobCardRecommend  jobs={jobRecommend} />
             </div>
           </div>
         </div>

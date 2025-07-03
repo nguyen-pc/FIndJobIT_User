@@ -1,4 +1,3 @@
-
 // JobPage.jsx
 import "tailwindcss";
 import React, { useEffect, useState } from "react";
@@ -112,7 +111,9 @@ const JobPage = () => {
             <div className="job-detail-card">
               <div className="job-header">
                 <h2>
-                  {jobDetail ? jobDetail.name : "Vị trí công việc không xác định"}
+                  {jobDetail
+                    ? jobDetail.name
+                    : "Vị trí công việc không xác định"}
                 </h2>
                 <div className="job-meta-grid">
                   <span className="job-meta-item">
@@ -131,12 +132,20 @@ const JobPage = () => {
                     </span>
                   </span>
                   <span className="job-meta-item">
-                    <img src={location_1} alt="Địa điểm" className="salary-icon" />
+                    <img
+                      src={location_1}
+                      alt="Địa điểm"
+                      className="salary-icon"
+                    />
                     <strong>Địa điểm:</strong> <br />
                     {jobDetail ? jobDetail.location : ""}
                   </span>
                   <span className="job-meta-item">
-                    <img src={skill} alt="Kinh nghiệm" className="salary-icon" />
+                    <img
+                      src={skill}
+                      alt="Kinh nghiệm"
+                      className="salary-icon"
+                    />
                     <strong>Kinh nghiệm:</strong>
                     <br /> Không có
                   </span>
@@ -172,31 +181,24 @@ const JobPage = () => {
                       onClick={() => setIsReviewCVModalOpen(true)}
                     >
                       Review CV
-                      className={`favorite-button ${isFavorite ? "" : ""}`}
-                      onClick={handleFollowJob}
-                    >
-                      <img
-                        className="w-[100%]"
-                        src={isFavorite ? HeartFilled : Heart}
-                        alt=""
-                      />
                     </button>
                     <div className="apply-favorite-group">
                       <button
                         className="action-button apply-button"
+                        // onClick={handleApply}
                         disabled={isApplied}
                         onClick={() => setIsModalOpen(true)}
                       >
                         {isApplied ? "Đã ứng tuyển" : "Ứng tuyển"}
                       </button>
                       <button
-                        className={`favorite-button ${isFavorite ? "active" : ""}`}
+                        className={`favorite-button ${isFavorite ? "" : ""}`}
                         onClick={handleFollowJob}
                       >
                         <img
-                          src={tim}
-                          className="favorite-icon-img"
-                          alt="Yêu thích"
+                          className="w-[100%]"
+                          src={isFavorite ? HeartFilled : Heart}
+                          alt=""
                         />
                       </button>
                     </div>
