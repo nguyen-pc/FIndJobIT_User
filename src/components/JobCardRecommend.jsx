@@ -1,30 +1,26 @@
-import React, { useEffect, useState } from "react";
-import fptLogo from "../assets/fpt.png";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { callFetchJob } from "../config/api";
+import React from "react";
+import { convertSlug, getLocationName } from "../config/utils";
 import { EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { convertSlug, getLocationName } from "../config/utils";
+import { useNavigate } from "react-router-dom";
 
-dayjs.extend(relativeTime);
+const JobCardRecommend = ({ jobs }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
 
-const CardJob = ({ displayJob, isLoading }) => {
   const navigate = useNavigate();
-  const handleViewDetailJob = (item) => {
-    const slug = convertSlug(item.name);
-    navigate(`/job/${slug}?id=${item.id}`);
-  };
-
+    const handleViewDetailJob = (item) => {
+      const slug = convertSlug(item.job.title);
+      navigate(`/job/${slug}?id=${item.job.id}`);
+    };
   return (
     <section className="featured-jobs" id="jobs">
-      <h2>Việc làm nổi bật</h2>
+      <h2>Việc làm có thể phù hợp với bạn</h2>
 
       <div className="jobs-list">
         {isLoading ? (
           <p>Loading...</p>
-        ) : displayJob && displayJob.length > 0 ? (
-          displayJob.map((job) => (
+        ) : jobs && jobs.length > 0 ? (
+          jobs.map((job) => (
             <div
               className="job-card"
               key={job.id}
@@ -35,7 +31,7 @@ const CardJob = ({ displayJob, isLoading }) => {
                 <img
                   className="job-company-logo"
                   src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
-                    job?.company?.logo
+                    job?.job?.logoUrl
                   }`}
                   alt={job.company}
                 />
@@ -45,26 +41,22 @@ const CardJob = ({ displayJob, isLoading }) => {
                     ? job.company.name
                     : job.company}
                 </span>
-                {/* <img
-                  className="w-[100%]"
-                  src={isFavorite ? HeartFilled : Heart}
-                  alt=""
-                /> */}
+                <span className="favorite-icon">♡</span>
               </div>
-              <h3>{job.name}</h3>
+              <h3>{job.job.title}</h3>
               <div>
                 <ThunderboltOutlined style={{ color: "orange" }} />
                 &nbsp;
-                {(job.salary + "")?.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} đ
+                {(job.job.salary + "")?.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} đ
               </div>
               <div>
                 <EnvironmentOutlined style={{ color: "#58aaab" }} />
-                &nbsp;{getLocationName(job.location)}
+                &nbsp;{getLocationName(job.job.location)}
               </div>
               <div>
                 {job.updatedAt
-                  ? dayjs(job.updatedAt).locale("en").fromNow()
-                  : dayjs(job.createdAt).locale("en").fromNow()}
+                  ? dayjs(job.job.updatedAt).locale("en").fromNow()
+                  : dayjs(job.job.createdAt).locale("en").fromNow()}
               </div>
               <button>Ứng tuyển ngay</button>
             </div>
@@ -75,19 +67,20 @@ const CardJob = ({ displayJob, isLoading }) => {
       </div>
 
       {/* Pagination nếu cần */}
-      {/* {total > pageSize && (
-        <div className="pagination">
-          <span onClick={() => handleOnchangePage({ current: current - 1 })}>
-            ⬅️
-          </span>
-          
-          <span onClick={() => handleOnchangePage({ current: current + 1 })}>
-            ➡️
-          </span>
-        </div>
-      )} */}
     </section>
   );
 };
 
-export default CardJob;
+export default JobCardRecommend;
+
+//    {total > pageSize && (
+//         <div className="pagination">
+//           <span onClick={() => handleOnchangePage({ current: current - 1 })}>
+//             ⬅️
+//           </span>
+//           {/* Hiển thị số trang, có thể sử dụng hàm renderPageNumbers */}
+//           <span onClick={() => handleOnchangePage({ current: current + 1 })}>
+//             ➡️
+//           </span>
+//         </div>
+//       )}

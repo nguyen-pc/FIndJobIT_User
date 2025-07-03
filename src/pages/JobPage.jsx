@@ -1,4 +1,6 @@
 
+// JobPage.jsx
+import "tailwindcss";
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
@@ -19,6 +21,8 @@ import parse from "html-react-parser";
 import ApplyModal from "../components/ApplyModal";
 import ReviewCVModal from "../components/ReviewCVModal";
 import { useAppSelector } from "../redux/hooks";
+import Heart from "../assets/heart.png";
+import HeartFilled from "../assets/heart-filled.png";
 
 const JobPage = () => {
   const navigate = useNavigate();
@@ -168,6 +172,14 @@ const JobPage = () => {
                       onClick={() => setIsReviewCVModalOpen(true)}
                     >
                       Review CV
+                      className={`favorite-button ${isFavorite ? "" : ""}`}
+                      onClick={handleFollowJob}
+                    >
+                      <img
+                        className="w-[100%]"
+                        src={isFavorite ? HeartFilled : Heart}
+                        alt=""
+                      />
                     </button>
                     <div className="apply-favorite-group">
                       <button

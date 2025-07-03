@@ -4,13 +4,16 @@ import Background2 from "../assets/background2.png";
 import LogoCompany from "../assets/logofpt.png";
 import Heart from "../assets/heart.png";
 import HeartFilled from "../assets/heart-filled.png"; // Giả sử bạn có icon trái tim đã tô màu
+
 import parse from "html-react-parser";
 import { useAppSelector } from "../redux/hooks";
 import {
   cancelFollowCompany,
   checkCompanyStatus,
   countUserFollowCompany,
+  disLikeCompany,
   followCompany,
+  likeCompany,
 } from "../config/api";
 
 function CompanyBanner({ company }) {
@@ -22,6 +25,7 @@ function CompanyBanner({ company }) {
     "Công ty cổ phần viễn thông FPT"
   );
   const [companyStaff, setCompanyStaff] = useState(0);
+
   const [follower, setFollower] = useState(false); // Có thể dùng state này để tăng số lượng người theo dõi
   const [isFollowing, setIsFollowing] = useState(false); // Trạng thái mới: theo dõi hay chưa
   const [counter, setCounter] = useState(0); // Biến đếm số người theo dõi
@@ -58,6 +62,7 @@ function CompanyBanner({ company }) {
       if (!isFollowing) {
         console.log("Follow company payload:", payload, isFollowing);
         const response = await followCompany(payload);
+        const like = await likeCompany(company.id);
         if (response.data) {
           console.log("Follow job successful:", response.data);
           setIsFollowing(true);
@@ -66,6 +71,7 @@ function CompanyBanner({ company }) {
         }
       } else {
         const response = await cancelFollowCompany(payload);
+        const dislike = await disLikeCompany(company.id);
         setIsFollowing(false);
       }
     } catch (error) {
