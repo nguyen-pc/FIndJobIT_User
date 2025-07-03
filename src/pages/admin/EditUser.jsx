@@ -3,26 +3,44 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/admin/Header";
+import { useLocation } from "react-router-dom";
 
-const Form = () => {
+const EditUser = ({ onSubmit }) => {
+  const location = useLocation();
+  const userData = location.state;
+
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const handleFormSubmit = (values) => {
-    console.log(values);
-    // Gửi dữ liệu đến server nếu cần
+    if (onSubmit) {
+      onSubmit(values);
+    } else {
+      console.log("Updated user:", values);
+    }
   };
 
   return (
     <Box m="20px">
       <Header
-        title="TẠO NGƯỜI DÙNG"
-        subtitle="Thêm người dùng mới vào hệ thống"
+        title="CHỈNH SỬA NGƯỜI DÙNG"
+        subtitle="Cập nhật thông tin người dùng"
       />
 
       <Formik
         onSubmit={handleFormSubmit}
-        initialValues={initialValues}
-        validationSchema={userSchema}
+        initialValues={{
+          ...userData,
+          name: userData.name || "",
+          phoneNumber: userData.phoneNumber || "",
+          address: userData.address || "",
+          taxNumber: userData.taxNumber || "",
+          age: userData.age || "",
+          gender: userData.gender || "",
+          company: userData.company || { name: "" },
+          role: userData.role || { name: "" },
+        }}
+        enableReinitialize
+        validationSchema={userEditSchema}
       >
         {({
           values,
@@ -48,10 +66,10 @@ const Form = () => {
                 label="Họ và tên"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.fullName}
-                name="fullName"
-                error={!!touched.fullName && !!errors.fullName}
-                helperText={touched.fullName && errors.fullName}
+                value={values.name}
+                name="name"
+                error={!!touched.name && !!errors.name}
+                helperText={touched.name && errors.name}
                 sx={{ gridColumn: "span 4" }}
               />
 
@@ -75,14 +93,25 @@ const Form = () => {
               <TextField
                 fullWidth
                 variant="filled"
-                type="email"
-                label="Email"
+                type="number"
+                label="Tuổi"
                 onBlur={handleBlur}
                 onChange={handleChange}
+                value={values.age}
+                name="age"
+                error={!!touched.age && !!errors.age}
+                helperText={touched.age && errors.age}
+                sx={{ gridColumn: "span 2" }}
+              />
+
+              <TextField
+                fullWidth
+                variant="filled"
+                type="email"
+                label="Email"
                 value={values.email}
                 name="email"
-                error={!!touched.email && !!errors.email}
-                helperText={touched.email && errors.email}
+                disabled
                 sx={{ gridColumn: "span 2" }}
               />
 
@@ -93,10 +122,24 @@ const Form = () => {
                 label="Số điện thoại"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.phone}
-                name="phone"
-                error={!!touched.phone && !!errors.phone}
-                helperText={touched.phone && errors.phone}
+                value={values.phoneNumber}
+                name="phoneNumber"
+                error={!!touched.phoneNumber && !!errors.phoneNumber}
+                helperText={touched.phoneNumber && errors.phoneNumber}
+                sx={{ gridColumn: "span 2" }}
+              />
+
+              <TextField
+                fullWidth
+                variant="filled"
+                type="text"
+                label="Mã số thuế"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.taxNumber}
+                name="taxNumber"
+                error={!!touched.taxNumber && !!errors.taxNumber}
+                helperText={touched.taxNumber && errors.taxNumber}
                 sx={{ gridColumn: "span 2" }}
               />
 
@@ -111,27 +154,37 @@ const Form = () => {
                 name="address"
                 error={!!touched.address && !!errors.address}
                 helperText={touched.address && errors.address}
+                sx={{ gridColumn: "span 4" }}
+              />
+
+              <TextField
+                fullWidth
+                variant="filled"
+                type="text"
+                label="Vai trò"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.role?.name || ""}
+                name="role.name"
                 sx={{ gridColumn: "span 2" }}
               />
 
               <TextField
                 fullWidth
                 variant="filled"
-                type="password"
-                label="Mật khẩu"
+                type="text"
+                label="Công ty"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.password}
-                name="password"
-                error={!!touched.password && !!errors.password}
-                helperText={touched.password && errors.password}
+                value={values.company?.name || ""}
+                name="company.name"
                 sx={{ gridColumn: "span 2" }}
               />
             </Box>
 
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
-                Tạo người dùng
+              <Button type="submit" color="primary" variant="contained">
+                Cập nhật
               </Button>
             </Box>
           </form>
@@ -144,31 +197,13 @@ const Form = () => {
 const phoneRegExp =
   /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
 
-const userSchema = yup.object().shape({
-  fullName: yup.string().required("Vui lòng nhập họ và tên"),
+const userEditSchema = yup.object().shape({
+  name: yup.string().required("Vui lòng nhập họ và tên"),
   gender: yup.string().required("Vui lòng chọn giới tính"),
-  email: yup
-    .string()
-    .email("Email không hợp lệ")
-    .required("Vui lòng nhập email"),
-  phone: yup
-    .string()
-    .matches(phoneRegExp, "Số điện thoại không hợp lệ")
-    .required("Vui lòng nhập số điện thoại"),
+  age: yup.number().required("Vui lòng nhập tuổi").min(0, "Tuổi không hợp lệ"),
+  phoneNumber: yup.string().matches(phoneRegExp, "Số điện thoại không hợp lệ"),
   address: yup.string().required("Vui lòng nhập địa chỉ"),
-  password: yup
-    .string()
-    .min(6, "Mật khẩu phải có ít nhất 6 ký tự")
-    .required("Vui lòng nhập mật khẩu"),
+  taxNumber: yup.string(),
 });
 
-const initialValues = {
-  fullName: "",
-  gender: "",
-  email: "",
-  phone: "",
-  address: "",
-  password: "",
-};
-
-export default Form;
+export default EditUser;
