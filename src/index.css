@@ -1,5 +1,10 @@
 
+
+
+
+
 @import "tailwindcss";
+
 
 .salary-icon {
     width: 20px;
@@ -209,25 +214,28 @@
 }
 
 
-.ForgotPasswordForm1{
-  
+.ForgotPasswordForm1 {
+
     flex: 1;
     display: flex;
     flex-direction: column;
-        /* căn giữa dọc */
+    /* căn giữa dọc */
     align-items: center;
-        /* căn giữa ngang */
+    /* căn giữa ngang */
     padding-top: 40px;
     background-color: #ffffff;
 }
-.ForgotPasswordForm1 h5{
+
+.ForgotPasswordForm1 h5 {
     font-size: medium;
     color: #1C9EAF;
 }
-.return_to_signin{
-   display: flex;
+
+.return_to_signin {
+    display: flex;
 }
-.return_to_signin h5{
+
+.return_to_signin h5 {
     font-style: italic;
     font-weight: 100;
     font-size: small;
@@ -372,53 +380,272 @@ header {
     /* Khoảng trống cho mũi tên tùy chỉnh */
 }
 
-/* Mũi tên tùy chỉnh cho select */
-/* .nav-menu .filter-select::after {
-    content: '▼'; */
-    /* Ký tự mũi tên xuống */
-    /* position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 10px; */
-    /* Đảm bảo click xuyên qua mũi tên đến select */
-/* } */
 
-.filter-select:hover {
-    color: #177a8b;
-    
-    /* Đổi màu khi hover */
+
+
+
+/* Header.css hoặc tệp CSS toàn cục của bạn */
+.header {
+    /* ... các thuộc tính khác ... */
+    /* Đảm bảo overflow là visible để dropdown không bị cắt bởi giới hạn của header */
+    overflow: visible;
+    /* Thay đổi từ 'hidden' thành 'visible' */ }
+.user-menu-container {
+    position: relative;
+    /* Quan trọng để định vị menu thả xuống */
+    display: inline-block;
+    /* Cho phép container bao bọc nội dung của nó một cách chặt chẽ */
 }
 
 .user-button {
-    background-color: #1C9EAF;
-    /* Nút màu xanh chủ đạo */
-    color: #ffffff;
-    /* Chữ trắng */
-    border: none;
-    padding: 10px 20px;
-    /* Padding vừa phải */
-    border-radius: 20px;
-    /* Bo tròn hoàn toàn */
+   /* background-color: #f0f0f0;
+    border: 1px solid #ccc; */
+    padding: 8px 12px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-right: 6px;
-    /* Khoảng cách giữa icon và chữ */
-    flex-shrink: 0;
-    /* Ngăn nút bị co lại */
+    font-size: 16px;
+    color: #333;
+    white-space: nowrap; /* Ngăn nút bị vỡ dòng */
 }
 
 .user-button:hover {
-    /* Màu tối hơn khi hover */
+    background-color: #f0f0f0;
+    /* Hiển thị nổi bật nhẹ khi di chuột qua */
+    border-radius: 5px;
+}
+
+.user-icon {
+    font-size: 20px;
+    /* Điều chỉnh kích thước icon */
+}
+
+.user-dropdown {
+    position: absolute;
+        top: 100%;
+        /* Đặt menu bên dưới nút */
+        right: 0;
+        /* Căn chỉnh với cạnh phải của nút */
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        min-width: 250px;
+        z-index: 100;
+        /* Đảm bảo nó hiển thị trên các nội dung khác */
+        padding: 10px 0;
+        display: flex;
+        flex-direction: column;
+}
+
+.user-menu-container:hover .user-dropdown {
+    display: block;
+    /* Hiển thị khi di chuột qua container */
+}
+
+.dropdown-header {
+    display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        gap: 10px;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 10px;
+}
+
+.dropdown-avatar {
+    width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+}
+
+.user-info-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.user-email,
+.user-role {
+    font-size: 13px;
+    color: #666;
+}
+
+.dropdown-item {
+    /* padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: #333;
+    font-size: 15px;
+    transition: background-color 0.2s ease; */
+    padding: 10px 15px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #333;
+        align-self: stretch;
+        flex-shrink: 0;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Styling cho mục dropdown có submenu */
+.dropdown-item.dropdown-toggle {
+    display: flex;
+    justify-content: space-between; /* Đẩy mũi tên sang phải */
+    align-items: center;
+    padding-right: 15px; /* Giảm padding right để có chỗ cho mũi tên */
+}
+
+.dropdown-item.dropdown-toggle .arrow-icon {
+    font-size: 10px; /* Kích thước mũi tên */
+    margin-left: 10px; /* Khoảng cách với text */
+    transition: transform 0.2s ease; /* Hiệu ứng xoay mũi tên */
+}
+
+/* Submenu chính */
+.security-submenu {
+    display: flex;
+    flex-direction: column;
+    background-color: #fcfcfc; /* Nền nhẹ hơn cho submenu */
+    border-top: 1px solid #eee;
+    padding: 5px 0;
+    max-height: 0; /* Ban đầu ẩn bằng cách set max-height về 0 */
+    overflow: hidden;
+    transition: max-height 0.3s ease-out; /* Hiệu ứng mở/đóng */
+}
+
+/* Khi submenu mở, tăng max-height để hiển thị nội dung */
+/* Sử dụng kết hợp với JavaScript/React để kích hoạt hiển thị */
+.dropdown-item.dropdown-toggle + .security-submenu {
+    max-height: 200px; /* Đảm bảo đủ cao để chứa tất cả các mục con */
+    transition: max-height 0.3s ease-in;
+}
+
+.submenu-item {
+    padding: 10px 15px 10px 45px; /* Padding trái lớn hơn để thụt vào so với mục cha */
+    color: #555;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.submenu-item:hover {
+    background-color: #e6e6e6; /* Màu nền khi hover */
+    color: #1C9EAF; /* Màu chữ khi hover */
+}
+
+/* Mục cha của menu con (Quản lý việc làm, Quản lý CV, Cá nhân & Bảo mật) */
+.dropdown-item.job-management-item,
+.dropdown-item.cv-management-item,
+/* Thêm class mới */
+.dropdown-item.security-item {
+    /* Thêm class mới */
+    display: flex;
+    flex-direction: column;
+    /* Quan trọng: Đặt nội dung theo cột */
+    align-items: flex-start;
+    /* Căn trái các mục con bên trong */
+    padding-bottom: 0;
+    /* Xóa padding dưới mặc định để menu con nằm sát */
+    width: 100%;
+    /* Đảm bảo nó chiếm đủ chiều rộng trong user-dropdown */
+}
+
+/* Bọc nội dung tiêu đề (header) của các mục cha menu con */
+.job-management-item .job-management-header,
+.cv-management-item .cv-management-header,
+/* Thêm class mới */
+.security-item .security-header {
+    /* Thêm class mới */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Đẩy mũi tên sang phải */
+    width: 100%;
+    /* Quan trọng để nó chiếm hết chiều rộng của mục cha */
+    padding: 10px 15px;
+    /* Giữ padding như các dropdown-item khác */
+    box-sizing: border-box;
+    /* Đảm bảo padding không làm tăng chiều rộng tổng */
+    cursor: pointer;
+    /* Đảm bảo vẫn có con trỏ khi hover */
+}
+
+/* Kiểu cho mũi tên trỏ xuống */
+.dropdown-arrow {
+    font-size: 14px;
+    color: #666;
+    transition: transform 0.3s ease;
+    /* Hiệu ứng xoay mượt mà */
+}
+
+/* Menu con (sub-dropdown) - Quan trọng: Vẫn là static để đẩy nội dung xuống */
+.sub-dropdown {
+    position: static;
+    /* Quan trọng: Đặt lại về static để nó nằm trong luồng tài liệu */
+    background-color: white;
+    /* Giữ nền */
+    box-shadow: none;
+    /* Không cần bóng đổ nếu nó là một phần của khung chính */
+    border-radius: 0;
+    /* Không cần border-radius nếu nó là một phần của khung chính */
+    z-index: auto;
+    /* Đặt lại z-index về mặc định */
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    /* Xóa padding bên ngoài để các mục con nằm sát */
+    width: 100%;
+    /* Chiếm hết chiều rộng của mục cha */
+    margin-top: 5px;
+    /* Khoảng cách từ tiêu đề "Quản lý việc làm" */
+}
+
+.sub-dropdown .dropdown-item {
+    /* Điều chỉnh padding cho các mục con để chúng nằm thụt vào một chút */
+    padding: 8px 30px;
+    /* Tăng padding-left để thụt vào */
+    white-space: nowrap;
+    /* Ngăn chặn ngắt dòng văn bản */
+}
+
+.sub-dropdown .dropdown-item:hover {
+    background-color: #e9e9e9;
+}
+
+
+
+
+
+
+.logout-item {
+    border-top: 1px solid #eee;
+    color: #e74c3c;
+    /* Màu đỏ cho đăng xuất */
+}
+
+.logout-item:hover {
+    background-color: #ffe5e5;
+    /* Màu đỏ nhạt hơn khi di chuột qua */ }
+
+/* .user-button:hover {
+   
     transform: translateY(-2px);
     background-color: #177a8b;
-    /* Hiệu ứng nhấc nhẹ lên */
-}
+    
+} */
 
 
 
@@ -461,7 +688,7 @@ header {
     z-index: -1;
     border-radius: 15px;
     /* Giữ border-radius nếu bạn muốn */
-   
+
 }
 
 /* ... (các CSS khác của bạn) ... */
@@ -495,6 +722,36 @@ header {
     padding: 8px;
     border: none;
     font-size: 14px;
+    outline: none;
+    background: transparent;
+    color: #333;
+}
+
+
+
+.search-bar2 {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    background: #f0f8ff;
+    padding: 4px 10px;
+    /* Giảm padding dọc để giảm chiều cao */
+    border-radius: 20px;
+    border: 1px solid #b2d8e8;
+    width: auto;
+    max-width: 350px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.search-bar2 input {
+    flex-grow: 1;
+    padding: 4px;
+    /* Giảm padding cho input để giảm chiều cao của nó */
+    border: none;
+    font-size: 12px;
+    /* Giảm kích thước font chữ một chút */
     outline: none;
     background: transparent;
     color: #333;
@@ -557,49 +814,38 @@ header {
 }
 
 .filter-select {
-    /* Styling chung cho các select bộ lọc */
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     background-color: #e6f3fa;
-    /* Nền màu xanh nhạt */
     border: 1px solid #b2d8e8;
     padding: 10px 25px;
-    /* Tăng padding */
     border-radius: 20px;
-    /* Bo tròn */
     font-size: 14px;
-    color: #1C9EAF;
+    color: #090a0a;
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
     position: relative;
-    /* Cho mũi tên tùy chỉnh */
     padding-right: 40px;
-    /* Thêm không gian cho mũi tên */
     min-width: 120px;
-    /* Đảm bảo chiều rộng tối thiểu */
     text-align: center;
-    /* Căn giữa chữ */
 }
 
-.filter-select:hover {
-    background-color: #d1e9f7;
-    /* Màu hover nhạt hơn */
-    border-color: #1C9EAF;
-}
 
-/* Mũi tên tùy chỉnh cho filter-select */
-/* .filter-select::after {
-    content: '▼';
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 10px;
+.nav-menu .filter-select:hover {
     color: #1C9EAF;
-    pointer-events: none;
+    /* Hoặc màu xanh dương khác bạn muốn, ví dụ #007bff */
+}
+/* Cập nhật trạng thái hover cho .filter-select */
+/* .filter-select:hover {
+    background-color: #d1e9f7;
+    border-color: #1C9EAF;
+    color: #00FF0D;
+    
 } */
+
+
 
 
 /* --- SECTIONS (Công ty nổi bật, Việc làm nổi bật) --- */
@@ -868,7 +1114,7 @@ footer {
         width: 80%;
         /* Chiếm nhiều chiều rộng hơn */
         max-width: 300px;
-       
+
         /* Giới hạn chiều rộng */
     }
 
@@ -961,6 +1207,7 @@ footer {
         font-size: 13px;
     }
 }
+
 .pagination span:hover {
     background-color: #e6f3fa;
 }
@@ -1396,7 +1643,8 @@ footer {
 .job-detail-page-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Đảm bảo footer luôn ở dưới cùng */
+    min-height: 100vh;
+    /* Đảm bảo footer luôn ở dưới cùng */
 }
 
 /* Wrapper cho nội dung chính, chia làm 2 cột */
@@ -1405,20 +1653,25 @@ footer {
     justify-content: center;
     gap: 20px;
     padding: 30px 20px;
-    background-color: #f0f2f5; /* Màu nền nhẹ nhàng */
-    flex-grow: 1; /* Cho phép mở rộng để đẩy footer xuống */
+    background-color: #f0f2f5;
+    /* Màu nền nhẹ nhàng */
+    flex-grow: 1;
+    /* Cho phép mở rộng để đẩy footer xuống */
 }
 
 /* Panel bên trái chứa chi tiết công việc */
 .left-panel {
-    flex: 3; /* Chiếm nhiều không gian hơn */
-    max-width: 800px; /* Giới hạn chiều rộng tối đa */
+    flex: 3;
+    /* Chiếm nhiều không gian hơn */
+    max-width: 800px;
+    /* Giới hạn chiều rộng tối đa */
 }
 
 /* Panel bên phải chứa thông tin công ty */
 .right-panel {
     flex: 1;
-    max-width: 350px; /* Giới hạn chiều rộng tối đa */
+    max-width: 350px;
+    /* Giới hạn chiều rộng tối đa */
 }
 
 /* Card chi tiết công việc */
@@ -1427,7 +1680,8 @@ footer {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     padding: 30px;
-    margin-bottom: 20px; /* Khoảng cách với card khác nếu có */
+    margin-bottom: 20px;
+    /* Khoảng cách với card khác nếu có */
 }
 
 .job-card-header {
@@ -1481,11 +1735,12 @@ footer {
     font-size: 30px;
     color: #666;
     font-weight: 600;
-    margin-right:146px ;
+    margin-right: 146px;
 }
 
 .meta-icon {
-    color: #00ff0d; /* Màu xanh của biểu tượng */
+    color: #00ff0d;
+    /* Màu xanh của biểu tượng */
     font-size: 20px;
     margin-right: 8px;
 }
@@ -1501,13 +1756,16 @@ footer {
 }
 
 .skill-tag {
-    background-color: #2b8864; /* Màu nền nhẹ cho tag */
-    color: #ffff; /* Màu chữ xanh đậm */
+    background-color: #2b8864;
+    /* Màu nền nhẹ cho tag */
+    color: #ffff;
+    /* Màu chữ xanh đậm */
     padding: 8px 15px;
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
-    white-space: nowrap; /* Ngăn không cho tag bị xuống dòng */
+    white-space: nowrap;
+    /* Ngăn không cho tag bị xuống dòng */
 }
 
 /* Nút hành động */
@@ -1531,7 +1789,8 @@ footer {
 }
 
 .apply-button {
-    background-color: #007bff; /* Màu xanh dương */
+    background-color: #007bff;
+    /* Màu xanh dương */
     color: white;
 }
 
@@ -1541,7 +1800,8 @@ footer {
 }
 
 .review-cv-button {
-    background-color: #f0f0f0; /* Màu xám nhạt */
+    background-color: #f0f0f0;
+    /* Màu xám nhạt */
     color: #1C9EAF;
     border: 1px solid #1C9EAF;
 }
@@ -1564,7 +1824,8 @@ footer {
 }
 
 .heart-icon.favorite {
-    color: #ff4d4f; /* Màu đỏ khi là yêu thích */
+    color: #ff4d4f;
+    /* Màu đỏ khi là yêu thích */
 }
 
 /* Hạn nộp hồ sơ */
@@ -1592,7 +1853,8 @@ footer {
     border-radius: 12px;
     padding: 25px;
     margin-bottom: 20px;
-    border: 1px solid #f0f0f0; /* Viền nhẹ */
+    border: 1px solid #f0f0f0;
+    /* Viền nhẹ */
 }
 
 .section-title-h2 {
@@ -1600,7 +1862,8 @@ footer {
     font-weight: 700;
     color: #333;
     margin-bottom: 15px;
-    border-left: 5px solid #007bff; /* Gạch chân màu xanh */
+    border-left: 5px solid #007bff;
+    /* Gạch chân màu xanh */
     padding-left: 10px;
 }
 
@@ -1613,7 +1876,8 @@ footer {
 }
 
 .job-section-card ul {
-    list-style: disc; /* Dùng dấu chấm cho list */
+    list-style: disc;
+    /* Dùng dấu chấm cho list */
     padding-left: 25px;
 }
 
@@ -1627,13 +1891,16 @@ footer {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     padding: 30px;
-    position: sticky; /* Giữ card ở vị trí khi cuộn */
-    top: 30px; /* Khoảng cách từ trên xuống */
+    position: sticky;
+    /* Giữ card ở vị trí khi cuộn */
+    top: 30px;
+    /* Khoảng cách từ trên xuống */
 }
 
 .company-header {
     display: flex;
-    flex-direction: column; /* Xếp logo và tên công ty theo chiều dọc */
+    flex-direction: column;
+    /* Xếp logo và tên công ty theo chiều dọc */
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 20px;
@@ -1670,7 +1937,8 @@ footer {
 .view-company-button {
     width: 100%;
     padding: 12px;
-    background-color: #e7f5ff; /* Màu xanh nhạt */
+    background-color: #e7f5ff;
+    /* Màu xanh nhạt */
     color: #007bff;
     border: 1px solid #007bff;
     border-radius: 8px;
@@ -1686,7 +1954,8 @@ footer {
 }
 
 /* Loading and Error states */
-.loading-container, .error-container {
+.loading-container,
+.error-container {
     text-align: center;
     padding: 50px;
     font-size: 18px;
@@ -1698,6 +1967,7 @@ footer {
     text-decoration: none;
     font-weight: 600;
 }
+
 .error-container a:hover {
     text-decoration: underline;
 }
@@ -1714,11 +1984,13 @@ footer {
     .right-panel {
         flex: none;
         width: 100%;
-        max-width: 700px; /* Giới hạn chiều rộng cho tablet */
+        max-width: 700px;
+        /* Giới hạn chiều rộng cho tablet */
     }
 
     .company-info-card {
-        position: static; /* Bỏ sticky trên màn hình nhỏ hơn */
+        position: static;
+        /* Bỏ sticky trên màn hình nhỏ hơn */
         margin-top: 20px;
     }
 }
@@ -1740,7 +2012,8 @@ footer {
     .job-actions {
         flex-direction: column;
         gap: 10px;
-        align-items: stretch; /* Đảm bảo các nút chiếm toàn bộ chiều rộng */
+        align-items: stretch;
+        /* Đảm bảo các nút chiếm toàn bộ chiều rộng */
     }
 
     .action-button {
@@ -1750,7 +2023,8 @@ footer {
 
     .job-card-header {
         flex-direction: column;
-        align-items: flex-start; /* Sắp xếp logo và tiêu đề theo chiều dọc */
+        align-items: flex-start;
+        /* Sắp xếp logo và tiêu đề theo chiều dọc */
     }
 
     .company-logo-card {
@@ -1781,11 +2055,13 @@ footer {
         font-size: 20px;
     }
 
-    .meta-item, .deadline-info {
+    .meta-item,
+    .deadline-info {
         font-size: 14px;
     }
 
-    .meta-icon, .deadline-icon {
+    .meta-icon,
+    .deadline-icon {
         font-size: 18px;
     }
 
@@ -1813,21 +2089,31 @@ footer {
 
 .job-meta {
     display: flex;
-    flex-wrap: wrap; /* Cho phép các mục xuống dòng nếu không đủ chỗ */
-    gap: 20px; /* Khoảng cách giữa các mục meta */
-    margin-bottom: 20px; /* Khoảng cách với phần skills bên dưới */
-    justify-content: space-between; /* Căn đều các mục */
+    flex-wrap: wrap;
+    /* Cho phép các mục xuống dòng nếu không đủ chỗ */
+    gap: 20px;
+    /* Khoảng cách giữa các mục meta */
+    margin-bottom: 20px;
+    /* Khoảng cách với phần skills bên dưới */
+    justify-content: space-between;
+    /* Căn đều các mục */
 }
 
 .job-meta-item {
     display: flex;
-    flex-direction: column; /* Xếp chữ xuống dưới icon */
-    align-items: center; /* Căn giữa nội dung trong mỗi item */
-    text-align: center; /* Căn giữa văn bản */
-    font-size: 0.9em; /* Kích thước chữ nhỏ hơn một chút */
+    flex-direction: column;
+    /* Xếp chữ xuống dưới icon */
+    align-items: center;
+    /* Căn giữa nội dung trong mỗi item */
+    text-align: center;
+    /* Căn giữa văn bản */
+    font-size: 0.9em;
+    /* Kích thước chữ nhỏ hơn một chút */
     color: #555;
-    flex: 1 1 auto; /* Cho phép item co giãn và tự động xuống dòng */
-    min-width: 120px; /* Đảm bảo mỗi item có chiều rộng tối thiểu */
+    flex: 1 1 auto;
+    /* Cho phép item co giãn và tự động xuống dòng */
+    min-width: 120px;
+    /* Đảm bảo mỗi item có chiều rộng tối thiểu */
 }
 
 .job-meta-item strong {
@@ -1836,37 +2122,49 @@ footer {
 }
 
 .salary-icon {
-    width: 24px; /* Kích thước icon lớn hơn một chút */
+    width: 24px;
+    /* Kích thước icon lớn hơn một chút */
     height: 24px;
-    margin-bottom: 5px; /* Khoảng cách giữa icon và text */
+    margin-bottom: 5px;
+    /* Khoảng cách giữa icon và text */
 }
 
 /* New style for the skills container */
 .job-skills-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px; /* Khoảng cách giữa các skill tag */
-    margin-top: -10px; /* Điều chỉnh để nằm sát hơn với job-meta */
-    margin-bottom: 20px; /* Khoảng cách với job-actions */
-    justify-content: flex-start; /* Căn các skill tag về bên trái */
-    
+    gap: 8px;
+    /* Khoảng cách giữa các skill tag */
+    margin-top: -10px;
+    /* Điều chỉnh để nằm sát hơn với job-meta */
+    margin-bottom: 20px;
+    /* Khoảng cách với job-actions */
+    justify-content: flex-start;
+    /* Căn các skill tag về bên trái */
+
 }
 
 .skill-tag {
-    background-color: #1C9EAF; /* Màu nền nhẹ cho tag */
-    color: #ffff; /* Màu chữ cho tag */
+    background-color: #1C9EAF;
+    /* Màu nền nhẹ cho tag */
+    color: #ffff;
+    /* Màu chữ cho tag */
     padding: 8px 12px;
-    border-radius: 20px; /* Bo tròn tag */
+    border-radius: 20px;
+    /* Bo tròn tag */
     font-size: 0.85em;
     font-weight: 500;
-    white-space: nowrap; /* Ngăn tag bị ngắt dòng */
+    white-space: nowrap;
+    /* Ngăn tag bị ngắt dòng */
 }
 
 /* Nếu bạn muốn căn chỉnh các nút hành động (apply, favorite, review) */
 .job-actions {
     display: flex;
-    gap: 15px; /* Khoảng cách giữa các nút */
-    margin-top: 20px; /* Khoảng cách từ skill tags */
+    gap: 15px;
+    /* Khoảng cách giữa các nút */
+    margin-top: 20px;
+    /* Khoảng cách từ skill tags */
     flex-wrap: wrap;
 }
 
@@ -1905,10 +2203,13 @@ footer {
 .favorite-button {
     background-color: transparent;
     border: 1px solid #ddd;
-    color: #f44336; /* Màu đỏ cho trái tim */
+    color: #f44336;
+    /* Màu đỏ cho trái tim */
     padding: 10px 9px;
-    border-radius: 50%; /* Nút tròn */
-    width: 40px; /* Kích thước cố định */
+    border-radius: 50%;
+    /* Nút tròn */
+    width: 40px;
+    /* Kích thước cố định */
     height: 40px;
     display: flex;
     justify-content: center;
@@ -1955,12 +2256,14 @@ footer {
 
 .left-panel {
     flex: 3;
-    min-width: 700px; /* Điều chỉnh lại nếu cần */
+    min-width: 700px;
+    /* Điều chỉnh lại nếu cần */
 }
 
 .right-panel {
     flex: 1;
-    min-width: 300px; /* Điều chỉnh lại nếu cần */
+    min-width: 300px;
+    /* Điều chỉnh lại nếu cần */
 }
 
 /* Các style responsive đã có hoặc cần thêm */
@@ -1970,12 +2273,16 @@ footer {
         padding: 20px;
         max-width: 90%;
     }
-    .left-panel, .right-panel {
+
+    .left-panel,
+    .right-panel {
         min-width: unset;
         width: 100%;
     }
+
     .job-meta {
-        justify-content: center; /* Căn giữa các meta items trên mobile */
+        justify-content: center;
+        /* Căn giữa các meta items trên mobile */
     }
 }
 
@@ -1983,14 +2290,19 @@ footer {
     .job-detail-content-container {
         padding: 20px 15px;
     }
+
     .job-detail-page-container {
         padding: 15px;
     }
+
     .job-header h2 {
-        font-size: 1.5em; /* Giảm kích thước tiêu đề trên mobile */
+        font-size: 1.5em;
+        /* Giảm kích thước tiêu đề trên mobile */
     }
+
     .job-actions {
-        flex-direction: column; /* Xếp chồng các nút hành động */
+        flex-direction: column;
+        /* Xếp chồng các nút hành động */
         align-items: stretch;
     }
 }
@@ -2062,7 +2374,7 @@ footer {
     /* Đảm bảo container chiếm hết không gian còn lại */
 }
 
-.job-detail-content-container-1{
+.job-detail-content-container-1 {
     margin-left: 100px;
     margin-right: 100px;
 }
@@ -2212,6 +2524,7 @@ footer {
     max-width: fit-content;
     /* Đảm bảo không kéo dài toàn dòng */
 }
+
 .job-actions-vertical {
     display: flex;
     flex-direction: column;
@@ -2602,7 +2915,7 @@ footer {
     display: block;
     position: relative;
     z-index: 3;
-   
+
 }
 
 .imageBackground {
@@ -2613,7 +2926,7 @@ footer {
     left: 0;
     z-index: 4;
     background-color: rgba(60, 179, 113, 0.7);
-border-radius: 10px;
+    border-radius: 10px;
 }
 
 
@@ -2651,15 +2964,17 @@ border-radius: 10px;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-.company_detail1_banner{
+.company_detail1_banner {
     font-weight: 400;
-    font-size:medium;
+    font-size: medium;
     margin-top: 10px;
 }
+
 .company_detail2_banner {
     font-weight: 400;
     font-size: medium;
 }
+
 /* CSS hiện tại của Button_follow */
 .Button_follow {
     display: flex;
@@ -2695,7 +3010,7 @@ border-radius: 10px;
 
 /* CSS cho trạng thái khi đã theo dõi */
 .Button_follow.Button_followed {
-    background-color:#1C9EAF    ;
+    background-color: #1C9EAF;
     /* Nền xanh lam */
     color: #ffffff;
     /* Chữ trắng */
@@ -2714,8 +3029,9 @@ border-radius: 10px;
 }
 
 .Button_follow.Button_followed:hover {
-    background-color:#1C9EAF;
+    background-color: #1C9EAF;
 }
+
 .aboutus-card {
     border-radius: 10px;
     overflow: hidden;
@@ -2756,7 +3072,7 @@ border-radius: 10px;
 
 /* Component CompanyContact */
 .contact-card {
-    background:white;
+    background: white;
     /* sửa lại đường dẫn đúng */
     background-size: cover;
     background-repeat: no-repeat;
@@ -2769,7 +3085,7 @@ border-radius: 10px;
 }
 
 .contact-header {
-background-image: url("./assets//background2.png");
+    background-image: url("./assets//background2.png");
     color: white;
     padding: 12px 20px;
     font-size: 16px;
@@ -2797,6 +3113,7 @@ background-image: url("./assets//background2.png");
     cursor: pointer;
     object-fit: cover;
 }
+
 /* Component CompanyJobListCard */
 .joblist-card {
     background-image: url("../assets/card_background.png");
@@ -2880,7 +3197,7 @@ background-image: url("./assets//background2.png");
     cursor: pointer;
 }
 
-.company-info-row{
+.company-info-row {
     display: flex;
     margin-left: 15vw;
 }
@@ -2911,7 +3228,8 @@ background-image: url("./assets//background2.png");
         font-size: clamp(10px, 4vw, 18px);
         top: 55%;
         left: 50%;
-    } }
+    }
+}
 
 /* Responsive */
 @media (max-width: 991.98px) {
@@ -3037,7 +3355,7 @@ header {
     /* Không có viền */
     padding: 8px 0px;
     /* Padding cho mục chọn */
-    color: #1C9EAF;
+    color: #070707;
     font-weight: 500;
     font-size: 15px;
     cursor: pointer;
@@ -3051,51 +3369,23 @@ header {
 
 /* Mũi tên tùy chỉnh cho select */
 /* .nav-menu .filter-select::after { */
-    /* content: '▼'; */
-    /* Ký tự mũi tên xuống */
-    /* position: absolute;
+/* content: '▼'; */
+/* Ký tự mũi tên xuống */
+/* position: absolute;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
     font-size: 10px;
     color: #1C9EAF;
     pointer-events: none; */
-    /* Đảm bảo click xuyên qua mũi tên đến select */
+/* Đảm bảo click xuyên qua mũi tên đến select */
 /* } */
 
-.nav-menu .filter-select:hover {
-    color: #177a8b;
-    /* Đổi màu khi hover */
-}
 
-.user-button {
-    background-color: #1C9EAF;
-    /* Nút màu xanh chủ đạo */
-    color: #ffffff;
-    /* Chữ trắng */
-    border: none;
-    padding: 10px 20px;
-    /* Padding vừa phải */
-    border-radius: 20px;
-    /* Bo tròn hoàn toàn */
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    /* Khoảng cách giữa icon và chữ */
-    flex-shrink: 0;
-    /* Ngăn nút bị co lại */
-}
 
-.user-button:hover {
-    background-color: #177a8b;
-    /* Màu tối hơn khi hover */
-    transform: translateY(-2px);
-    /* Hiệu ứng nhấc nhẹ lên */
-}
+
+
+
 
 .user-icon {
     font-size: 18px;
@@ -3141,7 +3431,7 @@ header {
     z-index: -1;
     border-radius: 15px;
     /* Giữ border-radius nếu bạn muốn */
-   
+
 }
 
 /* ... (các CSS khác của bạn) ... */
@@ -3236,50 +3526,35 @@ header {
     z-index: 2;
 }
 
-.filter-select {
-    /* Styling chung cho các select bộ lọc */
+/* .filter-select {
+    
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     background-color: #e6f3fa;
-    /* Nền màu xanh nhạt */
+    
     border: 1px solid #b2d8e8;
     padding: 10px 25px;
-    /* Tăng padding */
+   
     border-radius: 20px;
-    /* Bo tròn */
+   
     font-size: 14px;
     color: #1C9EAF;
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
     position: relative;
-    /* Cho mũi tên tùy chỉnh */
+   
     padding-right: 40px;
-    /* Thêm không gian cho mũi tên */
+  
     min-width: 120px;
-    /* Đảm bảo chiều rộng tối thiểu */
+   
     text-align: center;
-    /* Căn giữa chữ */
-}
-
-.filter-select:hover {
-    background-color: #d1e9f7;
-    /* Màu hover nhạt hơn */
-    border-color: #1C9EAF;
-}
-
-/* Mũi tên tùy chỉnh cho filter-select */
-/* .filter-select::after {
-    content: '▼';
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 10px;
-    color: #1C9EAF;
-    pointer-events: none;
+   
 } */
+
+
+
 
 
 /* --- SECTIONS (Công ty nổi bật, Việc làm nổi bật) --- */
@@ -3640,6 +3915,7 @@ footer {
         font-size: 13px;
     }
 }
+
 .pagination span:hover {
     background-color: #e6f3fa;
 }
@@ -4072,33 +4348,149 @@ footer {
 /* JobPage.css */
 
 /* Container chính cho toàn bộ trang */
-.job-detail-page-container {
+/* ... (Giữ nguyên các style hiện có trong index.css) ... */
+
+/* Main wrapper for Job Detail Page */
+.job-detail-page-wrapper {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Đảm bảo footer luôn ở dưới cùng */
+    min-height: 100vh;
+    background-color: #f4f7f6;
 }
 
-/* Wrapper cho nội dung chính, chia làm 2 cột */
-.main-content-wrapper {
+/* Content container with two columns and full-width section */
+.job-detail-content-container {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 30px 20px;
-    background-color: #f0f2f5; /* Màu nền nhẹ nhàng */
-    flex-grow: 1; /* Cho phép mở rộng để đẩy footer xuống */
+    flex-direction: column;
+    /* Đổi thành column để xếp chồng các phần tử */
+    gap: 30px;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    flex-grow: 1;
 }
 
-/* Panel bên trái chứa chi tiết công việc */
+/* Container for the two-column layout (job-detail-card and company-info-card) */
+.two-column-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    width: 100%;
+}
+
+/* Left Panel - Contains main job details */
 .left-panel {
-    flex: 3; /* Chiếm nhiều không gian hơn */
-    max-width: 800px; /* Giới hạn chiều rộng tối đa */
+    flex: 2.5;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-/* Panel bên phải chứa thông tin công ty */
+/* Right Panel - Contains company info */
 .right-panel {
     flex: 1;
-    max-width: 350px; /* Giới hạn chiều rộng tối đa */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
+
+/* Full-width panel for detail-recruitment-card */
+.full-width-panel {
+    width: 100%;
+    max-width: 1200px;
+    box-sizing: border-box;
+}
+
+/* Job Detail Card - Top main job info */
+.job-detail-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+}
+
+/* Detail Recruitment Card */
+.job-section-card.detail-recruitment-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .job-detail-content-container {
+        padding: 20px 15px;
+        max-width: 90%;
+    }
+
+    .two-column-container {
+        flex-direction: column;
+    }
+
+    .left-panel,
+    .right-panel,
+    .full-width-panel {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .job-detail-card,
+    .job-section-card.detail-recruitment-card {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .job-detail-content-container {
+        padding: 20px 10px;
+    }
+
+    .job-detail-card,
+    .job-section-card.detail-recruitment-card {
+        padding: 20px;
+    }
+
+    .job-header h2 {
+        font-size: 1.5em;
+    }
+
+    .job-meta-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .job-detail-card,
+    .job-section-card.detail-recruitment-card {
+        padding: 15px;
+    }
+
+    .job-header h2 {
+        font-size: 1.3em;
+    }
+
+    .job-meta-item {
+        font-size: 0.9em;
+    }
+
+    .salary-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .skill-tag {
+        font-size: 0.85em;
+        padding: 5px 10px;
+    }
+}
+
+/* ... (Giữ nguyên các style khác trong index.css) ... */
 
 /* Card chi tiết công việc */
 .job-card {
@@ -4106,7 +4498,8 @@ footer {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     padding: 30px;
-    margin-bottom: 20px; /* Khoảng cách với card khác nếu có */
+    margin-bottom: 20px;
+    /* Khoảng cách với card khác nếu có */
 }
 
 .job-card-header {
@@ -4160,11 +4553,12 @@ footer {
     font-size: 30px;
     color: #666;
     font-weight: 600;
-    margin-right:146px ;
+    margin-right: 146px;
 }
 
 .meta-icon {
-    color: #00ff0d; /* Màu xanh của biểu tượng */
+    color: #00ff0d;
+    /* Màu xanh của biểu tượng */
     font-size: 20px;
     margin-right: 8px;
 }
@@ -4180,13 +4574,16 @@ footer {
 }
 
 .skill-tag {
-    background-color: #2b8864; /* Màu nền nhẹ cho tag */
-    color: #ffff; /* Màu chữ xanh đậm */
+    background-color: #2b8864;
+    /* Màu nền nhẹ cho tag */
+    color: #ffff;
+    /* Màu chữ xanh đậm */
     padding: 8px 15px;
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
-    white-space: nowrap; /* Ngăn không cho tag bị xuống dòng */
+    white-space: nowrap;
+    /* Ngăn không cho tag bị xuống dòng */
 }
 
 /* Nút hành động */
@@ -4210,7 +4607,8 @@ footer {
 }
 
 .apply-button {
-    background-color: #007bff; /* Màu xanh dương */
+    background-color: #007bff;
+    /* Màu xanh dương */
     color: white;
 }
 
@@ -4220,7 +4618,8 @@ footer {
 }
 
 .review-cv-button {
-    background-color: #f0f0f0; /* Màu xám nhạt */
+    background-color: #f0f0f0;
+    /* Màu xám nhạt */
     color: #1C9EAF;
     border: 1px solid #1C9EAF;
 }
@@ -4243,7 +4642,8 @@ footer {
 }
 
 .heart-icon.favorite {
-    color: #ff4d4f; /* Màu đỏ khi là yêu thích */
+    color: #ff4d4f;
+    /* Màu đỏ khi là yêu thích */
 }
 
 /* Hạn nộp hồ sơ */
@@ -4271,7 +4671,8 @@ footer {
     border-radius: 12px;
     padding: 25px;
     margin-bottom: 20px;
-    border: 1px solid #f0f0f0; /* Viền nhẹ */
+    border: 1px solid #f0f0f0;
+    /* Viền nhẹ */
 }
 
 .section-title-h2 {
@@ -4279,7 +4680,8 @@ footer {
     font-weight: 700;
     color: #333;
     margin-bottom: 15px;
-    border-left: 5px solid #007bff; /* Gạch chân màu xanh */
+    border-left: 5px solid #007bff;
+    /* Gạch chân màu xanh */
     padding-left: 10px;
 }
 
@@ -4292,7 +4694,8 @@ footer {
 }
 
 .job-section-card ul {
-    list-style: disc; /* Dùng dấu chấm cho list */
+    list-style: disc;
+    /* Dùng dấu chấm cho list */
     padding-left: 25px;
 }
 
@@ -4306,13 +4709,16 @@ footer {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     padding: 30px;
-    position: sticky; /* Giữ card ở vị trí khi cuộn */
-    top: 30px; /* Khoảng cách từ trên xuống */
+    position: sticky;
+    /* Giữ card ở vị trí khi cuộn */
+    top: 30px;
+    /* Khoảng cách từ trên xuống */
 }
 
 .company-header {
     display: flex;
-    flex-direction: column; /* Xếp logo và tên công ty theo chiều dọc */
+    flex-direction: column;
+    /* Xếp logo và tên công ty theo chiều dọc */
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 20px;
@@ -4349,7 +4755,8 @@ footer {
 .view-company-button {
     width: 100%;
     padding: 12px;
-    background-color: #e7f5ff; /* Màu xanh nhạt */
+    background-color: #e7f5ff;
+    /* Màu xanh nhạt */
     color: #007bff;
     border: 1px solid #007bff;
     border-radius: 8px;
@@ -4365,7 +4772,8 @@ footer {
 }
 
 /* Loading and Error states */
-.loading-container, .error-container {
+.loading-container,
+.error-container {
     text-align: center;
     padding: 50px;
     font-size: 18px;
@@ -4377,6 +4785,7 @@ footer {
     text-decoration: none;
     font-weight: 600;
 }
+
 .error-container a:hover {
     text-decoration: underline;
 }
@@ -4393,11 +4802,13 @@ footer {
     .right-panel {
         flex: none;
         width: 100%;
-        max-width: 700px; /* Giới hạn chiều rộng cho tablet */
+        max-width: 700px;
+        /* Giới hạn chiều rộng cho tablet */
     }
 
     .company-info-card {
-        position: static; /* Bỏ sticky trên màn hình nhỏ hơn */
+        position: static;
+        /* Bỏ sticky trên màn hình nhỏ hơn */
         margin-top: 20px;
     }
 }
@@ -4419,7 +4830,8 @@ footer {
     .job-actions {
         flex-direction: column;
         gap: 10px;
-        align-items: stretch; /* Đảm bảo các nút chiếm toàn bộ chiều rộng */
+        align-items: stretch;
+        /* Đảm bảo các nút chiếm toàn bộ chiều rộng */
     }
 
     .action-button {
@@ -4429,7 +4841,8 @@ footer {
 
     .job-card-header {
         flex-direction: column;
-        align-items: flex-start; /* Sắp xếp logo và tiêu đề theo chiều dọc */
+        align-items: flex-start;
+        /* Sắp xếp logo và tiêu đề theo chiều dọc */
     }
 
     .company-logo-card {
@@ -4460,11 +4873,13 @@ footer {
         font-size: 20px;
     }
 
-    .meta-item, .deadline-info {
+    .meta-item,
+    .deadline-info {
         font-size: 14px;
     }
 
-    .meta-icon, .deadline-icon {
+    .meta-icon,
+    .deadline-icon {
         font-size: 18px;
     }
 
@@ -4492,21 +4907,31 @@ footer {
 
 .job-meta {
     display: flex;
-    flex-wrap: wrap; /* Cho phép các mục xuống dòng nếu không đủ chỗ */
-    gap: 20px; /* Khoảng cách giữa các mục meta */
-    margin-bottom: 20px; /* Khoảng cách với phần skills bên dưới */
-    justify-content: space-between; /* Căn đều các mục */
+    flex-wrap: wrap;
+    /* Cho phép các mục xuống dòng nếu không đủ chỗ */
+    gap: 20px;
+    /* Khoảng cách giữa các mục meta */
+    margin-bottom: 20px;
+    /* Khoảng cách với phần skills bên dưới */
+    justify-content: space-between;
+    /* Căn đều các mục */
 }
 
 .job-meta-item {
     display: flex;
-    flex-direction: column; /* Xếp chữ xuống dưới icon */
-    align-items: center; /* Căn giữa nội dung trong mỗi item */
-    text-align: center; /* Căn giữa văn bản */
-    font-size: 0.9em; /* Kích thước chữ nhỏ hơn một chút */
+    flex-direction: column;
+    /* Xếp chữ xuống dưới icon */
+    align-items: center;
+    /* Căn giữa nội dung trong mỗi item */
+    text-align: center;
+    /* Căn giữa văn bản */
+    font-size: 0.9em;
+    /* Kích thước chữ nhỏ hơn một chút */
     color: #555;
-    flex: 1 1 auto; /* Cho phép item co giãn và tự động xuống dòng */
-    min-width: 120px; /* Đảm bảo mỗi item có chiều rộng tối thiểu */
+    flex: 1 1 auto;
+    /* Cho phép item co giãn và tự động xuống dòng */
+    min-width: 120px;
+    /* Đảm bảo mỗi item có chiều rộng tối thiểu */
 }
 
 .job-meta-item strong {
@@ -4515,37 +4940,49 @@ footer {
 }
 
 .salary-icon {
-    width: 24px; /* Kích thước icon lớn hơn một chút */
+    width: 24px;
+    /* Kích thước icon lớn hơn một chút */
     height: 24px;
-    margin-bottom: 5px; /* Khoảng cách giữa icon và text */
+    margin-bottom: 5px;
+    /* Khoảng cách giữa icon và text */
 }
 
 /* New style for the skills container */
 .job-skills-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px; /* Khoảng cách giữa các skill tag */
-    margin-top: -10px; /* Điều chỉnh để nằm sát hơn với job-meta */
-    margin-bottom: 20px; /* Khoảng cách với job-actions */
-    justify-content: flex-start; /* Căn các skill tag về bên trái */
-    
+    gap: 8px;
+    /* Khoảng cách giữa các skill tag */
+    margin-top: -10px;
+    /* Điều chỉnh để nằm sát hơn với job-meta */
+    margin-bottom: 20px;
+    /* Khoảng cách với job-actions */
+    justify-content: flex-start;
+    /* Căn các skill tag về bên trái */
+
 }
 
 .skill-tag {
-    background-color: #1C9EAF; /* Màu nền nhẹ cho tag */
-    color: #ffff; /* Màu chữ cho tag */
+    background-color: #1C9EAF;
+    /* Màu nền nhẹ cho tag */
+    color: #ffff;
+    /* Màu chữ cho tag */
     padding: 8px 12px;
-    border-radius: 20px; /* Bo tròn tag */
+    border-radius: 20px;
+    /* Bo tròn tag */
     font-size: 0.85em;
     font-weight: 500;
-    white-space: nowrap; /* Ngăn tag bị ngắt dòng */
+    white-space: nowrap;
+    /* Ngăn tag bị ngắt dòng */
 }
 
 /* Nếu bạn muốn căn chỉnh các nút hành động (apply, favorite, review) */
 .job-actions {
     display: flex;
-    gap: 15px; /* Khoảng cách giữa các nút */
-    margin-top: 20px; /* Khoảng cách từ skill tags */
+    gap: 15px;
+    /* Khoảng cách giữa các nút */
+    margin-top: 20px;
+    /* Khoảng cách từ skill tags */
     flex-wrap: wrap;
 }
 
@@ -4584,10 +5021,13 @@ footer {
 .favorite-button {
     background-color: transparent;
     border: 1px solid #ddd;
-    color: #f44336; /* Màu đỏ cho trái tim */
+    color: #f44336;
+    /* Màu đỏ cho trái tim */
     padding: 10px;
-    border-radius: 50%; /* Nút tròn */
-    width: 40px; /* Kích thước cố định */
+    border-radius: 50%;
+    /* Nút tròn */
+    width: 40px;
+    /* Kích thước cố định */
     height: 40px;
     display: flex;
     justify-content: center;
@@ -4634,12 +5074,14 @@ footer {
 
 .left-panel {
     flex: 3;
-    min-width: 700px; /* Điều chỉnh lại nếu cần */
+    min-width: 700px;
+    /* Điều chỉnh lại nếu cần */
 }
 
 .right-panel {
     flex: 1;
-    min-width: 300px; /* Điều chỉnh lại nếu cần */
+    min-width: 300px;
+    /* Điều chỉnh lại nếu cần */
 }
 
 /* Các style responsive đã có hoặc cần thêm */
@@ -4649,12 +5091,16 @@ footer {
         padding: 20px;
         max-width: 90%;
     }
-    .left-panel, .right-panel {
+
+    .left-panel,
+    .right-panel {
         min-width: unset;
         width: 100%;
     }
+
     .job-meta {
-        justify-content: center; /* Căn giữa các meta items trên mobile */
+        justify-content: center;
+        /* Căn giữa các meta items trên mobile */
     }
 }
 
@@ -4662,14 +5108,19 @@ footer {
     .job-detail-content-container {
         padding: 20px 15px;
     }
+
     .job-detail-page-container {
         padding: 15px;
     }
+
     .job-header h2 {
-        font-size: 1.5em; /* Giảm kích thước tiêu đề trên mobile */
+        font-size: 1.5em;
+        /* Giảm kích thước tiêu đề trên mobile */
     }
+
     .job-actions {
-        flex-direction: column; /* Xếp chồng các nút hành động */
+        flex-direction: column;
+        /* Xếp chồng các nút hành động */
         align-items: stretch;
     }
 }
@@ -4741,7 +5192,7 @@ footer {
     /* Đảm bảo container chiếm hết không gian còn lại */
 }
 
-.job-detail-content-container-1{
+.job-detail-content-container-1 {
     margin-left: 100px;
     margin-right: 100px;
 }
@@ -4891,6 +5342,7 @@ footer {
     max-width: fit-content;
     /* Đảm bảo không kéo dài toàn dòng */
 }
+
 .job-actions-vertical {
     display: flex;
     flex-direction: column;
@@ -5280,7 +5732,7 @@ footer {
     display: block;
     position: relative;
     z-index: 3;
-   
+
 }
 
 .imageBackground {
@@ -5291,7 +5743,7 @@ footer {
     left: 0;
     z-index: 4;
     background-color: rgba(60, 179, 113, 0.7);
-border-radius: 10px;
+    border-radius: 10px;
 }
 
 
@@ -5329,15 +5781,17 @@ border-radius: 10px;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-.company_detail1_banner{
+.company_detail1_banner {
     font-weight: 400;
-    font-size:medium;
+    font-size: medium;
     margin-top: 10px;
 }
+
 .company_detail2_banner {
     font-weight: 400;
     font-size: medium;
 }
+
 /* CSS hiện tại của Button_follow */
 .Button_follow {
     display: flex;
@@ -5373,7 +5827,7 @@ border-radius: 10px;
 
 /* CSS cho trạng thái khi đã theo dõi */
 .Button_follow.Button_followed {
-    background-color:#1C9EAF    ;
+    background-color: #1C9EAF;
     /* Nền xanh lam */
     color: #ffffff;
     /* Chữ trắng */
@@ -5392,8 +5846,9 @@ border-radius: 10px;
 }
 
 .Button_follow.Button_followed:hover {
-    background-color:#1C9EAF;
+    background-color: #1C9EAF;
 }
+
 .aboutus-card {
     border-radius: 10px;
     overflow: hidden;
@@ -5434,7 +5889,7 @@ border-radius: 10px;
 
 /* Component CompanyContact */
 .contact-card {
-    background:white;
+    background: white;
     /* sửa lại đường dẫn đúng */
     background-size: cover;
     background-repeat: no-repeat;
@@ -5447,7 +5902,7 @@ border-radius: 10px;
 }
 
 .contact-header {
-background-image: url("./assets//background2.png");
+    background-image: url("./assets//background2.png");
     color: white;
     padding: 12px 20px;
     font-size: 16px;
@@ -5475,6 +5930,7 @@ background-image: url("./assets//background2.png");
     cursor: pointer;
     object-fit: cover;
 }
+
 /* Component CompanyJobListCard */
 .joblist-card {
     background-image: url("../assets/card_background.png");
@@ -5558,7 +6014,7 @@ background-image: url("./assets//background2.png");
     cursor: pointer;
 }
 
-.company-info-row{
+.company-info-row {
     display: flex;
     margin-left: 15vw;
 }
@@ -5589,7 +6045,9 @@ background-image: url("./assets//background2.png");
         font-size: clamp(10px, 4vw, 18px);
         top: 55%;
         left: 50%;
-    } }
+    }
+}
+
 /* Responsive */
 @media (max-width: 991.98px) {
     .login_wrapper {
@@ -5622,74 +6080,79 @@ background-image: url("./assets//background2.png");
     min-height: 100vh;
     background-color: #f8fbfd;
     padding: 20px;
-  }
-  
-  .profile-card {
+}
+
+.profile-card {
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     padding: 30px;
     max-width: 600px;
     width: 100%;
-  }
-  
-  .profile-header {
+}
+
+.profile-header {
     text-align: center;
     margin-bottom: 20px;
-  }
-  
-  .profile-header h1 {
+}
+
+.profile-header h1 {
     color: #1C9EAF;
     font-size: 28px;
     margin-bottom: 10px;
-  }
-  
-  .role {
+}
+
+.role {
     color: #555;
     font-size: 16px;
-  }
-  
-  .profile-details {
+}
+
+.profile-details {
     margin-bottom: 20px;
-  }
-  
-  .profile-details p {
+}
+
+.profile-details p {
     font-size: 15px;
     color: #333;
     margin-bottom: 10px;
-  }
-  
-  .profile-details strong {
+}
+
+.profile-details strong {
     color: #1C9EAF;
-  }
-  
-  .skills, .experience, .summary {
+}
+
+.skills,
+.experience,
+.summary {
     margin-bottom: 15px;
-  }
-  
-  .skills h3, .experience h3, .summary h3 {
+}
+
+.skills h3,
+.experience h3,
+.summary h3 {
     color: #1C9EAF;
     font-size: 20px;
     margin-bottom: 10px;
-  }
-  
-  .skills ul {
+}
+
+.skills ul {
     list-style: disc;
     padding-left: 20px;
-  }
-  
-  .skills li {
+}
+
+.skills li {
     font-size: 15px;
     color: #444;
     margin-bottom: 5px;
-  }
-  
-  .profile-actions {
+}
+
+.profile-actions {
     display: flex;
     justify-content: space-between;
-  }
-  
-  .edit-button, .logout-button {
+}
+
+.edit-button,
+.logout-button {
     padding: 10px 20px;
     border-radius: 8px;
     border: none;
@@ -5697,41 +6160,45 @@ background-image: url("./assets//background2.png");
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  .edit-button {
+}
+
+.edit-button {
     background-color: #1C9EAF;
     color: white;
-  }
-  
-  .edit-button:hover {
+}
+
+.edit-button:hover {
     background-color: #167a87;
-  }
-  
-  .logout-button {
+}
+
+.logout-button {
     background-color: #f44336;
     color: white;
-  }
-  
-  .logout-button:hover {
+}
+
+.logout-button:hover {
     background-color: #e76767;
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .profile-card {
-      padding: 20px;
+        padding: 20px;
     }
+
     .profile-header h1 {
-      font-size: 24px;
+        font-size: 24px;
     }
+
     .profile-actions {
-      flex-direction: column;
-      gap: 10px;
+        flex-direction: column;
+        gap: 10px;
     }
-    .edit-button, .logout-button {
-      width: 100%;
+
+    .edit-button,
+    .logout-button {
+        width: 100%;
     }
-  }
+}
 
 
 
@@ -5857,7 +6324,8 @@ background-image: url("./assets//background2.png");
 }
 
 .edit-button:hover {
-    background: #1698a9; }
+    background: #1698a9;
+}
 
 
 
@@ -6118,4 +6586,119 @@ background-image: url("./assets//background2.png");
     .edit-profile-actions-bottom .cancel-button,
     .edit-profile-actions-bottom .save-button {
         width: 100%;
-    } }
+    }
+}
+
+
+
+/* src/pages/JobFollow.css hoặc src/assets/styles/JobFollow.css */
+
+.job-follow-page {
+    /* Các thuộc tính cơ bản cho toàn bộ trang */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Đảm bảo trang chiếm toàn bộ chiều cao màn hình */
+}
+
+.job-follow-content {
+    /* Các thuộc tính cho phần nội dung chính của trang */
+    flex-grow: 1;
+    /* Cho phép nội dung chính chiếm không gian còn lại */
+    padding: 20px;
+    max-width: 800px;
+    /* Giới hạn chiều rộng nội dung để danh sách không quá rộng */
+    margin: 0 auto;
+    /* Căn giữa nội dung */
+    width: 100%;
+    box-sizing: border-box;
+    /* Đảm bảo padding không làm tăng kích thước tổng thể */
+}
+
+.page-header-placeholder {
+    /* Placeholder cho tiêu đề trang */
+    height: 50px;
+    /* Chiều cao giả định cho tiêu đề */
+    /* background-color: #e0e0e0; */
+    background-image: url("./assets/background2.png");
+    /* Màu nền placeholder */
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.saved-jobs-list-placeholder {
+    /* Placeholder cho khu vực danh sách công việc */
+    /* Không cần thay đổi nhiều ở đây nếu chỉ là placeholder */
+    min-height: 300px;
+    /* Chiều cao tối thiểu giả định cho danh sách */
+    background-color: #f0f0f0;
+    /* Màu nền placeholder */
+    border: 1px dashed #ccc;
+    /* Đường viền nét đứt để dễ nhận biết */
+    border-radius: 5px;
+    display: flex;
+    /* Giữ flex để dễ căn giữa nội dung placeholder */
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-style: italic;
+}
+
+/* Quan trọng: Điều chỉnh cho các job-card thật sự */
+/* Nếu bạn có các job-card thật (chứ không phải placeholder) thì dùng đoạn này */
+/* job-card */
+.job-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    margin-bottom: 15px;
+    /* Thêm khoảng cách giữa các thẻ công việc */
+    width: 100%;
+    /* Đảm bảo mỗi thẻ chiếm toàn bộ chiều rộng có sẵn */
+    box-sizing: border-box;
+    /* Quan trọng để padding không làm tràn ra ngoài */
+}
+
+/* Để các job-card xếp chồng lên nhau */
+.saved-jobs-list {
+    /* Đây là class của div chứa các job-card thật sự */
+    display: flex;
+    flex-direction: column;
+    /* Xếp các thẻ theo chiều dọc */
+    gap: 15px;
+    /* Khoảng cách giữa các thẻ công việc */
+}
+
+.job-card h2 {
+    font-size: 1.2em;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.job-card p {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.job-card button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.job-card button:hover {
+    opacity: 0.9;
+}
+
+.job-card button:last-child {
+    background-color: #dc3545;
+    /* Màu đỏ cho nút xóa */
+}

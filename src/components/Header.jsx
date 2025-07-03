@@ -3,25 +3,31 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LOCATION_LIST } from "../config/utils";
 import { callFetchAllSkill } from "../config/api";
 import { notification, Select } from "antd";
-import { useAppSelector } from "../redux/hooks";
+import profile from "../assets/profile 1.png";
+import job from "../assets/job.png";
+import CV from "../assets/cv.png";
 
-const { Option } = Select;
+
+const { Option = Select.Option } = Select;
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const optionsLocation = LOCATION_LIST; // Ví dụ: [{ value: "hanoi", label: "Hà Nội" }, ...]
+  const optionsLocation = LOCATION_LIST;
   const [optionsSkills, setOptionsSkills] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [searchOpacity, setSearchOpacity] = useState(1);
   const [headerHeight, setHeaderHeight] = useState(250);
-  const isAuthenticated = useAppSelector(
-    (state) => state.account.isAuthenticated
-  );
-  const user = useAppSelector((state) => state.account.user);
-  console.log("user", user);
+  const [showJobManagementDropdown, setShowJobManagementDropdown] = useState(false); // Trạng thái hiển thị menu con quản lý việc làm
+  const [showUserDropdown, setShowUserDropdown] = useState(false); // Trạng thái hiển thị menu chính của người dùng
 
+  // Thêm trạng thái cho menu con của Quản lý CV và Cá nhân & Bảo mật
+  const [showCvManagementDropdown, setShowCvManagementDropdown] = useState(false);
+  const [showSecurityDropdown, setShowSecurityDropdown] = useState(false);
+
+
+  // Hàm xử lý khi chọn từ các dropdown filter trên thanh điều hướng
   const handleSelectChange = (e) => {
     const value = e.target.value;
     if (value === "jobs" || value === "featured-jobs") {
@@ -116,42 +122,52 @@ const Header = () => {
       style={{
         height: `${headerHeight}px`,
         transition: "height 0.3s ease",
-        overflow: "hidden",
+        overflow: "visible", // Quan trọng để dropdown không bị cắt
       }}
     >
       <div className="header-top">
         <Link to="/" className="logo">
           NextDev
         </Link>
-        {/* <div className=" ml-10  w-60 rounded   text-center pt-1 h-10 border text-sm">
+        <div className="search-bar2">
           <input
             type="text"
             placeholder="Tìm kiếm theo công việc, công ty..."
-            className="w-60 p-1  focus:outline-none text-[13px]"
           />
-        </div> */}
-
-        {/* Các phần Navigation khác */}
+        </div>
         <nav className="nav-menu">
-          <button
-            onClick={() => navigate("/job_list")}
+          <select
             className="filter-select"
+            onChange={handleSelectChange}
+            defaultValue=""
           >
-            {" "}
-            Việc làm HOT
-          </button>
-          <button
-            onClick={() => navigate("/job_list")}
+            <option value="" disabled>
+              Việc làm HOT
+            </option>
+            <option value="hot-jobs">Top việc làm HOT</option>
+          </select>
+          <select
             className="filter-select"
+            onChange={handleSelectChange}
+            defaultValue=""
           >
-            Việc làm
-          </button>
-          <button
-            onClick={() => navigate("/company_list")}
+            <option value="" disabled>
+              Việc làm
+            </option>
+            <option value="jobs">Tất cả việc làm</option>
+            <option value="featured-jobs">Việc làm theo ngành</option>
+          </select>
+          <select
             className="filter-select"
+            onChange={handleSelectChange}
+            defaultValue=""
           >
-            Công ty
-          </button>
+            <option value="" disabled>
+              Công ty
+            </option>
+            <option value="companies">Công ty nổi bật</option>
+            <option value="top-companies">Top Công ty</option>
+          </select>
           <select
             className="filter-select"
             onChange={handleSelectChange}
@@ -163,20 +179,149 @@ const Header = () => {
             <option value="events">Sự kiện</option>
           </select>
         </nav>
-        <div className="flex items-center space-x-4 ">
-          <button
-            className="user-button bg-transparent rounded-full text-black text-[12px] border"
-            onClick={() => navigate("/profile")}
-          >
-            <span className="user-icon text-black">👤</span> {user.name}
+
+        {/* Container cho menu người dùng và dropdown của nó */}
+        <div
+          className="user-menu-container"
+          onMouseEnter={() => setShowUserDropdown(true)} // Khi chuột vào container
+          onMouseLeave={() => setShowUserDropdown(false)} // Khi chuột rời container
+        >
+          <button className="user-button"> {/* Không có onClick ở đây nữa */}
+            <span className="user-icon">👤</span> Chí Thiên
           </button>
-          {user.role.name === "SUPER_ADMIN" && (
-            <button
-              className="user-button bg-transparent rounded-full text-black text-[12px] border ml-1 "
-              onClick={() => navigate("/admin/dashboard")}
-            >
-              Trang quản trị
-            </button>
+          {showUserDropdown && ( // Hiển thị menu chính của người dùng nếu showUserDropdown là true
+            <div className="user-dropdown">
+              {/* Header của dropdown người dùng */}
+              <div className="dropdown-header">
+                <img className="dropdown-avatar" src={profile} alt="avatar" />
+                <div className="user-info-text">
+                  <span className="user-name">Chí Thiện</span>
+                  <span className="user-email">chithien@example.com</span>
+                  <span className="user-role">Ứng viên</span>
+                </div>
+              </div>
+
+              {/* Mục cha "Quản lý việc làm" với mũi tên */}
+              <div
+                className="dropdown-item job-management-item"
+                onClick={(e) => { // Sử dụng onClick để mở/đóng menu con
+                  e.stopPropagation(); // Ngăn chặn đóng menu chính khi nhấp vào mục này
+                  setShowJobManagementDropdown(!showJobManagementDropdown);
+                }}
+              >
+                <div className="job-management-header">
+                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                        <img
+                            width="18px"
+                            height="18px"
+                            src={job}
+                            alt="job-management"
+                        />
+                        Quản lý việc làm
+                    </div>
+                    <span className="dropdown-arrow" style={{ transform: showJobManagementDropdown ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                        &#9660;
+                    </span>
+                </div>
+
+                {showJobManagementDropdown && (
+                  <div className="sub-dropdown">
+                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/job-follow"); }}>
+                      Việc làm yêu thích
+                    </div>
+                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/applied-jobs"); }}>
+                      Việc làm đã ứng tuyển
+                    </div>
+                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/suggested-jobs"); }}>
+                      Gợi ý
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Mục cha "Quản lý CV" với mũi tên */}
+              <div
+                className="dropdown-item cv-management-item"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowCvManagementDropdown(!showCvManagementDropdown);
+                }}
+              >
+                <div className="cv-management-header">
+                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                        <img
+                        width="18px"
+                        height="18px"
+                        src={CV}
+                        alt="manage-cv"
+                        />
+                        Quản lý CV
+                    </div>
+                    <span className="dropdown-arrow" style={{ transform: showCvManagementDropdown ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                        &#9660;
+                    </span>
+                </div>
+
+                {showCvManagementDropdown && (
+                  <div className="sub-dropdown">
+                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/my-cv"); }}>
+                      CV của tôi
+                    </div>
+                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/recruiters-view-profile"); }}>
+                      Nhà tuyển dụng xem hồ sơ
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Mục cha "Cá nhân và bảo mật" với mũi tên */}
+              <div
+                className="dropdown-item security-item"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowSecurityDropdown(!showSecurityDropdown);
+                }}
+              >
+                <div className="security-header">
+                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                        <img
+                            width="18px"
+                            height="18px"
+                            src="https://img.icons8.com/ios-glyphs/30/resume.png"
+                            alt="profile-security"
+                        />
+                        Cá nhân và bảo mật
+                    </div>
+                    <span className="dropdown-arrow" style={{ transform: showSecurityDropdown ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                        &#9660;
+                    </span>
+                </div>
+
+                {showSecurityDropdown && (
+                  <div className="sub-dropdown">
+                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/profile"); }}>
+                      Cài đặt thông tin cá nhân
+                    </div>
+                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/security-settings"); }}>
+                      Cài đặt bảo mật
+                    </div>
+                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/change-password"); }}>
+                      Đổi mật khẩu
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="dropdown-item logout-item" onClick={() => navigate("/logout")}>
+                <img
+                  width="18px"
+                  height="18px"
+                  src="https://img.icons8.com/ios-glyphs/30/exit.png"
+                  alt="logout"
+                />
+                Đăng xuất
+              </div>
+            </div>
           )}
         </div>
       </div>
@@ -186,20 +331,12 @@ const Header = () => {
         style={{ opacity: searchOpacity, transition: "opacity 0.3s ease" }}
       >
         <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Tìm kiếm theo công việc, công ty..."
-          />
-
+          <input type="text" placeholder="Tìm kiếm theo công việc, công ty..." />
           <button className="search-button" onClick={handleSearch}>
             🔍
           </button>
         </div>
-
-        <div
-          className="filters"
-          style={{ display: "flex", gap: "1rem", alignItems: "center" }}
-        >
+        <div className="filters" style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
           {/* Select đa lựa chọn cho Địa điểm */}
           <Select
             mode="multiple"
