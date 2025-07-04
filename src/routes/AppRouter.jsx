@@ -5,6 +5,7 @@ import HomePage from "../pages/HomePage";
 import SignUp from "../pages/SignUp";
 import CompanyDetails from "../pages/CompanyDetails";
 import JobPage from "../pages/JobPage";
+import JobFollow from "../pages/JobFollow";
 
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
@@ -53,7 +54,7 @@ export default function AppRouter() {
         <Route path="/job_list" element={<JobListPage />} />
         <Route path="/job/:jobId" element={<JobPage />} />
         <Route path="/jobfollow" element={<JobFollowPage />}/>
-
+       <Route path="/job-follow" element={<JobFollow />} /> {/* Thêm route cho trang JobFollow */}
 
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
@@ -73,6 +74,8 @@ export default function AppRouter() {
 
           <Route path="formEmployer" element={<FormEmployerAdd />} />
           <Route path="addJob" element={<AddJob />} />
+        
+
 
           <Route path="bar" element={<Bar />} />
           <Route path="pie" element={<Pie />} />
