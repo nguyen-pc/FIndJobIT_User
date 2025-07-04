@@ -80,26 +80,6 @@ const JobPage = () => {
     }
   };
 
-
-  const handleApply = () => {
-    setIsApplied(true);
-    console.log("Applied for job ID:", jobId);
-  };
-
-  const handleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    console.log("Toggled favorite for job ID:", jobId);
-  };
-
-  const handleReviewCV = () => {
-    console.log("Reviewing CV for job ID:", jobId);
-  };
-
-
-
-
-
-
   const handleFollowJob = async () => {
     const payload = {
       jobId: jobDetail?.id,
@@ -135,7 +115,9 @@ const JobPage = () => {
             <div className="job-detail-card">
               <div className="job-header">
                 <h2>
-                  {jobDetail ? jobDetail.name : "Vị trí công việc không xác định"}
+                  {jobDetail
+                    ? jobDetail.name
+                    : "Vị trí công việc không xác định"}
                 </h2>
                 <div className="job-meta-grid">
                   <span className="job-meta-item">
@@ -154,12 +136,20 @@ const JobPage = () => {
                     </span>
                   </span>
                   <span className="job-meta-item">
-                    <img src={location_1} alt="Địa điểm" className="salary-icon" />
+                    <img
+                      src={location_1}
+                      alt="Địa điểm"
+                      className="salary-icon"
+                    />
                     <strong>Địa điểm:</strong> <br />
                     {jobDetail ? jobDetail.location : ""}
                   </span>
                   <span className="job-meta-item">
-                    <img src={skill} alt="Kinh nghiệm" className="salary-icon" />
+                    <img
+                      src={skill}
+                      alt="Kinh nghiệm"
+                      className="salary-icon"
+                    />
                     <strong>Kinh nghiệm:</strong>
                     <br /> Không có
                   </span>
@@ -194,21 +184,7 @@ const JobPage = () => {
                       className="action-button review-cv"
                       onClick={() => setIsReviewCVModalOpen(true)}
                     >
-
                       Review CV
-
-                      {isApplied ? "Đã ứng tuyển" : "Ứng tuyển"}
-                    </button>
-                    <button
-                      className={`favorite-button ${isFavorite ? "" : ""}`}
-                      onClick={handleFollowJob}
-                    >
-                      <img
-                        className="w-[100%]"
-                        src={isFavorite ? HeartFilled : Heart}
-                        alt=""
-                      />
-
                     </button>
                     <div className="apply-favorite-group">
                       <button
@@ -219,13 +195,13 @@ const JobPage = () => {
                         {isApplied ? "Đã ứng tuyển" : "Ứng tuyển"}
                       </button>
                       <button
-                        className={`favorite-button ${isFavorite ? "active" : ""}`}
+                        className={`favorite-button ${isFavorite ? "" : ""}`}
                         onClick={handleFollowJob}
                       >
                         <img
-                          src={tim}
-                          className="favorite-icon-img"
-                          alt="Yêu thích"
+                          className="w-[100%]"
+                          src={isFavorite ? HeartFilled : Heart}
+                          alt=""
                         />
                       </button>
                     </div>

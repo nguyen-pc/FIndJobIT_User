@@ -14,7 +14,7 @@ const JobCardRecommend = ({ jobs }) => {
     };
   return (
     <section className="featured-jobs" id="jobs">
-      <h2>Việc làm có thể phù hợp với bạn</h2>
+      {/* <h2>Việc làm có thể phù hợp với bạn</h2> */}
 
       <div className="jobs-list">
         {isLoading ? (
@@ -41,7 +41,6 @@ const JobCardRecommend = ({ jobs }) => {
                     ? job.company.name
                     : job.company}
                 </span>
-                <span className="favorite-icon">♡</span>
               </div>
               <h3>{job.job.title}</h3>
               <div>

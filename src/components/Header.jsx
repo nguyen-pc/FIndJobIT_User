@@ -19,12 +19,20 @@ const Header = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [searchOpacity, setSearchOpacity] = useState(1);
   const [headerHeight, setHeaderHeight] = useState(250);
+
   const [showJobManagementDropdown, setShowJobManagementDropdown] = useState(false); // Trạng thái hiển thị menu con quản lý việc làm
   const [showUserDropdown, setShowUserDropdown] = useState(false); // Trạng thái hiển thị menu chính của người dùng
 
   // Thêm trạng thái cho menu con của Quản lý CV và Cá nhân & Bảo mật
   const [showCvManagementDropdown, setShowCvManagementDropdown] = useState(false);
   const [showSecurityDropdown, setShowSecurityDropdown] = useState(false);
+
+  const isAuthenticated = useAppSelector(
+    (state) => state.account.isAuthenticated
+  );
+  const user = useAppSelector((state) => state.account.user);
+  // console.log("user", user);
+
 
 
   // Hàm xử lý khi chọn từ các dropdown filter trên thanh điều hướng
@@ -125,7 +133,7 @@ const Header = () => {
         overflow: "visible", // Quan trọng để dropdown không bị cắt
       }}
     >
-      <div className="header-top">
+      <div className="header-top ">
         <Link to="/" className="logo">
           NextDev
         </Link>
