@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LOCATION_LIST } from "../config/utils";
-import { callFetchAllSkill } from "../config/api";
+import { callFetchAllSkill, callLogout } from "../config/api";
 import { notification, Select } from "antd";
 import profile from "../assets/profile 1.png";
 import job from "../assets/job.png";
 import CV from "../assets/cv.png";
-
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { setLogoutAction } from "../redux/slice/accountSlide";
 
 const { Option = Select.Option } = Select;
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const optionsLocation = LOCATION_LIST;
   const [optionsSkills, setOptionsSkills] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
@@ -20,11 +22,13 @@ const Header = () => {
   const [searchOpacity, setSearchOpacity] = useState(1);
   const [headerHeight, setHeaderHeight] = useState(250);
 
-  const [showJobManagementDropdown, setShowJobManagementDropdown] = useState(false); // Trạng thái hiển thị menu con quản lý việc làm
+  const [showJobManagementDropdown, setShowJobManagementDropdown] =
+    useState(false); // Trạng thái hiển thị menu con quản lý việc làm
   const [showUserDropdown, setShowUserDropdown] = useState(false); // Trạng thái hiển thị menu chính của người dùng
 
   // Thêm trạng thái cho menu con của Quản lý CV và Cá nhân & Bảo mật
-  const [showCvManagementDropdown, setShowCvManagementDropdown] = useState(false);
+  const [showCvManagementDropdown, setShowCvManagementDropdown] =
+    useState(false);
   const [showSecurityDropdown, setShowSecurityDropdown] = useState(false);
 
   const isAuthenticated = useAppSelector(
@@ -32,8 +36,6 @@ const Header = () => {
   );
   const user = useAppSelector((state) => state.account.user);
   // console.log("user", user);
-
-
 
   // Hàm xử lý khi chọn từ các dropdown filter trên thanh điều hướng
   const handleSelectChange = (e) => {
@@ -47,6 +49,15 @@ const Header = () => {
       }
     }
     e.target.value = "";
+  };
+
+  const handleLogout = async () => {
+    const res = await callLogout();
+    if (res && res && +res.statusCode === 200) {
+      dispatch(setLogoutAction({}));
+      // message.success("Đăng xuất thành công");
+      navigate("/");
+    }
   };
 
   // Fetch danh sách skill từ backend
@@ -137,45 +148,35 @@ const Header = () => {
         <Link to="/" className="logo">
           NextDev
         </Link>
-        <div className="search-bar2">
+        {/* <div className=" ml-10  w-60 rounded   text-center pt-1 h-10 border text-sm">
           <input
             type="text"
             placeholder="Tìm kiếm theo công việc, công ty..."
+            className="w-60 p-1  focus:outline-none text-[13px]"
           />
-        </div>
+        </div> */}
+
+        {/* Các phần Navigation khác */}
         <nav className="nav-menu">
-          <select
+          <button
+            onClick={() => navigate("/job_list")}
             className="filter-select"
-            onChange={handleSelectChange}
-            defaultValue=""
           >
-            <option value="" disabled>
-              Việc làm HOT
-            </option>
-            <option value="hot-jobs">Top việc làm HOT</option>
-          </select>
-          <select
+            {" "}
+            Việc làm HOT
+          </button>
+          <button
+            onClick={() => navigate("/job_list")}
             className="filter-select"
-            onChange={handleSelectChange}
-            defaultValue=""
           >
-            <option value="" disabled>
-              Việc làm
-            </option>
-            <option value="jobs">Tất cả việc làm</option>
-            <option value="featured-jobs">Việc làm theo ngành</option>
-          </select>
-          <select
+            Việc làm
+          </button>
+          <button
+            onClick={() => navigate("/company_list")}
             className="filter-select"
-            onChange={handleSelectChange}
-            defaultValue=""
           >
-            <option value="" disabled>
-              Công ty
-            </option>
-            <option value="companies">Công ty nổi bật</option>
-            <option value="top-companies">Top Công ty</option>
-          </select>
+            Công ty
+          </button>
           <select
             className="filter-select"
             onChange={handleSelectChange}
@@ -188,150 +189,262 @@ const Header = () => {
           </select>
         </nav>
 
-        {/* Container cho menu người dùng và dropdown của nó */}
-        <div
-          className="user-menu-container"
-          onMouseEnter={() => setShowUserDropdown(true)} // Khi chuột vào container
-          onMouseLeave={() => setShowUserDropdown(false)} // Khi chuột rời container
-        >
-          <button className="user-button"> {/* Không có onClick ở đây nữa */}
-            <span className="user-icon">👤</span> Chí Thiên
-          </button>
-          {showUserDropdown && ( // Hiển thị menu chính của người dùng nếu showUserDropdown là true
-            <div className="user-dropdown">
-              {/* Header của dropdown người dùng */}
-              <div className="dropdown-header">
-                <img className="dropdown-avatar" src={profile} alt="avatar" />
-                <div className="user-info-text">
-                  <span className="user-name">Chí Thiện</span>
-                  <span className="user-email">chithien@example.com</span>
-                  <span className="user-role">Ứng viên</span>
-                </div>
-              </div>
-
-              {/* Mục cha "Quản lý việc làm" với mũi tên */}
-              <div
-                className="dropdown-item job-management-item"
-                onClick={(e) => { // Sử dụng onClick để mở/đóng menu con
-                  e.stopPropagation(); // Ngăn chặn đóng menu chính khi nhấp vào mục này
-                  setShowJobManagementDropdown(!showJobManagementDropdown);
-                }}
+        {user && isAuthenticated ? (
+          <>
+            {user.role.name === "SUPER_ADMIN" && (
+              <button
+                className="user-button bg-transparent rounded-full text-black text-[12px] border "
+                onClick={() => navigate("/admin/dashboard")}
               >
-                <div className="job-management-header">
-                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                Trang quản trị
+              </button>
+            )}
+            <div
+              className="user-menu-container"
+              onMouseEnter={() => setShowUserDropdown(true)} // Khi chuột vào container
+              onMouseLeave={() => setShowUserDropdown(false)} // Khi chuột rời container
+            >
+              <button className="user-button">
+                {" "}
+                {/* Không có onClick ở đây nữa */}
+                <span className="user-icon">👤</span> {user.name}
+              </button>
+
+              {showUserDropdown && ( // Hiển thị menu chính của người dùng nếu showUserDropdown là true
+                <div className="user-dropdown">
+                  {/* Header của dropdown người dùng */}
+                  <div className="dropdown-header">
+                    <img
+                      className="dropdown-avatar"
+                      src={profile}
+                      alt="avatar"
+                    />
+                    <div className="user-info-text">
+                      <span className="user-name">{user.name}</span>
+                      <span className="user-email">{user.email}</span>
+                      <span className="user-role">Ứng viên</span>
+                    </div>
+                  </div>
+
+                  {/* Mục cha "Quản lý việc làm" với mũi tên */}
+                  <div
+                    className="dropdown-item job-management-item"
+                    onClick={(e) => {
+                      // Sử dụng onClick để mở/đóng menu con
+                      e.stopPropagation(); // Ngăn chặn đóng menu chính khi nhấp vào mục này
+                      setShowJobManagementDropdown(!showJobManagementDropdown);
+                    }}
+                  >
+                    <div className="job-management-header">
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
                         <img
-                            width="18px"
-                            height="18px"
-                            src={job}
-                            alt="job-management"
+                          width="18px"
+                          height="18px"
+                          src={job}
+                          alt="job-management"
                         />
                         Quản lý việc làm
-                    </div>
-                    <span className="dropdown-arrow" style={{ transform: showJobManagementDropdown ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                      </div>
+                      <span
+                        className="dropdown-arrow"
+                        style={{
+                          transform: showJobManagementDropdown
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        }}
+                      >
                         &#9660;
-                    </span>
-                </div>
+                      </span>
+                    </div>
 
-                {showJobManagementDropdown && (
-                  <div className="sub-dropdown">
-                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/job-follow"); }}>
-                      Việc làm yêu thích
-                    </div>
-                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/applied-jobs"); }}>
-                      Việc làm đã ứng tuyển
-                    </div>
-                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/suggested-jobs"); }}>
-                      Gợi ý
-                    </div>
+                    {showJobManagementDropdown && (
+                      <div className="sub-dropdown">
+                        <div
+                          className="dropdown-item"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate("/job-follow");
+                          }}
+                        >
+                          Việc làm yêu thích
+                        </div>
+                        <div
+                          className="dropdown-item"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate("/applied-jobs");
+                          }}
+                        >
+                          Việc làm đã ứng tuyển
+                        </div>
+                        <div
+                          className="dropdown-item"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate("/company_follow");
+                          }}
+                        >
+                          Công ty đã lưu
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
 
-              {/* Mục cha "Quản lý CV" với mũi tên */}
-              <div
-                className="dropdown-item cv-management-item"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowCvManagementDropdown(!showCvManagementDropdown);
-                }}
-              >
-                <div className="cv-management-header">
-                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                  {/* Mục cha "Quản lý CV" với mũi tên */}
+                  <div
+                    className="dropdown-item cv-management-item"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowCvManagementDropdown(!showCvManagementDropdown);
+                    }}
+                  >
+                    <div className="cv-management-header">
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
                         <img
-                        width="18px"
-                        height="18px"
-                        src={CV}
-                        alt="manage-cv"
+                          width="18px"
+                          height="18px"
+                          src={CV}
+                          alt="manage-cv"
                         />
                         Quản lý CV
-                    </div>
-                    <span className="dropdown-arrow" style={{ transform: showCvManagementDropdown ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                      </div>
+                      <span
+                        className="dropdown-arrow"
+                        style={{
+                          transform: showCvManagementDropdown
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        }}
+                      >
                         &#9660;
-                    </span>
-                </div>
+                      </span>
+                    </div>
 
-                {showCvManagementDropdown && (
-                  <div className="sub-dropdown">
-                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/my-cv"); }}>
-                      CV của tôi
-                    </div>
-                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/recruiters-view-profile"); }}>
-                      Nhà tuyển dụng xem hồ sơ
-                    </div>
+                    {showCvManagementDropdown && (
+                      <div className="sub-dropdown">
+                        <div
+                          className="dropdown-item"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate("/my-cv");
+                          }}
+                        >
+                          CV của tôi
+                        </div>
+                        <div
+                          className="dropdown-item"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate("/recruiters-view-profile");
+                          }}
+                        >
+                          Nhà tuyển dụng xem hồ sơ
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
 
-              {/* Mục cha "Cá nhân và bảo mật" với mũi tên */}
-              <div
-                className="dropdown-item security-item"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowSecurityDropdown(!showSecurityDropdown);
-                }}
-              >
-                <div className="security-header">
-                    <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                  {/* Mục cha "Cá nhân và bảo mật" với mũi tên */}
+                  <div
+                    className="dropdown-item security-item"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowSecurityDropdown(!showSecurityDropdown);
+                    }}
+                  >
+                    <div className="security-header">
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
                         <img
-                            width="18px"
-                            height="18px"
-                            src="https://img.icons8.com/ios-glyphs/30/resume.png"
-                            alt="profile-security"
+                          width="18px"
+                          height="18px"
+                          src="https://img.icons8.com/ios-glyphs/30/resume.png"
+                          alt="profile-security"
                         />
                         Cá nhân và bảo mật
-                    </div>
-                    <span className="dropdown-arrow" style={{ transform: showSecurityDropdown ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                      </div>
+                      <span
+                        className="dropdown-arrow"
+                        style={{
+                          transform: showSecurityDropdown
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        }}
+                      >
                         &#9660;
-                    </span>
-                </div>
+                      </span>
+                    </div>
 
-                {showSecurityDropdown && (
-                  <div className="sub-dropdown">
-                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/profile"); }}>
-                      Cài đặt thông tin cá nhân
-                    </div>
-                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/security-settings"); }}>
-                      Cài đặt bảo mật
-                    </div>
-                    <div className="dropdown-item" onClick={(e) => { e.stopPropagation(); navigate("/change-password"); }}>
-                      Đổi mật khẩu
-                    </div>
+                    {showSecurityDropdown && (
+                      <div className="sub-dropdown">
+                        <div
+                          className="dropdown-item"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate("/profile");
+                          }}
+                        >
+                          Cài đặt thông tin cá nhân
+                        </div>
+                        <div
+                          className="dropdown-item"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate("/forgotpassword");
+                          }}
+                        >
+                          Đổi mật khẩu
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
 
-              <div className="dropdown-item logout-item" onClick={() => navigate("/logout")}>
-                <img
-                  width="18px"
-                  height="18px"
-                  src="https://img.icons8.com/ios-glyphs/30/exit.png"
-                  alt="logout"
-                />
-                Đăng xuất
-              </div>
+                  <div
+                    className="dropdown-item logout-item"
+                    onClick={() => handleLogout()}
+                  >
+                    <img
+                      width="18px"
+                      height="18px"
+                      src="https://img.icons8.com/ios-glyphs/30/exit.png"
+                      alt="logout"
+                    />
+                    Đăng xuất
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </>
+        ) : (
+          <div>
+            <button
+              onClick={() => navigate("/signin")}
+              className="p-2 rounded bg-[#1C9EAF] text-white :hover:bg-[#1C9EAF]/90 "
+            >
+              {" "}
+              Đăng nhập
+            </button>
+          </div>
+        )}
+
+        {/* Container cho menu người dùng và dropdown của nó */}
       </div>
       {/* Phần header search */}
       <div
@@ -339,12 +452,18 @@ const Header = () => {
         style={{ opacity: searchOpacity, transition: "opacity 0.3s ease" }}
       >
         <div className="search-bar">
-          <input type="text" placeholder="Tìm kiếm theo công việc, công ty..." />
+          <input
+            type="text"
+            placeholder="Tìm kiếm theo công việc, công ty..."
+          />
           <button className="search-button" onClick={handleSearch}>
             🔍
           </button>
         </div>
-        <div className="filters" style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+        <div
+          className="filters"
+          style={{ display: "flex", gap: "1rem", alignItems: "center" }}
+        >
           {/* Select đa lựa chọn cho Địa điểm */}
           <Select
             mode="multiple"

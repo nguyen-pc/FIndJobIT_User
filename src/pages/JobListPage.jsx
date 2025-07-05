@@ -188,7 +188,7 @@ const JobListPage = () => {
       <Header />
       <div>
         {/* Công việc mới nhất */}
-        <div className="HotCompany ml-20 o" style={{ padding: "0px " }}>
+        <div className="HotCompany ml-20 " style={{ padding: "0px " }}>
           <div className="mt-10  flex">
             <p
               className="text-2xl font-semibold text-center"

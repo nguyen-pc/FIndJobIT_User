@@ -15,7 +15,6 @@ import ProfilePage from "../pages/ProfilePage";
 import TestTailwind from "../components/testtailwind";
 import RecommendJob from "../pages/RecommendJob";
 import CompanyList from "../pages/CompanyList";
-import JobFollowPage from "../pages/JobFollowPage";
 
 //admin route
 import HomeAdmin from "../pages/admin/Home";
@@ -37,8 +36,9 @@ import EditUser from "../pages/admin/EditUser";
 import SkillManagement from "../pages/admin/SkillManagement";
 import AddJob from "../pages/admin/AddJob";
 
-import Team from "../pages/admin/Team";
 import JobListPage from "../pages/JobListPage";
+import HistoryApply from "../pages/HistoryApply.tsx";
+import CompanyFollowPage from "../pages/CompanyFollowPage.jsx";
 
 export default function AppRouter() {
   return (
@@ -50,15 +50,16 @@ export default function AppRouter() {
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/reset_password" element={<ResetPassword />} />
         <Route path="/resetpassword" element={<ResetPasswordPage />} />
-
         <Route path="/job_list" element={<JobListPage />} />
         <Route path="/job/:jobId" element={<JobPage />} />
-        <Route path="/jobfollow" element={<JobFollowPage />}/>
-       <Route path="/job-follow" element={<JobFollow />} /> {/* Thêm route cho trang JobFollow */}
+        <Route path="/job-follow" element={<JobFollow />} />{" "}
+        <Route path="/applied-jobs" element={<HistoryApply />}/>
 
+        
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/company/:id" element={<CompanyDetails />} />
+        <Route path="/company_follow" element={<CompanyFollowPage />}/>
         <Route path="/company_list" element={<CompanyList />} />
         <Route path="/recommend-job" element={<RecommendJob />} />
         {/* route admin */}
@@ -74,8 +75,6 @@ export default function AppRouter() {
 
           <Route path="formEmployer" element={<FormEmployerAdd />} />
           <Route path="addJob" element={<AddJob />} />
-        
-
 
           <Route path="bar" element={<Bar />} />
           <Route path="pie" element={<Pie />} />

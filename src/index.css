@@ -6617,7 +6617,7 @@ footer {
 
 .page-header-placeholder {
     /* Placeholder cho tiêu đề trang */
-    height: 50px;
+    height: 100px;
     /* Chiều cao giả định cho tiêu đề */
     /* background-color: #e0e0e0; */
     background-image: url("./assets/background2.png");

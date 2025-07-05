@@ -1,9 +1,5 @@
-
-
-
 // JobPage.jsx
 import "tailwindcss";
-
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
@@ -189,6 +185,7 @@ const JobPage = () => {
                     <div className="apply-favorite-group">
                       <button
                         className="action-button apply-button"
+                        // onClick={handleApply}
                         disabled={isApplied}
                         onClick={() => setIsModalOpen(true)}
                       >
@@ -280,4 +277,4 @@ const JobPage = () => {
   );
 };
 
-export default JobPage;///
+export default JobPage;

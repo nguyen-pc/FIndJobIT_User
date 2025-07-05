@@ -139,6 +139,9 @@ export const callFetchUser = (query: string) => {
     `/api/v1/users?${query}`
   );
 };
+export const callFetchUserById = (id: string) => {
+  return axios.get<IBackendRes<IUser>>(`/api/v1/users/${id}`);
+};
 
 //Module Skill
 
@@ -162,6 +165,14 @@ export const callFetchAllSkill = (query: string) => {
   return axios.get<IBackendRes<IModelPaginate<ISkill>>>(
     `/api/v1/skills?${query}`
   );
+};
+
+export const callFetchSkillById = (id: string) => {
+  return axios.get<IBackendRes<ISkill>>(`/api/v1/skills/${id}`);
+};
+
+export const callFetchSkillNoPagination = () => {
+  return axios.get<IBackendRes<ISkill>>(`/api/v1/skills/all`);
 };
 
 // Module Company
@@ -236,6 +247,11 @@ export const cancelFollowCompany = (payload: FollowCompany) => {
   });
 };
 
+export const fetchCompanyFollowed = (userId:number) => {
+  return axios.get<IBackendRes<IJob>>(`/api/v1/companies/follow/${userId}`);
+};
+
+
 export const checkCompanyStatus = (companyId: number, userId: number) => {
   return axios.get<IBackendRes<{ followed: boolean }>>(
     `/api/v1/companies/${companyId}/follow-status?userId=${userId}`
@@ -299,6 +315,10 @@ export const checkFollowStatus = (jobId: number, userId: number) => {
   return axios.get<IBackendRes<{ followed: boolean }>>(
     `/api/v1/jobs/${jobId}/follow-status?userId=${userId}`
   );
+};
+
+export const fetchJobFollowed = (userId:number) => {
+  return axios.get<IBackendRes<IJob>>(`/api/v1/jobs/followed/${userId}`);
 };
 
 export const recommendJob = () => {

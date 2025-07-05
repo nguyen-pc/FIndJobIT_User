@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useAppSelector } from "../redux/hooks";
-import { fetchJobFollowed } from "../config/api";
-import CardJob from "../components/CardJob";
-import CardJobFollow from "../components/CardJobFollow";
+import { fetchCompanyFollowed } from "../config/api";
+import CardCompanyFollow from "../components/CardCompanyFollow";
 
-const JobFollow = () => {
-  const [displayJob, setDisplayJob] = useState(null);
+const CompanyFollowPage = () => {
+  const [displayCompany, setDisplayCompany] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const isAuthenticated = useAppSelector(
@@ -16,18 +15,18 @@ const JobFollow = () => {
   const user = useAppSelector((state) => state.account.user);
 
   useEffect(() => {
-    fetchFollowedJobs();
+    fetchFollowedCompany();
   }, [user]);
 
-  const fetchFollowedJobs = async () => {
+  const fetchFollowedCompany = async () => {
     try {
-      const res = await fetchJobFollowed(user.id);
+      const res = await fetchCompanyFollowed(user.id);
       console.log(res);
       if (res && res.data) {
-        setDisplayJob(res.data);
+        setDisplayCompany(res.data);
         console.log("Followed Jobs:", res.data.data);
       } else {
-        setDisplayJob([]);
+        setDisplayCompany([]);
       }
     } catch (error) {
       console.error("Error fetching followed jobs:", error);
@@ -40,18 +39,18 @@ const JobFollow = () => {
       <main className="job-follow-content">
         <div className="page-header-placeholder">
           <h4 className="text-2xl font-semibold text-center pt-2 mt-10 text-white">
-            Danh sách công việc đã lưu
+            Danh sách công ty đã lưu
           </h4>
           <nav className="text-center text-white mt-2">
-            Xem lại danh sách những việc làm mà bạn đã lưu trước đó. Ứng tuyển ngay để không bỏ lỡ cơ hội nghề nghiệp dành cho bạn.     
+            Xem lại danh sách những công ty mà bạn đã lưu trước đó. Theo dõi để không bỏ lỡ cơ hội nghề nghiệp dành cho bạn.     
           </nav>
         </div>
         <div className="">
-          <CardJobFollow
-            displayJob={displayJob}
+          <CardCompanyFollow
+            displayCompany={displayCompany}
             userId={user.id}
-            onUnfollow={(jobId) => {
-              setDisplayJob(displayJob.filter((job) => job.id !== jobId));
+            onUnfollow={(companyId) => {
+              setDisplayCompany(displayCompany.filter((company) => company.id !== companyId));
             }}
           />
         </div>
@@ -61,4 +60,4 @@ const JobFollow = () => {
   );
 };
 
-export default JobFollow;
+export default CompanyFollowPage;
