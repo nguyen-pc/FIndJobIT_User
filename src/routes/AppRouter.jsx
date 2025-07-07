@@ -39,6 +39,8 @@ import AddJob from "../pages/admin/job/AddJob";
 import JobListPage from "../pages/JobListPage";
 import HistoryApply from "../pages/HistoryApply.tsx";
 import CompanyFollowPage from "../pages/CompanyFollowPage.jsx";
+import CompanyManagement from "../pages/admin/company/CompanyManagement.jsx";
+import AddCompany from "../pages/admin/company/addCompany.jsx";
 
 export default function AppRouter() {
   return (
@@ -68,6 +70,8 @@ export default function AppRouter() {
           <Route path="userManagement" element={<UserManagement />} />
           <Route path="employerManagement" element={<EmployerManagement />} />
           <Route path="jobManagement" element={<JobManagement />} />
+          <Route path="companyManagement" element={<CompanyManagement />} />
+          <Route path="addCompany" element={<AddCompany />} />
           <Route path="skillManagement" element={<SkillManagement />} />
 
           <Route path="addUser" element={<FormUserAdd />} />

@@ -138,6 +138,13 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
+              title="Công ty"
+              to="/admin/companyManagement"
+              icon={<ContactsOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
               title="Công việc"
               to="/admin/jobManagement"
               icon={<ReceiptOutlinedIcon />}
