@@ -24,17 +24,17 @@ import Bar from "../pages/admin/Bar";
 import Calendar2 from "../pages/admin/Calendar2";
 import EmployerManagement from "../pages/admin/EmployerManagement";
 import Faq from "../pages/admin/Faq";
-import FormUserAdd from "../pages/admin/FormUserAdd";
+import FormUserAdd from "../pages/admin/user/FormUserAdd";
 import FormEmployerAdd from "../pages/admin/FormEmployerAdd";
 
 import Geography from "../pages/admin/Geography";
-import JobManagement from "../pages/admin/JobManagement";
+import JobManagement from "../pages/admin/job/JobManagement";
 import Line from "../pages/admin/Line";
 import Pie from "../pages/admin/Pie";
-import UserManagement from "../pages/admin/UserManagement";
-import EditUser from "../pages/admin/EditUser";
+import UserManagement from "../pages/admin/user/UserManagement";
+import EditUser from "../pages/admin/user/EditUser";
 import SkillManagement from "../pages/admin/SkillManagement";
-import AddJob from "../pages/admin/AddJob";
+import AddJob from "../pages/admin/job/AddJob";
 
 import JobListPage from "../pages/JobListPage";
 import HistoryApply from "../pages/HistoryApply.tsx";

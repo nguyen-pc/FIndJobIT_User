@@ -2,16 +2,68 @@ import { Box, Button, TextField, MenuItem } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Header from "../../components/admin/Header";
+import Header from "../../../components/admin/Header";
+import { useEffect, useState } from "react";
+import { callCreateUser, callFetchCompany, callFetchRole } from "../../../config/api";
+import { useNavigate } from "react-router-dom";
 
 const FormUserAdd = () => {
+  const [companies, setCompanies] = useState([]);
+  const [roles, setRoles] = useState([]);
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const navigate = useNavigate();
 
-  const handleFormSubmit = (values) => {
-    console.log(values);
-    // Gửi dữ liệu đến server nếu cần
+  useEffect(() => {
+    fetchCompanyData();
+    fetchRoleData();
+  }, []);
+
+  const fetchCompanyData = async () => {
+    try {
+      const res = await callFetchCompany("page=1&size=100");
+      console.log("Công ty đã tải:", res.data.result);
+      if (res && res.data && res.data.result) {
+        setCompanies(res.data.result);
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu công ty:", error);
+    }
   };
 
+  const fetchRoleData = async () => {
+    try {
+      const res = await callFetchRole("page=1&size=100");
+      console.log("Vai trò đã tải:", res.data.result);
+      if (res && res.data && res.data.result) {
+        setRoles(res.data.result);
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu vai trò:", error);
+    }
+  };
+
+  const handleFormSubmit = async (values) => {
+    try {
+      // Chuyển đổi role và company sang định dạng đối tượng
+      const payload = {
+        ...values,
+        role: { id: values.role },
+        company: { id: values.company },
+      };
+      console.log("Submitting form with payload:", payload);
+      const res = await callCreateUser(payload);
+      if (res) {
+        console.log("User has been updated successfully:", res.data);
+        navigate("/admin/userManagement");
+      } else {
+        console.error("Failed to update user:", res.message);
+        // Ví dụ: hiển thị thông báo lỗi
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      // Ví dụ: thông báo lỗi cho người dùng
+    }
+  };
   return (
     <Box m="20px">
       <Header
@@ -68,8 +120,9 @@ const FormUserAdd = () => {
                 helperText={touched.gender && errors.gender}
                 sx={{ gridColumn: "span 2" }}
               >
-                <MenuItem value="Nam">Nam</MenuItem>
-                <MenuItem value="Nữ">Nữ</MenuItem>
+                <MenuItem value="MALE">MALE</MenuItem>
+                <MenuItem value="FEMALE">FEMALE</MenuItem>
+                <MenuItem value="OTHER">OTHER</MenuItem>
               </TextField>
 
               <TextField
@@ -157,28 +210,38 @@ const FormUserAdd = () => {
               />
 
               <TextField
+                select
                 fullWidth
                 variant="filled"
-                type="text"
                 label="Vai trò"
-                onBlur={handleBlur}
+                name="role"
+                value={values.role}
                 onChange={handleChange}
-                value={values.role?.name}
-                name="role.name"
                 sx={{ gridColumn: "span 2" }}
-              />
+              >
+                {roles.map((role) => (
+                  <MenuItem key={role.id} value={role.id}>
+                    {role.name}
+                  </MenuItem>
+                ))}
+              </TextField>
 
               <TextField
+                select
                 fullWidth
                 variant="filled"
-                type="text"
                 label="Công ty"
-                onBlur={handleBlur}
+                name="company"
+                value={values.company}
                 onChange={handleChange}
-                value={values.company?.name}
-                name="company.name"
                 sx={{ gridColumn: "span 2" }}
-              />
+              >
+                {companies.map((company) => (
+                  <MenuItem key={company.id} value={company.id}>
+                    {company.name}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Box>
 
             <Box display="flex" justifyContent="end" mt="20px">

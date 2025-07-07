@@ -25,7 +25,7 @@ const EditProfilePage = () => {
     name: "",
     address: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     gender: "",
     skills: [], // Mảng skill lưu dưới dạng {id, name}
   });
@@ -43,7 +43,7 @@ const EditProfilePage = () => {
           name: res.data.name || "",
           address: res.data.address || "",
           email: res.data.email || "",
-          phone: res.data.phone || "",
+          phoneNumber: res.data.phoneNumber || "",
           gender: res.data.gender || "",
           skills: res.data.skills || [],
         });
@@ -177,14 +177,14 @@ const EditProfilePage = () => {
                 />
               </div>
               <div className="form-group flex flex-col mb-2">
-                <label htmlFor="phone" className="mb-1">
+                <label htmlFor="phoneNumber" className="mb-1">
                   SĐT:
                 </label>
                 <input
                   type="tel"
-                  id="phone"
-                  name="phone"
-                  value={editedUser.phone}
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  value={editedUser.phoneNumber}
                   onChange={handleChange}
                   className="p-2 border rounded"
                 />

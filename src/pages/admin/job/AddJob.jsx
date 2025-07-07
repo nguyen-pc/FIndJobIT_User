@@ -2,7 +2,7 @@ import { Box, Button, TextField, MenuItem, Switch } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Header from "../../components/admin/Header";
+import Header from "../../../components/admin/Header";
 
 const skillOptions = ["JavaScript", "React", "Node.js", "Python"];
 const levelOptions = ["Intern", "Fresher", "Junior", "Mid", "Senior"];

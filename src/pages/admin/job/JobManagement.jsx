@@ -13,7 +13,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { Add, Edit, Delete } from "@mui/icons-material";
-import { mockJobs } from "../../data/mockData"; // mockJobs phải là export có thật
+import { mockJobs } from "../../../data/mockData"; // mockJobs phải là export có thật
 import { useNavigate } from "react-router-dom";
 const JobManagement = () => {
   const handleEdit = (jobId) => {

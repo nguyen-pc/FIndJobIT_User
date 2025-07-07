@@ -2,23 +2,108 @@ import { Box, Button, TextField, MenuItem } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Header from "../../components/admin/Header";
+import Header from "../../../components/admin/Header";
 import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  callFetchUserById,
+  callFetchSkillNoPagination,
+  callFetchCompany,
+  callFetchRole,
+  callUpdateUser, // Giả sử có API này để lấy danh sách vai trò
+} from "../../../config/api";
 
 const EditUser = ({ onSubmit }) => {
   const location = useLocation();
+  const [displayUser, setDisplayUser] = useState(null);
+  const [companies, setCompanies] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [skills, setSkills] = useState([]);
   const userData = location.state;
 
-  const isNonMobile = useMediaQuery("(min-width:600px)");
+  console.log("EditUser userData:", userData);
 
-  const handleFormSubmit = (values) => {
-    if (onSubmit) {
-      onSubmit(values);
-    } else {
-      console.log("Updated user:", values);
+  useEffect(() => {
+    if (userData?.id) {
+      fetchUserData();
+      fetchSkillsData();
+      fetchCompanyData();
+      fetchRoleData();
+    }
+  }, [userData]);
+
+  const fetchUserData = async () => {
+    try {
+      const res = await callFetchUserById(userData.id);
+      console.log("Dữ liệu người dùng đã tải:", res.data);
+      if (res && res.data) {
+        setDisplayUser(res.data);
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu người dùng:", error);
     }
   };
 
+  const fetchCompanyData = async () => {
+    try {
+      const res = await callFetchCompany("page=1&size=100");
+      console.log("Công ty đã tải:", res.data.result);
+      if (res && res.data && res.data.result) {
+        setCompanies(res.data.result);
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu công ty:", error);
+    }
+  };
+
+  const fetchRoleData = async () => {
+    try {
+      const res = await callFetchRole("page=1&size=100");
+      console.log("Vai trò đã tải:", res.data.result);
+      if (res && res.data && res.data.result) {
+        setRoles(res.data.result);
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải dữ liệu vai trò:", error);
+    }
+  };
+
+  const fetchSkillsData = async () => {
+    try {
+      const res = await callFetchSkillNoPagination();
+      if (res && res.data) {
+        setSkills(res.data);
+        console.log("Kỹ năng đã tải:", res.data);
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải kỹ năng:", error);
+    }
+  };
+
+  const isNonMobile = useMediaQuery("(min-width:600px)");
+
+  const handleFormSubmit = async (values) => {
+    try {
+      // Chuyển đổi role và company sang định dạng đối tượng
+      const payload = {
+        ...values,
+        role: { id: values.role },
+        company: { id: values.company },
+      };
+      console.log("Submitting form with payload:", payload);
+      const res = await callUpdateUser(payload);
+      if (res && res.statusCode === 200) {
+        console.log("User has been updated successfully:", res.data);
+        // Ví dụ: thông báo thành công, redirect, ...
+      } else {
+        console.error("Failed to update user:", res.message);
+        // Ví dụ: hiển thị thông báo lỗi
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      // Ví dụ: thông báo lỗi cho người dùng
+    }
+  };
   return (
     <Box m="20px">
       <Header
@@ -30,17 +115,33 @@ const EditUser = ({ onSubmit }) => {
         onSubmit={handleFormSubmit}
         initialValues={{
           ...userData,
-          name: userData.name || "",
-          phoneNumber: userData.phoneNumber || "",
-          address: userData.address || "",
-          taxNumber: userData.taxNumber || "",
-          age: userData.age || "",
-          gender: userData.gender || "",
-          company: userData.company || { name: "" },
-          role: userData.role || { name: "" },
+          name: userData?.name || "",
+          phoneNumber: displayUser?.phoneNumber || "",
+          address: userData?.address || "",
+          taxNumber: displayUser?.taxNumber || "",
+          age: userData?.age || "",
+          gender: userData?.gender || "",
+          // Lưu trữ dưới dạng id cho role và company
+          role: userData?.role ? userData.role.id : "",
+          company: userData?.company ? userData.company.id : "",
         }}
         enableReinitialize
-        validationSchema={userEditSchema}
+        validationSchema={yup.object().shape({
+          name: yup.string().required("Vui lòng nhập họ và tên"),
+          gender: yup.string().required("Vui lòng chọn giới tính"),
+          age: yup
+            .number()
+            .required("Vui lòng nhập tuổi")
+            .min(0, "Tuổi không hợp lệ"),
+          phoneNumber: yup
+            .string()
+            .matches(
+              /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/,
+              "Số điện thoại không hợp lệ"
+            ),
+          address: yup.string().required("Vui lòng nhập địa chỉ"),
+          taxNumber: yup.string(),
+        })}
       >
         {({
           values,
@@ -86,8 +187,9 @@ const EditUser = ({ onSubmit }) => {
                 helperText={touched.gender && errors.gender}
                 sx={{ gridColumn: "span 2" }}
               >
-                <MenuItem value="Nam">Nam</MenuItem>
-                <MenuItem value="Nữ">Nữ</MenuItem>
+                <MenuItem value="MALE">MALE</MenuItem>
+                <MenuItem value="FEMALE">FEMALE</MenuItem>
+                <MenuItem value="OTHER">OTHER</MenuItem>
               </TextField>
 
               <TextField
@@ -157,29 +259,41 @@ const EditUser = ({ onSubmit }) => {
                 sx={{ gridColumn: "span 4" }}
               />
 
+              {/* Chọn Vai trò */}
               <TextField
+                select
                 fullWidth
                 variant="filled"
-                type="text"
                 label="Vai trò"
-                onBlur={handleBlur}
+                name="role"
+                value={values.role}
                 onChange={handleChange}
-                value={values.role?.name || ""}
-                name="role.name"
                 sx={{ gridColumn: "span 2" }}
-              />
+              >
+                {roles.map((role) => (
+                  <MenuItem key={role.id} value={role.id}>
+                    {role.name}
+                  </MenuItem>
+                ))}
+              </TextField>
 
+              {/* Chọn Công ty */}
               <TextField
+                select
                 fullWidth
                 variant="filled"
-                type="text"
                 label="Công ty"
-                onBlur={handleBlur}
+                name="company"
+                value={values.company}
                 onChange={handleChange}
-                value={values.company?.name || ""}
-                name="company.name"
                 sx={{ gridColumn: "span 2" }}
-              />
+              >
+                {companies.map((company) => (
+                  <MenuItem key={company.id} value={company.id}>
+                    {company.name}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Box>
 
             <Box display="flex" justifyContent="end" mt="20px">

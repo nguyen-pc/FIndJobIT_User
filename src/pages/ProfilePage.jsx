@@ -84,7 +84,7 @@ const ProfilePage = () => {
                     <strong>Ngày sinh:</strong> {displayUser?.dob}
                   </p> */}
                   <p>
-                    <strong>SĐT:</strong> {displayUser?.phone}
+                    <strong>SĐT:</strong> {displayUser?.phoneNumber}
                   </p>
                   {/* <p>
                     <strong>LinkedIn:</strong>{" "}
