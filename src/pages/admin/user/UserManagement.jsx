@@ -94,7 +94,7 @@ const UserManagement = () => {
     if (id) {
       const res = await callDeleteUser(id);
       if (res) {
-        // message.success("Xóa User thành công");
+        message.success("Xóa User thành công");
         const q = buildQuery({ current: 1, pageSize: 11 }, {}, {});
         dispatch(fetchUser({ query: q }));
       } else {

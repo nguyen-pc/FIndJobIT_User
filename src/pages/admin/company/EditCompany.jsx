@@ -6,18 +6,15 @@ import Header from "../../../components/admin/Header";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Upload, message, notification } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { v4 as uuidv4 } from "uuid";
-import { callCreateCompany, callUploadSingleFile } from "../../../config/api";
-
-const initialValues = {
-  name: "",
-  address: "",
-  logo: "",
-  banner: "",
-  description: "",
-};
+import { useParams } from "react-router-dom";
+import {
+  callFetchCompanyById,
+  callUpdateCompany,
+  callUploadSingleFile,
+} from "../../../config/api";
 
 const jobSchema = yup.object().shape({
   name: yup.string().required("Vui lòng nhập tên công ty"),
@@ -25,14 +22,37 @@ const jobSchema = yup.object().shape({
   description: yup.string().required("Nhập mô tả"),
 });
 
-const AddCompany = () => {
+const EditCompany = () => {
+  const { id } = useParams();
   const isNonMobile = useMediaQuery("(min-width:600px)");
+
+  const [displayCompany, setDisplayCompany] = useState(null);
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [dataLogo, setDataLogo] = useState([]);
   const [dataBanner, setDataBanner] = useState([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+
+  useEffect(() => {
+    if (id) {
+      (async () => {
+        try {
+          const res = await callFetchCompanyById(id);
+          console.log("res", res);
+          if (res.data) {
+            setDisplayCompany(res.data);
+          }
+        } catch (error) {
+          console.error("Error fetching company data:", error);
+          notification.error({
+            message: "Có lỗi xảy ra",
+            description: "Không thể tải thông tin công ty.",
+          });
+        }
+      })();
+    }
+  }, [id]);
 
   const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -93,7 +113,14 @@ const AddCompany = () => {
     const res = await callUploadSingleFile(file, "company");
     if (res && res.data) {
       const fileName = res.data.fileName;
-      setDataLogo([{ name: fileName, uid: uuidv4() }]);
+      // Cập nhật dataLogo để hiển thị ảnh
+      setDataLogo([
+        {
+          uid: uuidv4(),
+          name: fileName,
+          url: `/path/to/your/images/${fileName}`,
+        },
+      ]);
       setFieldValue("logo", fileName);
       if (onSuccess) onSuccess("ok");
     } else {
@@ -113,7 +140,13 @@ const AddCompany = () => {
     const res = await callUploadSingleFile(file, "company");
     if (res && res.data) {
       const fileName = res.data.fileName;
-      setDataBanner([{ name: fileName, uid: uuidv4() }]);
+      setDataBanner([
+        {
+          uid: uuidv4(),
+          name: fileName,
+          url: `/path/to/your/images/${fileName}`,
+        },
+      ]);
       setFieldValue("banner", fileName);
       if (onSuccess) onSuccess("ok");
     } else {
@@ -134,19 +167,21 @@ const AddCompany = () => {
   };
 
   const handleFormSubmit = async (values) => {
-    console.log(values);
-    if (dataLogo.length === 0) {
+    console.log("Submitted values:", values);
+    if (!values.logo) {
       message.error("Vui lòng upload ảnh Logo");
       return;
     }
     const payload = {
+      id: id, // Thêm id để cập nhật đúng công ty
       name: values.name,
       address: values.address,
       description: values.description,
       logo: values.logo,
       banner: values.banner,
     };
-    const res = await callCreateCompany(
+    const res = await callUpdateCompany(
+      payload.id,
       payload.name,
       payload.address,
       payload.description,
@@ -154,7 +189,7 @@ const AddCompany = () => {
       payload.banner
     );
     if (res.data) {
-      message.success("Thêm mới company thành công");
+      message.success("Cập nhật thông tin công ty thành công");
     } else {
       notification.error({
         message: "Có lỗi xảy ra",
@@ -163,13 +198,23 @@ const AddCompany = () => {
     }
   };
 
+  // Sử dụng displayCompany để khởi tạo giá trị cho form
+  const formInitialValues = {
+    name: displayCompany?.name || "",
+    address: displayCompany?.address || "",
+    logo: displayCompany?.logo || "",
+    banner: displayCompany?.banner || "",
+    description: displayCompany?.description || "",
+  };
+
   return (
     <Box m="20px">
-      <Header title="THÊM CÔNG TY" subtitle="Tạo thông tin công ty mới" />
+      <Header title="CHỈNH SỬA CÔNG TY" subtitle="Cập nhật thông tin công ty" />
       <Formik
         onSubmit={handleFormSubmit}
-        initialValues={initialValues}
+        initialValues={formInitialValues}
         validationSchema={jobSchema}
+        enableReinitialize
       >
         {({
           values,
@@ -232,7 +277,20 @@ const AddCompany = () => {
                     onChange={handleChangeImage}
                     onRemove={(file) => handleRemoveFile(file, "logo")}
                     onPreview={handlePreview}
-                    defaultFileList={[]}
+                    fileList={
+                      // nếu có ảnh đã có, hiển thị nó
+                      values.logo
+                        ? [
+                            {
+                              uid: "logo",
+                              name: values.logo,
+                              url: `${
+                                import.meta.env.VITE_BACKEND_URL
+                              }/storage/company/${values.logo}`,
+                            },
+                          ]
+                        : dataLogo
+                    }
                   >
                     <div>
                       {loadingUpload ? <LoadingOutlined /> : <PlusOutlined />}
@@ -258,7 +316,19 @@ const AddCompany = () => {
                     onChange={handleChangeImage}
                     onRemove={(file) => handleRemoveFile(file, "banner")}
                     onPreview={handlePreview}
-                    defaultFileList={[]}
+                    fileList={
+                      values.banner
+                        ? [
+                            {
+                              uid: "banner",
+                              name: values.banner,
+                              url: `${
+                                import.meta.env.VITE_BACKEND_URL
+                              }/storage/company/${values.banner}`,
+                            },
+                          ]
+                        : dataBanner
+                    }
                   >
                     <div>
                       {loadingUpload ? <LoadingOutlined /> : <PlusOutlined />}
@@ -278,7 +348,7 @@ const AddCompany = () => {
             </Box>
             <Box display="flex" justifyContent="end" mt="60px">
               <Button type="submit" color="secondary" variant="contained">
-                Thêm công ty
+                Cập nhật công ty
               </Button>
             </Box>
           </form>
@@ -288,4 +358,4 @@ const AddCompany = () => {
   );
 };
 
-export default AddCompany;
+export default EditCompany;

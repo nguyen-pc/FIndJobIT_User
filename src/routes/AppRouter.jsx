@@ -33,7 +33,7 @@ import Line from "../pages/admin/Line";
 import Pie from "../pages/admin/Pie";
 import UserManagement from "../pages/admin/user/UserManagement";
 import EditUser from "../pages/admin/user/EditUser";
-import SkillManagement from "../pages/admin/SkillManagement";
+import SkillManagement from "../pages/admin/skill/SkillManagement";
 import AddJob from "../pages/admin/job/AddJob";
 
 import JobListPage from "../pages/JobListPage";
@@ -41,6 +41,9 @@ import HistoryApply from "../pages/HistoryApply.tsx";
 import CompanyFollowPage from "../pages/CompanyFollowPage.jsx";
 import CompanyManagement from "../pages/admin/company/CompanyManagement.jsx";
 import AddCompany from "../pages/admin/company/addCompany.jsx";
+import EditCompany from "../pages/admin/company/EditCompany.jsx";
+import EditSkill from "../pages/admin/skill/EditSkill.jsx";
+import AddSkill from "../pages/admin/skill/AddSkill.jsx";
 
 export default function AppRouter() {
   return (
@@ -55,30 +58,35 @@ export default function AppRouter() {
         <Route path="/job_list" element={<JobListPage />} />
         <Route path="/job/:jobId" element={<JobPage />} />
         <Route path="/job-follow" element={<JobFollow />} />{" "}
-        <Route path="/applied-jobs" element={<HistoryApply />}/>
-
-        
+        <Route path="/applied-jobs" element={<HistoryApply />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/company/:id" element={<CompanyDetails />} />
-        <Route path="/company_follow" element={<CompanyFollowPage />}/>
+        <Route path="/company_follow" element={<CompanyFollowPage />} />
         <Route path="/company_list" element={<CompanyList />} />
         <Route path="/recommend-job" element={<RecommendJob />} />
         {/* route admin */}
         <Route path="/admin/*" element={<HomeAdmin />}>
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="userManagement" element={<UserManagement />} />
-          <Route path="employerManagement" element={<EmployerManagement />} />
-          <Route path="jobManagement" element={<JobManagement />} />
-          <Route path="companyManagement" element={<CompanyManagement />} />
-          <Route path="addCompany" element={<AddCompany />} />
-          <Route path="skillManagement" element={<SkillManagement />} />
 
+          <Route path="userManagement" element={<UserManagement />} />
           <Route path="addUser" element={<FormUserAdd />} />
           <Route path="editUser/:id" element={<EditUser />} />
 
-          <Route path="formEmployer" element={<FormEmployerAdd />} />
+          <Route path="employerManagement" element={<EmployerManagement />} />
+
+          <Route path="jobManagement" element={<JobManagement />} />
           <Route path="addJob" element={<AddJob />} />
+
+          <Route path="companyManagement" element={<CompanyManagement />} />
+          <Route path="addCompany" element={<AddCompany />} />
+          <Route path="editCompany/:id" element={<EditCompany />} />
+
+          <Route path="skillManagement" element={<SkillManagement />} />
+          <Route path="editSkill/:id" element={<EditSkill />} />
+          <Route path="addSkill" element={<AddSkill />} />
+
+          <Route path="formEmployer" element={<FormEmployerAdd />} />
 
           <Route path="bar" element={<Bar />} />
           <Route path="pie" element={<Pie />} />

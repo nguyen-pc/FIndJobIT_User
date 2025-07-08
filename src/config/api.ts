@@ -158,7 +158,7 @@ export const callUpdateSkill = (id: string, name: string) => {
 };
 
 export const callDeleteSkill = (id: string) => {
-  return axios.put<IBackendRes<ISkill>>(`/api/v1/skills/${id}`);
+  return axios.delete<IBackendRes<ISkill>>(`/api/v1/skills/${id}`);
 };
 
 export const callFetchAllSkill = (query: string) => {
@@ -196,13 +196,15 @@ export const callCreateCompany = (
   name: string,
   address: string,
   description: string,
-  logo: string
+  logo: string,
+  banner: string
 ) => {
   return axios.post<IBackendRes<ICompany>>("/api/v1/companies", {
     name,
     address,
     description,
     logo,
+    banner,
   });
 };
 
@@ -211,7 +213,8 @@ export const callUpdateCompany = (
   name: string,
   address: string,
   description: string,
-  logo: string
+  logo: string,
+  banner: string
 ) => {
   return axios.post<IBackendRes<ICompany>>("/api/v1/companies", {
     id,
@@ -219,6 +222,7 @@ export const callUpdateCompany = (
     address,
     description,
     logo,
+    banner,
   });
 };
 
@@ -247,10 +251,9 @@ export const cancelFollowCompany = (payload: FollowCompany) => {
   });
 };
 
-export const fetchCompanyFollowed = (userId:number) => {
+export const fetchCompanyFollowed = (userId: number) => {
   return axios.get<IBackendRes<IJob>>(`/api/v1/companies/follow/${userId}`);
 };
-
 
 export const checkCompanyStatus = (companyId: number, userId: number) => {
   return axios.get<IBackendRes<{ followed: boolean }>>(
@@ -317,7 +320,7 @@ export const checkFollowStatus = (jobId: number, userId: number) => {
   );
 };
 
-export const fetchJobFollowed = (userId:number) => {
+export const fetchJobFollowed = (userId: number) => {
   return axios.get<IBackendRes<IJob>>(`/api/v1/jobs/followed/${userId}`);
 };
 

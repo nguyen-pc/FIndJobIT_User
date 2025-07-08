@@ -3,19 +3,130 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../../components/admin/Header";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { message } from "antd";
+import {
+  callFetchCompany,
+  callFetchAllSkill,
+  callCreateJob,
+} from "../../../config/api";
+import { LOCATION_LIST } from "../../../config/utils";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+// Cấu trúc validation cho form
+const jobSchema = yup.object().shape({
+  name: yup.string().required("Vui lòng nhập tên công việc"),
+  skills: yup.array().min(1, "Chọn ít nhất một kỹ năng"),
+  company: yup.object({
+    id: yup.string().required("Chọn công ty"),
+    name: yup.string(),
+  }),
+  location: yup.string().required("Vui lòng nhập địa điểm"),
+  salary: yup.number().required("Vui lòng nhập mức lương"),
+  quantity: yup.number().required("Vui lòng nhập số lượng"),
+  level: yup.string().required("Chọn cấp bậc"),
+  description: yup.string().required("Nhập mô tả"),
+  startDate: yup.string().required("Chọn ngày bắt đầu"),
+  endDate: yup.string().required("Chọn ngày kết thúc"),
+  active: yup.boolean(),
+});
 
-const skillOptions = ["JavaScript", "React", "Node.js", "Python"];
-const levelOptions = ["Intern", "Fresher", "Junior", "Mid", "Senior"];
-const companyOptions = [
-  { id: "1", name: "FPT Software" },
-  { id: "2", name: "VNG Corp" },
-];
+const initialValues = {
+  name: "",
+  skills: [],
+  company: { id: "", name: "" },
+  location: "",
+  salary: 0,
+  quantity: 1,
+  level: "",
+  description: "",
+  startDate: "",
+  endDate: "",
+  active: true,
+};
+
+// Hàm chuyển đổi dữ liệu từ API thành định dạng cho select
+async function fetchCompanyList(name) {
+  const res = await callFetchCompany(`page=1&size=100&name ~ '${name}'`);
+  if (res && res.data) {
+    const list = res.data.result;
+    return list.map((item) => ({
+      label: item.name,
+      // Gán value với format "id@#$logo" để sau có thể tách lấy id và logo nếu cần
+      value: `${item.id}@#$${item.logo}`,
+    }));
+  }
+  return [];
+}
+
+async function fetchSkillList() {
+  const res = await callFetchAllSkill(`page=1&size=100`);
+  if (res && res.data) {
+    const list = res.data.result;
+    return list.map((item) => ({
+      label: item.name,
+      value: `${item.id}`,
+    }));
+  }
+  return [];
+}
 
 const AddJob = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const [companies, setCompanies] = useState([]);
+  const [skills, setSkills] = useState([]);
+  let location = useLocation();
 
-  const handleFormSubmit = (values) => {
-    console.log(values);
+  // Call API để lấy danh sách company và skill khi component mount
+  useEffect(() => {
+    async function fetchData() {
+      const companyData = await fetchCompanyList("");
+      setCompanies(companyData);
+      const skillData = await fetchSkillList();
+      setSkills(skillData);
+    }
+    fetchData();
+  }, []);
+
+  const handleFormSubmit = async (values) => {
+    const cp = values?.company?.value?.split("@#$");
+    const arrSkills = values?.skills?.map((item) => {
+      return { id: +item };
+    });
+    const job = {
+      name: values.name,
+      skills: arrSkills,
+      company: {
+        id: values.company.id,
+        name: values.company.name,
+        logo: values.company.logoUlr,
+      },
+      location: values.location,
+      salary: values.salary,
+      quantity: values.quantity,
+      level: values.level,
+      description: values.description,
+      startDate: dayjs(values.startDate, "YYYY-MM-DD").toDate(),
+      endDate: dayjs(values.endDate, "YYYY-MM-DD").toDate(),
+      active: values.active,
+    };
+
+    console.log("Job data to submit:", job);
+
+    const res = await callCreateJob(job);
+    if (res.data) {
+      message.success("Tạo mới job thành công");
+      navigate("/admin/jobManagement");
+    } else {
+      notification.error({
+        message: "Có lỗi xảy ra",
+        description: res.message,
+      });
+    }
   };
 
   return (
@@ -45,6 +156,7 @@ const AddJob = () => {
                 "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
               }}
             >
+              {/* Tên công việc */}
               <TextField
                 fullWidth
                 variant="filled"
@@ -59,31 +171,43 @@ const AddJob = () => {
                 sx={{ gridColumn: "span 2" }}
               />
 
+              {/* Chọn công ty */}
               <TextField
                 select
                 fullWidth
                 variant="filled"
                 label="Công ty"
                 name="company.id"
-                value={values.company.id}
+                value={values.company.id || ""}
                 onChange={(e) => {
-                  const company = companyOptions.find(
-                    (c) => c.id === e.target.value
+                  const selectedCompanyId = e.target.value;
+                  const company = companies.find(
+                    (c) => c.value.split("@#$")[0] === selectedCompanyId
                   );
-                  setFieldValue("company", company || {});
+                  // Cập nhật cả id và name
+                  setFieldValue(
+                    "company",
+                    company
+                      ? { id: selectedCompanyId, name: company.label }
+                      : {}
+                  );
                 }}
                 onBlur={handleBlur}
                 error={!!touched.company?.id && !!errors.company?.id}
                 helperText={touched.company?.id && errors.company?.id}
                 sx={{ gridColumn: "span 2" }}
               >
-                {companyOptions.map((company) => (
-                  <MenuItem key={company.id} value={company.id}>
-                    {company.name}
-                  </MenuItem>
-                ))}
+                {companies.map((company) => {
+                  const [id] = company.value.split("@#$");
+                  return (
+                    <MenuItem key={id} value={id}>
+                      {company.label}
+                    </MenuItem>
+                  );
+                })}
               </TextField>
 
+              {/* Chọn kỹ năng */}
               <TextField
                 select
                 fullWidth
@@ -98,26 +222,33 @@ const AddJob = () => {
                 helperText={touched.skills && errors.skills}
                 sx={{ gridColumn: "span 4" }}
               >
-                {skillOptions.map((skill) => (
-                  <MenuItem key={skill} value={skill}>
-                    {skill}
+                {skills.map((skill) => (
+                  <MenuItem key={skill.value} value={skill.value}>
+                    {skill.label}
                   </MenuItem>
                 ))}
               </TextField>
 
+              {/* Các trường khác */}
               <TextField
+                select
                 fullWidth
                 variant="filled"
-                type="text"
                 label="Địa điểm"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.location}
                 name="location"
+                value={values.location}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 error={!!touched.location && !!errors.location}
                 helperText={touched.location && errors.location}
                 sx={{ gridColumn: "span 2" }}
-              />
+              >
+                {LOCATION_LIST.map((loc) => (
+                  <MenuItem key={loc.value} value={loc.value}>
+                    {loc.label}
+                  </MenuItem>
+                ))}
+              </TextField>
 
               <TextField
                 fullWidth
@@ -160,28 +291,27 @@ const AddJob = () => {
                 helperText={touched.level && errors.level}
                 sx={{ gridColumn: "span 2" }}
               >
-                {levelOptions.map((level) => (
-                  <MenuItem key={level} value={level}>
-                    {level}
-                  </MenuItem>
-                ))}
+                {["INTERN", "FRESHER", "JUNIOR", "MIDDLE", "SENIOR"].map(
+                  (level) => (
+                    <MenuItem key={level} value={level}>
+                      {level}
+                    </MenuItem>
+                  )
+                )}
               </TextField>
 
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                multiline
-                rows={4}
-                label="Mô tả công việc"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.description}
-                name="description"
-                error={!!touched.description && !!errors.description}
-                helperText={touched.description && errors.description}
-                sx={{ gridColumn: "span 4" }}
-              />
+              <Box gridColumn="span 4">
+                <ReactQuill
+                  theme="snow"
+                  value={values.description}
+                  onChange={(content) => setFieldValue("description", content)}
+                  style={{
+                    width: "100%",
+                    height: "200px",
+                    marginBottom: "20px",
+                  }}
+                />
+              </Box>
 
               <TextField
                 fullWidth
@@ -233,36 +363,6 @@ const AddJob = () => {
       </Formik>
     </Box>
   );
-};
-
-const jobSchema = yup.object().shape({
-  name: yup.string().required("Vui lòng nhập tên công việc"),
-  skills: yup.array().min(1, "Chọn ít nhất một kỹ năng"),
-  company: yup.object({
-    id: yup.string().required("Chọn công ty"),
-    name: yup.string(),
-  }),
-  location: yup.string().required("Vui lòng nhập địa điểm"),
-  salary: yup.number().required("Vui lòng nhập mức lương"),
-  quantity: yup.number().required("Vui lòng nhập số lượng"),
-  level: yup.string().required("Chọn cấp bậc"),
-  description: yup.string().required("Nhập mô tả"),
-  startDate: yup.string().required("Chọn ngày bắt đầu"),
-  endDate: yup.string().required("Chọn ngày kết thúc"),
-});
-
-const initialValues = {
-  name: "",
-  skills: [],
-  company: { id: "", name: "" },
-  location: "",
-  salary: 0,
-  quantity: 1,
-  level: "",
-  description: "",
-  startDate: "",
-  endDate: "",
-  active: true,
 };
 
 export default AddJob;

@@ -25,6 +25,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { callDeleteCompany } from "../../../config/api";
+import { message } from "antd";
 const CompanyManagement = () => {
   const isFetching = useAppSelector((state) => state.company.isFetching);
   const meta = useAppSelector((state) => state.company.meta);
@@ -95,20 +97,22 @@ const CompanyManagement = () => {
   }, [meta]);
 
   const handleEdit = (id) => {
-    const companyData = users.find((u) => u.id === id);
-    if (companyData) {
-      navigate(`/admin/editCompany/${id}`, { state: companyData });
-    }
+    navigate(`/admin/editCompany/${id}`);
   };
 
-  const handleDelete = (jobId) => {
+  const handleDelete = async (jobId) => {
+    try {
+      const res = await  callDeleteCompany(jobId);
+      if (res) {
+        message.success("Xóa công ty thành công");
+        const q = buildQuery({ current: 1, pageSize: 11 }, {}, {});
+        dispatch(fetchCompany({ query: q }));
+      }
+    } catch (error) {
+      console.error("Error deleting job:", error);
+    }
     console.log("Delete job:", jobId);
     // Confirm and delete logic here
-  };
-
-  const handleAdd = () => {
-    console.log("Add new job");
-    // Navigate to create job form
   };
 
   const columns = [
@@ -172,14 +176,14 @@ const CompanyManagement = () => {
         alignItems="center"
         mb={2}
       >
-        <Typography variant="h4">Danh sách công việc</Typography>
+        <Typography variant="h4">Danh sách công ty</Typography>
         <Button
           variant="contained"
           color="secondary"
           startIcon={<Add />}
           onClick={() => navigate("/admin/addCompany")}
         >
-          Thêm công việc
+          Thêm công ty
         </Button>
       </Box>
       <Box
