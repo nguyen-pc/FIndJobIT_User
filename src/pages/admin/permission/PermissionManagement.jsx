@@ -35,14 +35,14 @@ import { fetchPermission } from "../../../redux/slice/permissionSlide";
 const PermissionManagement = () => {
   const isFetching = useAppSelector((state) => state.permission.isFetching);
   const meta = useAppSelector((state) => state.permission.meta);
-  const companies = useAppSelector((state) => state.permission.result);
+  const permissions = useAppSelector((state) => state.permission.result);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
 
   const colors = tokens(theme.palette.mode);
 
-  console.log("Companies data:", companies);
+  console.log("permissions data:", permissions);
 
   // Hàm buildQuery động theo params, sort, filter
   const buildQuery = (params, sort, filter) => {
@@ -147,7 +147,14 @@ const PermissionManagement = () => {
         else if (method === "GET") chipColor = ""; // màu xanh dương
         else if (method === "POST") chipColor = "success"; // màu xanh lá
 
-        return <Chip label={method} className="font-bold" color={chipColor} variant="outlined" />;
+        return (
+          <Chip
+            label={method}
+            className="font-bold"
+            color={chipColor}
+            variant="outlined"
+          />
+        );
       },
     },
     {
@@ -233,7 +240,7 @@ const PermissionManagement = () => {
         }}
       >
         <DataGrid
-          rows={companies || []}
+          rows={permissions || []}
           columns={columns}
           loading={isFetching}
           pageSize={meta.pageSize || 10}

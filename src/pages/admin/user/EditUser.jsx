@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../../components/admin/Header";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   callFetchUserById,
@@ -12,6 +12,7 @@ import {
   callFetchRole,
   callUpdateUser, // Giả sử có API này để lấy danh sách vai trò
 } from "../../../config/api";
+import { message } from "antd";
 
 const EditUser = ({ onSubmit }) => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const EditUser = ({ onSubmit }) => {
   const [roles, setRoles] = useState([]);
   const [skills, setSkills] = useState([]);
   const userData = location.state;
+  const navigate = useNavigate();
 
   console.log("EditUser userData:", userData);
 
@@ -94,6 +96,8 @@ const EditUser = ({ onSubmit }) => {
       const res = await callUpdateUser(payload);
       if (res && res.statusCode === 200) {
         console.log("User has been updated successfully:", res.data);
+        message.success("Cập nhật người dùng thành công");
+        navigate("/admin/userManagement");
         // Ví dụ: thông báo thành công, redirect, ...
       } else {
         console.error("Failed to update user:", res.message);

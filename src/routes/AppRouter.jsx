@@ -48,6 +48,9 @@ import EditJob from "../pages/admin/job/EditJob.jsx";
 import PermissionManagement from "../pages/admin/permission/PermissionManagement.jsx";
 import EditPermission  from "../pages/admin/permission/EditPermission.jsx";
 import AddPermission from "../pages/admin/permission/AddPermission.jsx";
+import RoleManagement from "../pages/admin/role/RoleManagement.jsx";
+import EditRole from "../pages/admin/role/EditRole.jsx";
+import AddRole from "../pages/admin/role/AddRole.jsx";
 
 export default function AppRouter() {
   return (
@@ -97,6 +100,14 @@ export default function AppRouter() {
           />
           <Route path="editPermission/:id" element={<EditPermission />} />
           <Route path="addPermission" element={<AddPermission />} />
+
+          
+          <Route
+            path="roleManagement"
+            element={<RoleManagement />}
+          />
+          <Route path="editRole/:id" element={<EditRole />} />
+          <Route path="addRole" element={<AddRole />} />
 
           <Route path="formEmployer" element={<FormEmployerAdd />} />
 

@@ -6,6 +6,7 @@ import Header from "../../../components/admin/Header";
 import { useEffect, useState } from "react";
 import { callCreateUser, callFetchCompany, callFetchRole } from "../../../config/api";
 import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 const FormUserAdd = () => {
   const [companies, setCompanies] = useState([]);
@@ -54,6 +55,7 @@ const FormUserAdd = () => {
       const res = await callCreateUser(payload);
       if (res) {
         console.log("User has been updated successfully:", res.data);
+        message.success("Tạo người dùng thành công");
         navigate("/admin/userManagement");
       } else {
         console.error("Failed to update user:", res.message);
