@@ -133,7 +133,7 @@ const AddCompany = () => {
     }
   };
 
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async (values, { resetForm }) => {
     console.log(values);
     if (dataLogo.length === 0) {
       message.error("Vui lòng upload ảnh Logo");
@@ -155,6 +155,7 @@ const AddCompany = () => {
     );
     if (res.data) {
       message.success("Thêm mới company thành công");
+      resetForm();
     } else {
       notification.error({
         message: "Có lỗi xảy ra",

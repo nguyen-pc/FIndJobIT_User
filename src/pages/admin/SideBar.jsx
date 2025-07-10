@@ -158,6 +158,20 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+             <Item
+              title="Permission"
+              to="/admin/permissionManagement"
+              icon={<ChecklistIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+             <Item
+              title="Role"
+              to="/admin/roleManagement"
+              icon={<ChecklistIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
 
             <Typography
               variant="h6"

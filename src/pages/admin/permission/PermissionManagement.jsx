@@ -25,12 +25,17 @@ import { DataGrid } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { callDeleteCompany } from "../../../config/api";
+import {
+  callDeleteCompany,
+  callDeleteJob,
+  callDeletePermission,
+} from "../../../config/api";
 import { message } from "antd";
-const CompanyManagement = () => {
-  const isFetching = useAppSelector((state) => state.company.isFetching);
-  const meta = useAppSelector((state) => state.company.meta);
-  const companies = useAppSelector((state) => state.company.result);
+import { fetchPermission } from "../../../redux/slice/permissionSlide";
+const PermissionManagement = () => {
+  const isFetching = useAppSelector((state) => state.permission.isFetching);
+  const meta = useAppSelector((state) => state.permission.meta);
+  const companies = useAppSelector((state) => state.permission.result);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -49,10 +54,10 @@ const CompanyManagement = () => {
 
     const clone = { ...params };
     if (clone.name) q.filter = `${sfLike("name", clone.name)}`;
-    if (clone.address) {
+    if (clone.method) {
       q.filter = clone.name
-        ? q.filter + " and " + `${sfLike("address", clone.address)}`
-        : `${sfLike("address", clone.address)}`;
+        ? q.filter + " and " + `${sfLike("method", clone.method)}`
+        : `${sfLike("method", clone.method)}`;
     }
 
     if (!q.filter) delete q.filter;
@@ -63,7 +68,8 @@ const CompanyManagement = () => {
       sortBy = sort.name === "ascend" ? "sort=name,asc" : "sort=name,desc";
     }
     if (sort && sort.address) {
-      sortBy = sort.address === "ascend" ? "sort=address,asc" : "sort=address,desc";
+      sortBy =
+        sort.address === "ascend" ? "sort=address,asc" : "sort=address,desc";
     }
     if (sort && sort.createdAt) {
       sortBy =
@@ -88,8 +94,8 @@ const CompanyManagement = () => {
   };
   // Gọi fetchUser ban đầu
   useEffect(() => {
-    const initialQuery = buildQuery({ current: 1, pageSize: 15 }, {}, {});
-    dispatch(fetchCompany({ query: initialQuery }));
+    const initialQuery = buildQuery({ current: 1, pageSize: 47 }, {}, {});
+    dispatch(fetchPermission({ query: initialQuery }));
   }, []); // chỉ chạy 1 lần khi mount
 
   useEffect(() => {
@@ -97,21 +103,21 @@ const CompanyManagement = () => {
   }, [meta]);
 
   const handleEdit = (id) => {
-    navigate(`/admin/editCompany/${id}`);
+    navigate(`/admin/editPermission/${id}`);
   };
 
-  const handleDelete = async (jobId) => {
+  const handleDelete = async (permissionId) => {
     try {
-      const res = await  callDeleteCompany(jobId);
+      const res = await callDeletePermission(permissionId);
       if (res) {
-        message.success("Xóa công ty thành công");
-        const q = buildQuery({ current: 1, pageSize: 11 }, {}, {});
-        dispatch(fetchCompany({ query: q }));
+        message.success("Xóa Permission thành công");
+        const q = buildQuery({ current: 1, pageSize: 47 }, {}, {});
+        dispatch(fetchPermission({ query: q }));
       }
     } catch (error) {
       console.error("Error deleting job:", error);
     }
-    console.log("Delete job:", jobId);
+    console.log("Delete job:", permissionId);
     // Confirm and delete logic here
   };
 
@@ -119,13 +125,34 @@ const CompanyManagement = () => {
     { field: "id", headerName: "ID", width: 70 },
     {
       field: "name",
-      headerName: "Tên công ty",
+      headerName: "Tên Permission",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
-      field: "address",
-      headerName: "Địa chỉ",
+      field: "apiPath",
+      headerName: "API",
+      width: 120,
+    },
+    {
+      field: "method",
+      headerName: "Method",
+      width: 120,
+      renderCell: (params) => {
+        const method = params.row.method?.toUpperCase();
+        let chipColor = "default";
+        // Gán màu dựa theo phương thức HTTP
+        if (method === "DELETE") chipColor = "error"; // màu đỏ
+        else if (method === "PUT") chipColor = "warning"; // màu vàng
+        else if (method === "GET") chipColor = ""; // màu xanh dương
+        else if (method === "POST") chipColor = "success"; // màu xanh lá
+
+        return <Chip label={method} className="font-bold" color={chipColor} variant="outlined" />;
+      },
+    },
+    {
+      field: "module",
+      headerName: "Module",
       width: 120,
     },
     {
@@ -176,14 +203,14 @@ const CompanyManagement = () => {
         alignItems="center"
         mb={2}
       >
-        <Typography variant="h4">Danh sách công ty</Typography>
+        <Typography variant="h4">Danh sách Permission</Typography>
         <Button
           variant="contained"
           color="secondary"
           startIcon={<Add />}
-          onClick={() => navigate("/admin/addCompany")}
+          onClick={() => navigate("/admin/addPermission")}
         >
-          Thêm công ty
+          Thêm Permission
         </Button>
       </Box>
       <Box
@@ -233,4 +260,4 @@ const CompanyManagement = () => {
   );
 };
 
-export default CompanyManagement;
+export default PermissionManagement;

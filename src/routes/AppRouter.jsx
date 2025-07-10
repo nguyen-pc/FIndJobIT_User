@@ -44,6 +44,10 @@ import AddCompany from "../pages/admin/company/addCompany.jsx";
 import EditCompany from "../pages/admin/company/EditCompany.jsx";
 import EditSkill from "../pages/admin/skill/EditSkill.jsx";
 import AddSkill from "../pages/admin/skill/AddSkill.jsx";
+import EditJob from "../pages/admin/job/EditJob.jsx";
+import PermissionManagement from "../pages/admin/permission/PermissionManagement.jsx";
+import EditPermission  from "../pages/admin/permission/EditPermission.jsx";
+import AddPermission from "../pages/admin/permission/AddPermission.jsx";
 
 export default function AppRouter() {
   return (
@@ -77,6 +81,7 @@ export default function AppRouter() {
 
           <Route path="jobManagement" element={<JobManagement />} />
           <Route path="addJob" element={<AddJob />} />
+          <Route path="editJob/:id" element={<EditJob />} />
 
           <Route path="companyManagement" element={<CompanyManagement />} />
           <Route path="addCompany" element={<AddCompany />} />
@@ -85,6 +90,13 @@ export default function AppRouter() {
           <Route path="skillManagement" element={<SkillManagement />} />
           <Route path="editSkill/:id" element={<EditSkill />} />
           <Route path="addSkill" element={<AddSkill />} />
+
+          <Route
+            path="permissionManagement"
+            element={<PermissionManagement />}
+          />
+          <Route path="editPermission/:id" element={<EditPermission />} />
+          <Route path="addPermission" element={<AddPermission />} />
 
           <Route path="formEmployer" element={<FormEmployerAdd />} />
 

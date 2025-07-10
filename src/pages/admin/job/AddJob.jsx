@@ -92,7 +92,7 @@ const AddJob = () => {
     fetchData();
   }, []);
 
-  const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async (values, { resetForm }) => {
     const cp = values?.company?.value?.split("@#$");
     const arrSkills = values?.skills?.map((item) => {
       return { id: +item };
@@ -120,6 +120,7 @@ const AddJob = () => {
     const res = await callCreateJob(job);
     if (res.data) {
       message.success("Tạo mới job thành công");
+      resetForm();
       navigate("/admin/jobManagement");
     } else {
       notification.error({
