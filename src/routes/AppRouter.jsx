@@ -52,6 +52,16 @@ import RoleManagement from "../pages/admin/role/RoleManagement.jsx";
 import EditRole from "../pages/admin/role/EditRole.jsx";
 import AddRole from "../pages/admin/role/AddRole.jsx";
 
+//Employer route
+import HomeEmployer from "../pages/employer/Home.jsx";
+import EmployerAddCompany from "../pages/employer/company/AddCompany.jsx";
+import EmployerEditCompany from "../pages/employer/company/EditCompany.jsx";
+import EmployerCompanyManagement from "../pages/employer/company/CompanyManagement.jsx";
+
+import EmployerJobManagement from "../pages/employer/job/JobManagement.jsx";
+import EmployerAddJob from "../pages/employer/job/AddJob.jsx";
+import EmployerEditJob from "../pages/employer/job/EditJob.jsx";
+import EmployerCVManagement from "../pages/employer/cv/CVManagement.jsx";
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -115,6 +125,22 @@ export default function AppRouter() {
           <Route path="faq" element={<Faq />} />
           <Route path="calendar" element={<Calendar2 />} />
           <Route path="geography" element={<Geography />} />
+        </Route>
+        {/* route employer */}
+        <Route path="/employer/*" element={<HomeEmployer />}>
+          <Route
+            path="companyManagement"
+            element={<EmployerCompanyManagement />}
+          />
+
+          <Route path="addCompany" element={<EmployerAddCompany />} />
+          <Route path="editCompany" element={<EmployerEditCompany />} />
+
+          <Route path="jobManagement" element={<EmployerJobManagement />} />
+          <Route path="addJob" element={<EmployerAddJob />} />
+          <Route path="editJob" element={<EmployerEditJob />} />
+
+          <Route path="cvManagement" element={<EmployerCVManagement />} />
         </Route>
         {/* Catch-all route for 404 Not Found */}
       </Routes>
