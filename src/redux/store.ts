@@ -6,6 +6,7 @@ import skillReducer from "./slice/skillSlide";
 import jobReducer from "./slice/jobSlide";
 import permissionReducer from "./slice/permissionSlide";
 import roleReducer from "./slice/roleSlide";
+import resumeReducer from "./slice/ResumeSlide";
 export const store = configureStore({
   reducer: {
     account: accountReducer,
@@ -15,6 +16,7 @@ export const store = configureStore({
     job: jobReducer,
     permission: permissionReducer,
     role: roleReducer,
+    resume: resumeReducer,
   },
 });
 

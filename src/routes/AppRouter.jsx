@@ -62,6 +62,7 @@ import EmployerJobManagement from "../pages/employer/job/JobManagement.jsx";
 import EmployerAddJob from "../pages/employer/job/AddJob.jsx";
 import EmployerEditJob from "../pages/employer/job/EditJob.jsx";
 import EmployerCVManagement from "../pages/employer/cv/CVManagement.jsx";
+import ResumeManagement from "../pages/admin/resume/ResumeManagement.jsx";
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -115,7 +116,7 @@ export default function AppRouter() {
           <Route path="editRole/:id" element={<EditRole />} />
           <Route path="addRole" element={<AddRole />} />
 
-           <Route path="resumeManagement" element={<RoleManagement />} />
+           <Route path="resumeManagement" element={<ResumeManagement />} />
 
           <Route path="formEmployer" element={<FormEmployerAdd />} />
 

@@ -352,10 +352,7 @@ export const callCreateResume = (
 };
 
 export const callUpdateResumeStatus = (id: any, status: string) => {
-  return axios.put<IBackendRes<IResume>>(`/api/v1/resumes/${id}`, {
-    id,
-    status,
-  });
+  return axios.put<IBackendRes<IResume>>(`/api/v1/resumes`, { id, status });
 };
 
 export const callDeleteResume = (id: string) => {
