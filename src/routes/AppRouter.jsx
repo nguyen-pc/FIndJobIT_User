@@ -135,11 +135,11 @@ export default function AppRouter() {
           />
 
           <Route path="addCompany" element={<EmployerAddCompany />} />
-          <Route path="editCompany" element={<EmployerEditCompany />} />
+          <Route path="editCompany/:id" element={<EmployerEditCompany />} />
 
           <Route path="jobManagement" element={<EmployerJobManagement />} />
           <Route path="addJob" element={<EmployerAddJob />} />
-          <Route path="editJob" element={<EmployerEditJob />} />
+          <Route path="editJob/:id" element={<EmployerEditJob />} />
 
           <Route path="cvManagement" element={<EmployerCVManagement />} />
         </Route>

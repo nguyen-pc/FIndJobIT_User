@@ -6,18 +6,22 @@ import Header from "../../../components/admin/Header";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { message } from "antd";
+import { useParams, useNavigate } from "react-router-dom";
+import { message, notification } from "antd";
 import {
+  callFetchJobById,
+  callUpdateJob,
   callFetchCompany,
   callFetchAllSkill,
-  callCreateJob,
+  callFetchCompanyById,
+  callFetchUserById,
 } from "../../../config/api";
 import { LOCATION_LIST } from "../../../config/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { useAppSelector } from "../../../redux/hooks";
 dayjs.extend(utc);
-// Cấu trúc validation cho form
+
 const jobSchema = yup.object().shape({
   name: yup.string().required("Vui lòng nhập tên công việc"),
   skills: yup.array().min(1, "Chọn ít nhất một kỹ năng"),
@@ -35,6 +39,7 @@ const jobSchema = yup.object().shape({
   active: yup.boolean(),
 });
 
+// Mẫu giá trị mặc định nếu chưa có dữ liệu
 const initialValues = {
   name: "",
   skills: [],
@@ -49,18 +54,13 @@ const initialValues = {
   active: true,
 };
 
-// Hàm chuyển đổi dữ liệu từ API thành định dạng cho select
-async function fetchCompanyList(name) {
-  const res = await callFetchCompany(`page=1&size=100&name ~ '${name}'`);
-  if (res && res.data) {
-    const list = res.data.result;
-    return list.map((item) => ({
-      label: item.name,
-      // Gán value với format "id@#$logo" để sau có thể tách lấy id và logo nếu cần
-      value: `${item.id}@#$${item.logo}`,
-    }));
-  }
-  return [];
+async function fetchCompanyList(name, id) {
+  return [
+    {
+      label: name,
+      value: `${id}@#$${name}`,
+    },
+  ];
 }
 
 async function fetchSkillList() {
@@ -76,40 +76,135 @@ async function fetchSkillList() {
 }
 
 const EditJob = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const [displayJob, setDisplayJob] = useState(null);
   const [companies, setCompanies] = useState([]);
   const [skills, setSkills] = useState([]);
-  let location = useLocation();
+  const [displayUser, setDisplayUser] = useState(null);
+  const [companyDetails, setCompanyDetails] = useState(null);
+  const isAuthenticated = useAppSelector(
+    (state) => state.account.isAuthenticated
+  );
+  const user = useAppSelector((state) => state.account.user);
+  console.log("user", user);
 
-  // Call API để lấy danh sách company và skill khi component mount
+  // Fetch user thông qua API
   useEffect(() => {
-    async function fetchData() {
-      const companyData = await fetchCompanyList("");
-      setCompanies(companyData);
-      const skillData = await fetchSkillList();
-      setSkills(skillData);
+    const fetchUserID = async () => {
+      try {
+        const res = await callFetchUserById(user.id);
+        setDisplayUser(res.data);
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+      }
+    };
+    fetchUserID();
+  }, [user.id]);
+
+  // Sau khi displayUser có dữ liệu, call API để fetch company details
+  useEffect(() => {
+    const fetchCompanyDetails = async () => {
+      try {
+        const res = await callFetchCompanyById(displayUser.company.id);
+        setCompanyDetails(res.data);
+        console.log("Company details:", res.data);
+      } catch (error) {
+        console.error("Error fetching company details:", error);
+      }
+    };
+    if (displayUser) {
+      fetchCompanyDetails();
     }
-    fetchData();
-  }, []);
+  }, [displayUser]);
+
+  useEffect(() => {
+    async function fetchJob() {
+      try {
+        const res = await callFetchJobById(id);
+        if (res && res.data) {
+          setDisplayJob(res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching job data:", error);
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Không thể tải thông tin công việc.",
+        });
+      }
+    }
+
+    async function fetchData() {
+      try {
+        if (companyDetails) {
+          setCompanies([
+            {
+              label: companyDetails.name,
+              value: `${companyDetails.id}@#$${companyDetails.logo}`,
+            },
+          ]);
+        }
+        const skillsRes = await callFetchAllSkill("page=1&size=100");
+        if (skillsRes && skillsRes.data) {
+          setSkills(
+            skillsRes.data.result.map((item) => ({
+              label: item.name,
+              value: `${item.id}`,
+            }))
+          );
+        }
+      } catch (err) {
+        console.error("Error fetching companies/skills:", err);
+      }
+    }
+    fetchJob();
+    if (companyDetails) {
+      fetchData();
+    }
+  }, [id, companyDetails]);
+
+  // Xây dựng initialValues cho Formik từ displayJob nếu có
+  const formInitialValues = displayJob
+    ? {
+        name: displayJob.name || "",
+        skills: displayJob.skills
+          ? displayJob.skills.map((skill) => String(skill.id))
+          : [],
+        company: {
+          id: displayJob.company?.id || "",
+          name: displayJob.company?.name || "",
+        },
+        location: displayJob.location || "",
+        salary: displayJob.salary || 0,
+        quantity: displayJob.quantity || 1,
+        level: displayJob.level || "",
+        description: displayJob.description || "",
+        startDate: displayJob.startDate
+          ? dayjs(displayJob.startDate).format("YYYY-MM-DD")
+          : "",
+        endDate: displayJob.endDate
+          ? dayjs(displayJob.endDate).format("YYYY-MM-DD")
+          : "",
+        active: displayJob.active,
+      }
+    : initialValues;
 
   const handleFormSubmit = async (values) => {
-    const cp = values?.company?.value?.split("@#$");
-    const arrSkills = values?.skills?.map((item) => {
-      return { id: +item };
-    });
+    const arrSkills = values?.skills?.map((item) => ({ id: +item }));
     const job = {
       name: values.name,
       skills: arrSkills,
       company: {
         id: values.company.id,
         name: values.company.name,
-        logo: values.company.logoUlr,
       },
       location: values.location,
       salary: values.salary,
       quantity: values.quantity,
       level: values.level,
       description: values.description,
+      // Chuyển đổi định dạng ngày "YYYY-MM-DD" thành đối tượng Date
       startDate: dayjs(values.startDate, "YYYY-MM-DD").toDate(),
       endDate: dayjs(values.endDate, "YYYY-MM-DD").toDate(),
       active: values.active,
@@ -117,26 +212,38 @@ const EditJob = () => {
 
     console.log("Job data to submit:", job);
 
-    const res = await callCreateJob(job);
-    if (res.data) {
-      message.success("Tạo mới job thành công");
-      navigate("/employer/jobManagement");
-    } else {
+    try {
+      const res = await callUpdateJob(job, id);
+      if (res.data) {
+        message.success("Cập nhật công việc thành công");
+        navigate("/employer/jobManagement");
+      } else {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: res.message,
+        });
+      }
+    } catch (error) {
+      console.error("Error updating job:", error);
       notification.error({
         message: "Có lỗi xảy ra",
-        description: res.message,
+        description: error.message,
       });
     }
   };
 
   return (
     <Box m="20px">
-      <Header title="Công việc" subtitle="Chỉnh sửa công việc" />
+      <Header
+        title="CẬP NHẬT CÔNG VIỆC"
+        subtitle="Cập nhật thông tin công việc"
+      />
 
       <Formik
-        onSubmit={handleFormSubmit}
-        initialValues={initialValues}
+        enableReinitialize
+        initialValues={formInitialValues}
         validationSchema={jobSchema}
+        onSubmit={handleFormSubmit}
       >
         {({
           values,
@@ -170,7 +277,6 @@ const EditJob = () => {
                 helperText={touched.name && errors.name}
                 sx={{ gridColumn: "span 2" }}
               />
-
               {/* Chọn công ty */}
               <TextField
                 select
@@ -313,6 +419,7 @@ const EditJob = () => {
                 />
               </Box>
 
+              {/* Chọn ngày bắt đầu */}
               <TextField
                 fullWidth
                 variant="filled"
@@ -328,6 +435,7 @@ const EditJob = () => {
                 sx={{ gridColumn: "span 2" }}
               />
 
+              {/* Chọn ngày kết thúc */}
               <TextField
                 fullWidth
                 variant="filled"
@@ -355,7 +463,7 @@ const EditJob = () => {
 
             <Box display="flex" justifyContent="end" mt="20px">
               <Button type="submit" color="secondary" variant="contained">
-                Thêm công việc
+                Cập nhật công việc
               </Button>
             </Box>
           </form>

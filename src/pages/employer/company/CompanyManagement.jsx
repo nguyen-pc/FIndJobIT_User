@@ -1,9 +1,11 @@
-import React from "react";
-import { Box, Typography, Paper, Divider } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Typography, Paper, Divider, Button } from "@mui/material";
 import logo from "../../../assets/fpt.png";
 import background from "../../../assets/fpt_banner.png";
-import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../../redux/hooks";
+import { callFetchCompanyById, callFetchUserById } from "../../../config/api";
+
 const mockCompany = {
   name: "Công ty TNHH Công Nghệ NEXTDEV",
   address: "Tầng 5, Tòa nhà ABC, Quận 1, TP.HCM",
@@ -14,19 +16,55 @@ const mockCompany = {
 
 const CompanyManagement = () => {
   const navigate = useNavigate();
+  const [displayUser, setDisplayUser] = useState(null);
+  const [companyDetails, setCompanyDetails] = useState(null);
+  const isAuthenticated = useAppSelector(
+    (state) => state.account.isAuthenticated
+  );
+  const user = useAppSelector((state) => state.account.user);
+  console.log("user", user);
+
+  // Fetch user thông qua API
+  useEffect(() => {
+    const fetchUserID = async () => {
+      try {
+        const res = await callFetchUserById(user.id);
+        setDisplayUser(res.data);
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+      }
+    };
+    fetchUserID();
+  }, [user.id]);
+
+  // Sau khi displayUser có dữ liệu, call API để fetch company details
+  useEffect(() => {
+    const fetchCompanyDetails = async () => {
+      try {
+        const res = await callFetchCompanyById(displayUser.company.id);
+        setCompanyDetails(res.data);
+        console.log("Company details:", res.data);
+      } catch (error) {
+        console.error("Error fetching company details:", error);
+      }
+    };
+    if (displayUser) {
+      fetchCompanyDetails();
+    }
+  }, [displayUser]);
+
+  // Nếu companyDetails chưa được load, hiển thị loading hoặc trả về null
+  if (!companyDetails) {
+    return <Typography>Loading...</Typography>;
+  }
+
   return (
     <Box m={1}>
       <Button
         variant="contained"
         color="secondary"
-        onClick={() => navigate("/employer/addCompany")}
-      >
-        + Thêm công ty
-      </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => navigate("/employer/editCompany")}
+        className="mb-3"
+        onClick={() => navigate("/employer/editCompany/" + companyDetails.id)}
       >
         Chỉnh sửa công ty
       </Button>
@@ -36,7 +74,9 @@ const CompanyManagement = () => {
           sx={{
             width: "100%",
             height: "200px",
-            backgroundImage: `url(${mockCompany.banner})`,
+            backgroundImage: `url(${
+              import.meta.env.VITE_BACKEND_URL
+            }/storage/company/${companyDetails?.banner})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             borderRadius: 2,
@@ -46,7 +86,9 @@ const CompanyManagement = () => {
         {/* Logo + Tên công ty */}
         <Box display="flex" alignItems="center">
           <img
-            src={mockCompany.logo}
+            src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
+              companyDetails?.logo
+            }`}
             alt="Company Logo"
             style={{
               width: 80,
@@ -56,7 +98,7 @@ const CompanyManagement = () => {
             }}
           />
           <Typography variant="h5" fontWeight="bold">
-            {mockCompany.name}
+            {companyDetails.name}
           </Typography>
         </Box>
 
@@ -65,7 +107,7 @@ const CompanyManagement = () => {
           <Typography variant="subtitle1" fontWeight="bold">
             Địa chỉ:
           </Typography>
-          <Typography>{mockCompany.address}</Typography>
+          <Typography>{companyDetails.address}</Typography>
         </Box>
 
         <Divider sx={{ my: 3 }} />
@@ -76,7 +118,7 @@ const CompanyManagement = () => {
             Giới thiệu:
           </Typography>
           <div
-            dangerouslySetInnerHTML={{ __html: mockCompany.description }}
+            dangerouslySetInnerHTML={{ __html: companyDetails.description }}
             style={{ lineHeight: 1.6 }}
           />
         </Box>

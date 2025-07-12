@@ -12,10 +12,13 @@ import {
   callFetchCompany,
   callFetchAllSkill,
   callCreateJob,
+  callFetchCompanyById,
+  callFetchUserById,
 } from "../../../config/api";
 import { LOCATION_LIST } from "../../../config/utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { useAppSelector } from "../../../redux/hooks";
 dayjs.extend(utc);
 // Cấu trúc validation cho form
 const jobSchema = yup.object().shape({
@@ -50,17 +53,13 @@ const initialValues = {
 };
 
 // Hàm chuyển đổi dữ liệu từ API thành định dạng cho select
-async function fetchCompanyList(name) {
-  const res = await callFetchCompany(`page=1&size=100&name ~ '${name}'`);
-  if (res && res.data) {
-    const list = res.data.result;
-    return list.map((item) => ({
-      label: item.name,
-      // Gán value với format "id@#$logo" để sau có thể tách lấy id và logo nếu cần
-      value: `${item.id}@#$${item.logo}`,
-    }));
-  }
-  return [];
+async function fetchCompanyList(name, id) {
+  return [
+    {
+      label: name,
+      value: `${id}@#$${name}`,
+    },
+  ];
 }
 
 async function fetchSkillList() {
@@ -80,17 +79,58 @@ const AddJob = () => {
   const [companies, setCompanies] = useState([]);
   const [skills, setSkills] = useState([]);
   let location = useLocation();
+  const [displayUser, setDisplayUser] = useState(null);
+  const [companyDetails, setCompanyDetails] = useState(null);
+  const isAuthenticated = useAppSelector(
+    (state) => state.account.isAuthenticated
+  );
+  const user = useAppSelector((state) => state.account.user);
+  console.log("user", user);
+
+  // Fetch user thông qua API
+  useEffect(() => {
+    const fetchUserID = async () => {
+      try {
+        const res = await callFetchUserById(user.id);
+        setDisplayUser(res.data);
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+      }
+    };
+    fetchUserID();
+  }, [user.id]);
+
+  // Sau khi displayUser có dữ liệu, call API để fetch company details
+  useEffect(() => {
+    const fetchCompanyDetails = async () => {
+      try {
+        const res = await callFetchCompanyById(displayUser.company.id);
+        setCompanyDetails(res.data);
+        console.log("Company details:", res.data);
+      } catch (error) {
+        console.error("Error fetching company details:", error);
+      }
+    };
+    if (displayUser) {
+      fetchCompanyDetails();
+    }
+  }, [displayUser]);
 
   // Call API để lấy danh sách company và skill khi component mount
   useEffect(() => {
+    if (!companyDetails) return;
     async function fetchData() {
-      const companyData = await fetchCompanyList("");
+      const companyData = await fetchCompanyList(
+        companyDetails?.name || "",
+        companyDetails?.id
+      );
+      console.log("Company data:", companyData);
       setCompanies(companyData);
       const skillData = await fetchSkillList();
       setSkills(skillData);
     }
     fetchData();
-  }, []);
+  }, [companyDetails]);
 
   const handleFormSubmit = async (values) => {
     const cp = values?.company?.value?.split("@#$");
@@ -120,7 +160,7 @@ const AddJob = () => {
     const res = await callCreateJob(job);
     if (res.data) {
       message.success("Tạo mới job thành công");
-      navigate("/admin/jobManagement");
+      navigate("/employer/jobManagement");
     } else {
       notification.error({
         message: "Có lỗi xảy ra",
@@ -131,7 +171,7 @@ const AddJob = () => {
 
   return (
     <Box m="20px">
-      <Header title="THÊM CÔNG VIỆC" subtitle="Tạo thông tin công việc mới" />
+      <Header title="Công việc" subtitle="Chỉnh sửa công việc" />
 
       <Formik
         onSubmit={handleFormSubmit}
