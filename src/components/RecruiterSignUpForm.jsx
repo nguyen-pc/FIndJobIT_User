@@ -9,6 +9,7 @@ import PhoneIcon from "../assets/phone.png";
 import CompanyIcon from "../assets/enterprise.png";
 import TaxIcon from "../assets/tax.png";
 import { callRegister, callRegisterRecruiter } from "../config/api";
+import { notification } from "antd";
 function RecruiterSignUpForm() {
   const [isSubmit, setIsSubmit] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -35,10 +36,10 @@ function RecruiterSignUpForm() {
     if (password !== rePassword) {
       alert("Mật khẩu không khớp, vui lòng nhập lại!");
       setIsSubmit(false);
-      // notification.error({
-      //   message: "Mật khẩu không trùng khớp",
-      //   duration: 5,
-      // });
+      notification.error({
+        message: "Mật khẩu không trùng khớp",
+        duration: 5,
+      });
       return;
     }
     console.log(companyName, taxCode, email, password, name, phoneNumber);
@@ -53,7 +54,7 @@ function RecruiterSignUpForm() {
     console.log("Response from server:", res);
     setIsSubmit(false);
     if (res?.data?.id) {
-      // message.success("Đăng ký tài khoản thành công!");
+      message.success("Đăng ký tài khoản thành công!");
       navigate("/signin");
     } else {
       notification.error({

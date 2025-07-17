@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { callFetchCompany } from "../config/api";
-import fptLogo from "../assets/fpt.png";
-import { convertSlug } from "../config/utils";
+import { callFetchCompany } from "../../config/api";
+import { convertSlug } from "../../config/utils";
+import { Spin } from "antd";
 // import { convertSlug } from "../utils";
 
 const CardCompany = (props) => {
@@ -77,7 +77,7 @@ const CardCompany = (props) => {
       <h2>Công ty nổi bật</h2>
       <div className="categories-grid">
         {isLoading ? (
-          <p>Loading...</p>
+          <Spin spinning={isLoading} tip="Loading..."></Spin>
         ) : displayCompany && displayCompany.length > 0 ? (
           displayCompany.map((company) => (
             <div
@@ -86,6 +86,7 @@ const CardCompany = (props) => {
               onClick={() => handleViewDetailCompany(company)}
             >
               <img
+                className="w-20! h-12"
                 src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
                   company?.logo
                 }`}

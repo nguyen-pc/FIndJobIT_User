@@ -5,6 +5,7 @@ import background from "../../../assets/fpt_banner.png";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../redux/hooks";
 import { callFetchCompanyById, callFetchUserById } from "../../../config/api";
+import { Spin } from "antd/lib";
 
 const mockCompany = {
   name: "Công ty TNHH Công Nghệ NEXTDEV",
@@ -55,7 +56,12 @@ const CompanyManagement = () => {
 
   // Nếu companyDetails chưa được load, hiển thị loading hoặc trả về null
   if (!companyDetails) {
-    return <Typography>Loading...</Typography>;
+    return (
+      <Typography>
+        {" "}
+        <Spin spinning={isLoading} tip="Loading..."></Spin>
+      </Typography>
+    );
   }
 
   return (

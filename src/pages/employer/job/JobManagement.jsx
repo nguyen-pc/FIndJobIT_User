@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { tokens } from "../../../theme";
 import {
@@ -27,6 +28,7 @@ import { sfLike } from "spring-filter-query-builder";
 import { callDeleteJob, callFetchUserById } from "../../../config/api";
 import { DataGrid } from "@mui/x-data-grid";
 import { message } from "antd";
+import { EyeFilled } from "@ant-design/icons";
 const JobManagement = () => {
   const isFetching = useAppSelector((state) => state.job.isFetching);
   const meta = useAppSelector((state) => state.job.meta);
@@ -134,6 +136,9 @@ const JobManagement = () => {
           <IconButton onClick={() => handleDelete(params.row.id)}>
             <DeleteIcon style={{ color: "#ff4d4f" }} />
           </IconButton>
+          <IconButton onClick={() => handleViewCV(params.row.id)}>
+            <VisibilityIcon style={{ color: "#00c056" }} />
+          </IconButton>
         </Box>
       ),
     },
@@ -206,6 +211,9 @@ const JobManagement = () => {
     navigate(`/employer/editJob/${id}`);
   };
 
+  const handleViewCV = (id) => {
+    navigate(`/employer/cvManagement/${id}`);
+  };
   const handleDelete = async (jobId) => {
     try {
       const res = await callDeleteJob(jobId);

@@ -1,11 +1,12 @@
 import React from "react";
 import { EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { getLocationName, convertSlug } from "../config/utils";
+import { getLocationName, convertSlug } from "../../config/utils";
 import { useNavigate } from "react-router-dom";
-import { cancelFollowCompany } from "../config/api";
+import { cancelFollowCompany } from "../../config/api";
 import { FaTrash } from "react-icons/fa";
 import parse from "html-react-parser";
+import { Spin } from "antd";
 
 const CardCompanyFollow = ({
   displayCompany,
@@ -41,7 +42,7 @@ const CardCompanyFollow = ({
     <section className="flex flex-col" id="jobs">
       <div className="">
         {isLoading ? (
-          <p>Loading...</p>
+          <Spin spinning={isLoading} tip="Loading..."></Spin>
         ) : displayCompany && displayCompany.length > 0 ? (
           displayCompany.map((company) => (
             <div

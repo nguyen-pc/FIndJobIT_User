@@ -17,6 +17,7 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import ChecklistIcon from "@mui/icons-material/Checklist";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -141,7 +142,7 @@ const Sidebar = () => {
             <Item
               title="CV ứng viên"
               to="/employer/cvManagement"
-              icon={<ReceiptOutlinedIcon />}
+              icon={<AssignmentIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -153,27 +154,27 @@ const Sidebar = () => {
             >
               Pages
             </Typography>
-            <Item
+            {/* <Item
               title="Profile Form"
               to="/admin/addUser"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Calendar"
-              to="/admin/calendar"
+              to="/employer/calendar"
               icon={<CalendarTodayOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+            {/* <Item
               title="FAQ Page"
               to="/admin/faq"
               icon={<HelpOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
           </Box>
         </Menu>
       </ProSidebar>

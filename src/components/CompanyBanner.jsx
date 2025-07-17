@@ -82,8 +82,20 @@ function CompanyBanner({ company }) {
   return (
     <>
       <div className="company_banner_container">
-        <img src={ImageCompany} alt="" className="imageCompany" />
-        <img src={Background2} alt="" className="imageBackground" />
+        <img
+          src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
+            company?.banner
+          }`}
+          alt=""
+          className="imageCompany"
+        />
+        {/* <img
+          src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
+            company?.banner
+          }`}
+          alt=""
+          className="imageBackground"
+        /> */}
         <div className="logo_company">
           <img
             src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${

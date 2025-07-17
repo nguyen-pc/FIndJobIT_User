@@ -3,7 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useAppSelector } from "../redux/hooks";
 import { fetchCompanyFollowed } from "../config/api";
-import CardCompanyFollow from "../components/CardCompanyFollow";
+import CardCompanyFollow from "../components/card/CardCompanyFollow";
 
 const CompanyFollowPage = () => {
   const [displayCompany, setDisplayCompany] = useState(null);
@@ -42,7 +42,8 @@ const CompanyFollowPage = () => {
             Danh sách công ty đã lưu
           </h4>
           <nav className="text-center text-white mt-2">
-            Xem lại danh sách những công ty mà bạn đã lưu trước đó. Theo dõi để không bỏ lỡ cơ hội nghề nghiệp dành cho bạn.     
+            Xem lại danh sách những công ty mà bạn đã lưu trước đó. Theo dõi để
+            không bỏ lỡ cơ hội nghề nghiệp dành cho bạn.
           </nav>
         </div>
         <div className="">
@@ -50,7 +51,9 @@ const CompanyFollowPage = () => {
             displayCompany={displayCompany}
             userId={user.id}
             onUnfollow={(companyId) => {
-              setDisplayCompany(displayCompany.filter((company) => company.id !== companyId));
+              setDisplayCompany(
+                displayCompany.filter((company) => company.id !== companyId)
+              );
             }}
           />
         </div>

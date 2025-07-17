@@ -288,7 +288,9 @@ export const callFetchJob = (query: string) => {
 };
 
 export const callFetchJobByCompany = (id: string, query: string) => {
-  return axios.get<IBackendRes<IModelPaginate<IJob>>>(`/api/v1/jobs/jobCompany/${id}?${query}`);
+  return axios.get<IBackendRes<IModelPaginate<IJob>>>(
+    `/api/v1/jobs/jobCompany/${id}?${query}`
+  );
 };
 
 export const callFetchJobLatest = (query: string) => {
@@ -371,6 +373,12 @@ export const callFetchResume = (query: string) => {
 
 export const callFetchResumeById = (id: string) => {
   return axios.get<IBackendRes<IResume>>(`/api/v1/resumes/${id}`);
+};
+
+export const callFetchResumeByCompany = (id: string, query: string) => {
+  return axios.get<IBackendRes<IResume>>(
+    `/api/v1/resumes/by-company/${id}?${query}`
+  );
 };
 
 export const callFetchResumeByUser = () => {

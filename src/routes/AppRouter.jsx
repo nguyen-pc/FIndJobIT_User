@@ -22,6 +22,7 @@ import HomeAdmin from "../pages/admin/Home";
 import Dashboard from "../pages/admin/Dashboard";
 import Bar from "../pages/admin/Bar";
 import Calendar2 from "../pages/admin/Calendar2";
+import Calendar3 from "../pages/employer/Calendar3";
 import EmployerManagement from "../pages/admin/EmployerManagement";
 import Faq from "../pages/admin/Faq";
 import FormUserAdd from "../pages/admin/user/FormUserAdd";
@@ -54,6 +55,7 @@ import AddRole from "../pages/admin/role/AddRole.jsx";
 
 //Employer route
 import HomeEmployer from "../pages/employer/Home.jsx";
+import DashboardCompany from "../pages/employer/DashboardCompany.jsx";
 import EmployerAddCompany from "../pages/employer/company/AddCompany.jsx";
 import EmployerEditCompany from "../pages/employer/company/EditCompany.jsx";
 import EmployerCompanyManagement from "../pages/employer/company/CompanyManagement.jsx";
@@ -63,6 +65,7 @@ import EmployerAddJob from "../pages/employer/job/AddJob.jsx";
 import EmployerEditJob from "../pages/employer/job/EditJob.jsx";
 import EmployerCVManagement from "../pages/employer/cv/CVManagement.jsx";
 import ResumeManagement from "../pages/admin/resume/ResumeManagement.jsx";
+import SearchJobPage from "../pages/SearchJobPage.jsx";
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -83,6 +86,7 @@ export default function AppRouter() {
         <Route path="/company_follow" element={<CompanyFollowPage />} />
         <Route path="/company_list" element={<CompanyList />} />
         <Route path="/recommend-job" element={<RecommendJob />} />
+        <Route  path="search_job" element={<SearchJobPage />}/>
         {/* route admin */}
         <Route path="/admin/*" element={<HomeAdmin />}>
           <Route path="dashboard" element={<Dashboard />} />
@@ -116,7 +120,7 @@ export default function AppRouter() {
           <Route path="editRole/:id" element={<EditRole />} />
           <Route path="addRole" element={<AddRole />} />
 
-           <Route path="resumeManagement" element={<ResumeManagement />} />
+          <Route path="resumeManagement" element={<ResumeManagement />} />
 
           <Route path="formEmployer" element={<FormEmployerAdd />} />
 
@@ -129,6 +133,7 @@ export default function AppRouter() {
         </Route>
         {/* route employer */}
         <Route path="/employer/*" element={<HomeEmployer />}>
+          <Route path="dashboard" element={<DashboardCompany />} />
           <Route
             path="companyManagement"
             element={<EmployerCompanyManagement />}
@@ -141,7 +146,8 @@ export default function AppRouter() {
           <Route path="addJob" element={<EmployerAddJob />} />
           <Route path="editJob/:id" element={<EmployerEditJob />} />
 
-          <Route path="cvManagement" element={<EmployerCVManagement />} />
+          <Route path="cvManagement/:id" element={<EmployerCVManagement />} />
+          <Route path="calendar" element={<Calendar3 />} />
         </Route>
         {/* Catch-all route for 404 Not Found */}
       </Routes>

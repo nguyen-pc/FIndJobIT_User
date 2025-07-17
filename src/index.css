@@ -6702,3 +6702,10 @@ footer {
     background-color: #dc3545;
     /* Màu đỏ cho nút xóa */
 }
+
+.a{
+    text-decoration: none;
+    font-weight: 400;
+    color: #1ca8c9;
+    font-size: 16px;
+}

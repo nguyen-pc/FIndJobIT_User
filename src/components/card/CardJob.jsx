@@ -1,17 +1,43 @@
 import React, { useEffect, useState } from "react";
-import fptLogo from "../assets/fpt.png";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { callFetchJob } from "../config/api";
+import { callFetchJob } from "../../config/api";
 import { EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { convertSlug, getLocationName } from "../config/utils";
+import { convertSlug, getLocationName } from "../../config/utils";
+import { Spin } from "antd";
+import { useAppSelector } from "../../redux/hooks";
+import axios from "axios";
 
 dayjs.extend(relativeTime);
 
 const CardJob = ({ displayJob, isLoading }) => {
+  const isAuthenticated = useAppSelector(
+    (state) => state.account.isAuthenticated
+  );
+  const user = useAppSelector((state) => state.account.user);
+
   const navigate = useNavigate();
-  const handleViewDetailJob = (item) => {
+  const handleViewDetailJob = async (item) => {
+    const payload = {
+      user_id: user.id,
+      job_id: item.id,
+      interaction_type: "view",
+    };
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/interactions",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Error interaction:", error);
+    }
     const slug = convertSlug(item.name);
     navigate(`/job/${slug}?id=${item.id}`);
   };
@@ -22,7 +48,7 @@ const CardJob = ({ displayJob, isLoading }) => {
 
       <div className="jobs-list">
         {isLoading ? (
-          <p>Loading...</p>
+          <Spin spinning={isLoading} tip="Loading..."></Spin>
         ) : displayJob && displayJob.length > 0 ? (
           displayJob.map((job) => (
             <div

@@ -7,6 +7,7 @@ import {
   callFetchUserById,
   callUpdateUser,
 } from "../config/api";
+import { Spin } from "antd";
 
 const EditProfilePage = () => {
   const navigate = useNavigate();
@@ -124,7 +125,7 @@ const EditProfilePage = () => {
 
       <main className="edit-profile-content">
         {isLoading ? (
-          <p>Loading...</p>
+          <Spin spinning={isLoading} tip="Loading..."></Spin>
         ) : (
           <form
             id="edit-profile-form"
@@ -233,8 +234,8 @@ const EditProfilePage = () => {
                     setEditedUser((prevUser) => ({
                       ...prevUser,
                       skills: selectedOptions.map((option) => ({
-                        id: option.value, 
-                         name: option.label,// Chỉ lấy id, đúng định dạng như yêu cầu.
+                        id: option.value,
+                        name: option.label, // Chỉ lấy id, đúng định dạng như yêu cầu.
                       })),
                     }))
                   }

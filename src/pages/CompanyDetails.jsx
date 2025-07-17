@@ -9,6 +9,7 @@ import Header from "../components/Header";
 import { useLocation } from "react-router-dom";
 import { callFetchCompanyById, callFetchJobByIdCompany } from "../config/api";
 import { useEffect, useState } from "react";
+import Footer from "../components/Footer";
 function CompanyDetails() {
   const description = `Công ty Cổ phần Viễn thông FPT (tên gọi tắt là FPT Telecom) hiện là một trong những nhà cung cấp dịch vụ viễn thông và Internet hàng đầu khu vực.`;
 
@@ -75,6 +76,7 @@ function CompanyDetails() {
           <p>Hiện tại công ty chưa có công việc nào được đăng tuyển.</p>
         </div>
       )}
+      <Footer />
     </div>
   );
 }

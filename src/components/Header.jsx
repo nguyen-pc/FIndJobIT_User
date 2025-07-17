@@ -8,6 +8,20 @@ import job from "../assets/job.png";
 import CV from "../assets/cv.png";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setLogoutAction } from "../redux/slice/accountSlide";
+import Button from "@mui/material/Button";
+import queryString from "query-string";
+import { sfIn } from "spring-filter-query-builder";
+import {
+  Box,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const { Option = Select.Option } = Select;
 
@@ -15,12 +29,23 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
   const optionsLocation = LOCATION_LIST;
   const [optionsSkills, setOptionsSkills] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [searchOpacity, setSearchOpacity] = useState(1);
   const [headerHeight, setHeaderHeight] = useState(250);
+  const [searchParams, setSearchParams] = useState({
+    name: "",
+    salary: "",
+    level: [],
+    current: 1,
+    pageSize: 15,
+  });
 
   const [showJobManagementDropdown, setShowJobManagementDropdown] =
     useState(false); // Trạng thái hiển thị menu con quản lý việc làm
@@ -49,6 +74,14 @@ const Header = () => {
       }
     }
     e.target.value = "";
+  };
+
+  const handleNavigate = () => {
+    if (user.role.name === "COMPANY") {
+      navigate("/employer/dashboard");
+    } else if (user.role.name === "SUPER_ADMIN") {
+      navigate("/admin/dashboard");
+    }
   };
 
   const handleLogout = async () => {
@@ -118,22 +151,116 @@ const Header = () => {
       });
       return;
     }
-    navigate(`/job?${query}`);
+    navigate(`/search_job?${query}`);
+  };
+  const handleSearchChange = (e) => {
+    setSearchParams({ ...searchParams, name: e.target.value });
+  };
+
+  const buildQuery = (params, sort, filter) => {
+    // if (searchParams.name === "") {
+    //   return "";
+    // }
+    const clone = { ...params };
+    let parts = [];
+    if (clone.name) parts.push(`name ~ '${clone.name}'`);
+    if (clone.salary) parts.push(`salary ~ '${clone.salary}'`);
+    if (clone.level && clone.level.length > 0) {
+      parts.push(sfIn("level", clone.level));
+    }
+
+    clone.filter = parts.join(" and ");
+    if (!clone.filter) delete clone.filter;
+
+    // Chuyển đổi phân trang: current => page, pageSize => size
+    clone.page = clone.current;
+    clone.size = clone.pageSize;
+    delete clone.current;
+    delete clone.pageSize;
+    delete clone.name;
+    delete clone.salary;
+    delete clone.level;
+    let temp = queryString.stringify(clone);
+
+    let sortBy = "";
+    const fields = ["name", "salary", "createdAt", "updatedAt"];
+    if (sort) {
+      for (const field of fields) {
+        if (sort[field]) {
+          sortBy = `sort=${field},${sort[field] === "ascend" ? "asc" : "desc"}`;
+          break; // Nếu chỉ xử lý 1 trường sắp xếp, loại bỏ break nếu cần nhiều trường
+        }
+      }
+    }
+
+    if (!sortBy) {
+      temp = `${temp}&sort=updatedAt,desc`;
+    } else {
+      temp = `${temp}&${sortBy}`;
+    }
+    console.log("Base query:", temp);
+    return temp;
   };
 
   // Xây dựng query và truyền cho onFinish khi click search button
   const handleSearch = () => {
-    let query = "";
+    const baseQuery = buildQuery(searchParams, {}, null);
+    let extraQuery = "";
     if (selectedLocation.length) {
-      query = `location=${selectedLocation.join(",")}`;
+      extraQuery += `&location=${selectedLocation.join(",")}`;
     }
     if (selectedSkills.length) {
-      query = query
-        ? query + `&skills=${selectedSkills.join(",")}`
-        : `skills=${selectedSkills.join(",")}`;
+      extraQuery += `&skills=${selectedSkills.join(",")}`;
     }
-    onFinish(query);
+    const finalQuery = baseQuery + extraQuery;
+    onFinish(finalQuery);
   };
+
+  // Các mục navigation dùng chung
+  const navItems = (
+    <List>
+      <ListItem
+        button
+        onClick={() => {
+          navigate("/job_list");
+          setDrawerOpen(false);
+        }}
+      >
+        <ListItemText primary="Việc làm HOT" />
+      </ListItem>
+      <ListItem
+        button
+        onClick={() => {
+          navigate("/job_list");
+          setDrawerOpen(false);
+        }}
+      >
+        <ListItemText primary="Việc làm" />
+      </ListItem>
+      <ListItem
+        button
+        onClick={() => {
+          navigate("/company_list");
+          setDrawerOpen(false);
+        }}
+      >
+        <ListItemText primary="Công ty" />
+      </ListItem>
+      <ListItem>
+        <ListItemText primary="Công cụ" />
+        {/* <select
+          className="filter-select"
+          onChange={handleSelectChange}
+          defaultValue=""
+        >
+          <option value="" disabled>
+            Sự kiện
+          </option>
+          <option value="events">Sự kiện</option>
+        </select> */}
+      </ListItem>
+    </List>
+  );
 
   return (
     <header
@@ -144,7 +271,7 @@ const Header = () => {
         overflow: "visible", // Quan trọng để dropdown không bị cắt
       }}
     >
-      <div className="header-top ">
+      <div className="header-top flex flex-row items-center justify-between">
         <Link to="/" className="logo">
           NextDev
         </Link>
@@ -157,7 +284,7 @@ const Header = () => {
         </div> */}
 
         {/* Các phần Navigation khác */}
-        <nav className="nav-menu">
+        <nav className="nav-menu md:block! hidden!">
           <button
             onClick={() => navigate("/job_list")}
             className="filter-select"
@@ -191,13 +318,11 @@ const Header = () => {
 
         {user && isAuthenticated ? (
           <>
-            {user.role.name === "SUPER_ADMIN" && (
-              <button
-                className="user-button bg-transparent rounded-full text-black text-[12px] border "
-                onClick={() => navigate("/admin/dashboard")}
-              >
+            {(user.role.name === "SUPER_ADMIN" ||
+              user.role.name === "COMPANY") && (
+              <Button onClick={() => handleNavigate()} variant="outlined">
                 Trang quản trị
-              </button>
+              </Button>
             )}
             <div
               className="user-menu-container"
@@ -443,25 +568,33 @@ const Header = () => {
             </button>
           </div>
         )}
+        {/* Mobile Navigation: IconButton mở Drawer */}
+        {(isMobile || isTablet) && (
+          <IconButton onClick={() => setDrawerOpen(true)}>
+            <MenuIcon />
+          </IconButton>
+        )}
 
         {/* Container cho menu người dùng và dropdown của nó */}
       </div>
       {/* Phần header search */}
       <div
-        className="header-search"
+        className="header-search hidden! lg:block!"
         style={{ opacity: searchOpacity, transition: "opacity 0.3s ease" }}
       >
         <div className="search-bar">
           <input
             type="text"
             placeholder="Tìm kiếm theo công việc, công ty..."
+            value={searchParams.name}
+            onChange={handleSearchChange}
           />
           <button className="search-button" onClick={handleSearch}>
             🔍
           </button>
         </div>
         <div
-          className="filters"
+          className="filters mt-2"
           style={{ display: "flex", gap: "1rem", alignItems: "center" }}
         >
           {/* Select đa lựa chọn cho Địa điểm */}
@@ -499,6 +632,14 @@ const Header = () => {
           </button>
         </div>
       </div>
+      {/* Drawer cho Mobile Navigation */}
+      <Drawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        <Box sx={{ width: "50vw" }}>{navItems}</Box>
+      </Drawer>
     </header>
   );
 };

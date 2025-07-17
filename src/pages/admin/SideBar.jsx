@@ -17,6 +17,9 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import ChecklistIcon from "@mui/icons-material/Checklist";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import AttributionIcon from "@mui/icons-material/Attribution";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -130,13 +133,13 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+            {/* <Item
               title="Nhà tuyển dụng"
               to="/admin/employerManagement"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Công ty"
               to="/admin/companyManagement"
@@ -158,24 +161,24 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-             <Item
+            <Item
               title="Permission"
               to="/admin/permissionManagement"
-              icon={<ChecklistIcon />}
+              icon={<AssignmentIndIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-             <Item
+            <Item
               title="Role"
               to="/admin/roleManagement"
-              icon={<ChecklistIcon />}
+              icon={<AttributionIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-             <Item
+            <Item
               title="Resume"
               to="/admin/resumeManagement"
-              icon={<ChecklistIcon />}
+              icon={<AssignmentIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -187,13 +190,13 @@ const Sidebar = () => {
             >
               Pages
             </Typography>
-            <Item
+            {/* <Item
               title="Profile Form"
               to="/admin/addUser"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             <Item
               title="Calendar"
               to="/admin/calendar"
@@ -201,13 +204,13 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+            {/* <Item
               title="FAQ Page"
               to="/admin/faq"
               icon={<HelpOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
 
             <Typography
               variant="h6"

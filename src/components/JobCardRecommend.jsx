@@ -3,22 +3,23 @@ import { convertSlug, getLocationName } from "../config/utils";
 import { EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { Spin } from "antd";
 
 const JobCardRecommend = ({ jobs }) => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const navigate = useNavigate();
-    const handleViewDetailJob = (item) => {
-      const slug = convertSlug(item.job.title);
-      navigate(`/job/${slug}?id=${item.job.id}`);
-    };
+  const handleViewDetailJob = (item) => {
+    const slug = convertSlug(item.job.title);
+    navigate(`/job/${slug}?id=${item.job.id}`);
+  };
   return (
     <section className="featured-jobs" id="jobs">
       {/* <h2>Việc làm có thể phù hợp với bạn</h2> */}
 
       <div className="jobs-list">
         {isLoading ? (
-          <p>Loading...</p>
+          <Spin spinning={isLoading} tip="Loading..."></Spin>
         ) : jobs && jobs.length > 0 ? (
           jobs.map((job) => (
             <div

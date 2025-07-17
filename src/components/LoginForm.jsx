@@ -48,7 +48,7 @@ function LoginForm() {
       console.log("Response from server:", res.data?.user);
       dispatch(setUserLoginInfo(res.data?.user));
       console.log("isAuthenticated", isAuthenticated);
-      // message.success("Đăng nhập tài khoản thành công!");
+      message.success("Đăng nhập tài khoản thành công!");
       // navigate(callback ? callback : "/");
       window.location.href = callback ? callback : "/";
     } else {

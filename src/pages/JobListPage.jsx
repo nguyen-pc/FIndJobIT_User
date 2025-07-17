@@ -5,9 +5,10 @@ import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { callFetchJob, callFetchJobLatest, recommendJob } from "../config/api";
 import { Card } from "antd";
-import CardJob from "../components/CardJob";
+import CardJob from "../components/card/CardJob";
 import { useAppSelector } from "../redux/hooks";
 import JobCardRecommend from "../components/JobCardRecommend";
+import Footer from "../components/Footer";
 
 const JobListPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,14 +19,14 @@ const JobListPage = () => {
   //Lấy công việc mới nhất
   const [displayJob, setDisplayJob] = useState(null);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(2);
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState("");
 
   //Lấy công việc phổ biến
   const [displayJobPopular, setDisplayJobPopular] = useState(null);
   const [currentPopular, setCurrenPopular] = useState(1);
-  const [pageSizePopular, setPageSizePopular] = useState(1);
+  const [pageSizePopular, setPageSizePopular] = useState(2);
   const [totalPopular, setTotalPopular] = useState(0);
   const [filterPopular, setFilterPopular] = useState("");
 
@@ -339,11 +340,12 @@ const JobListPage = () => {
           </div>
           <div className="flex-grow  max-w-[1300px] my-2  mx-auto w-full  ">
             <div className="">
-              <JobCardRecommend  jobs={jobRecommend} />
+              <JobCardRecommend jobs={jobRecommend} />
             </div>
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

@@ -1,10 +1,11 @@
 import React from "react";
 import { EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { getLocationName, convertSlug } from "../config/utils";
+import { getLocationName, convertSlug } from "../../config/utils";
 import { useNavigate } from "react-router-dom";
-import { cancelFollowJob } from "../config/api";
+import { cancelFollowJob } from "../../config/api";
 import { FaTrash } from "react-icons/fa";
+import { Spin } from "antd";
 
 const CardJobFollow = ({ displayJob, userId, isLoading, onUnfollow }) => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const CardJobFollow = ({ displayJob, userId, isLoading, onUnfollow }) => {
     navigate(`/job/${slug}?id=${item.id}`);
   };
 
-   const handleCancelFollowJob = async (jobId, userId) => {
+  const handleCancelFollowJob = async (jobId, userId) => {
     const payload = {
       jobId: jobId,
       userId: userId,
@@ -35,15 +36,17 @@ const CardJobFollow = ({ displayJob, userId, isLoading, onUnfollow }) => {
     <section className="flex flex-col" id="jobs">
       <div className="">
         {isLoading ? (
-          <p>Loading...</p>
+          <Spin spinning={isLoading} tip="Loading..."></Spin>
         ) : displayJob && displayJob.length > 0 ? (
           displayJob.map((job) => (
             <div
               className="w-full items-center border p-4 my-2 cursor-pointer"
               key={job.id}
-             
             >
-              <div  onClick={() => handleViewDetailJob(job)} className="job-card-header flex items-center gap-4">
+              <div
+                onClick={() => handleViewDetailJob(job)}
+                className="job-card-header flex items-center gap-4"
+              >
                 <img
                   className=" w-24 h-24 object-contain"
                   src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
@@ -74,12 +77,18 @@ const CardJobFollow = ({ displayJob, userId, isLoading, onUnfollow }) => {
                 </div>
               </div>
               <div className="flex items-center justify-between mt-4">
-                <button  onClick={() => handleViewDetailJob(job)} className="ml-4 px-4 py-2 bg-blue-500 text-white rounded">
+                <button
+                  onClick={() => handleViewDetailJob(job)}
+                  className="ml-4 px-4 py-2 bg-blue-500 text-white rounded"
+                >
                   Ứng tuyển ngay
                 </button>
-                <div onClick={() => handleCancelFollowJob(job.id, userId)} className="flex items-center gap-2  cursor-pointer text-[#424e5c] bg-[#e9eaec] rounded p-2"> 
-                    <FaTrash />
-                    Bỏ lưu
+                <div
+                  onClick={() => handleCancelFollowJob(job.id, userId)}
+                  className="flex items-center gap-2  cursor-pointer text-[#424e5c] bg-[#e9eaec] rounded p-2"
+                >
+                  <FaTrash />
+                  Bỏ lưu
                 </div>
               </div>
             </div>

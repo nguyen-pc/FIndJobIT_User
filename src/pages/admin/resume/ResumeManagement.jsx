@@ -21,6 +21,7 @@ const ResumeManagement = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+
   const [selectedResume, setSelectedResume] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   console.log("Resumes data:", resumes);

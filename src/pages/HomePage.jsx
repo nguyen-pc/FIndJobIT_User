@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import CardCompany from "../components/CardCompany";
-import CardJob from "../components/CardJob";
+import CardCompany from "../components/card/CardCompany";
+import CardJob from "../components/card/CardJob";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { callFetchJob } from "../config/api";
 
@@ -15,7 +15,7 @@ const HomePage = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(1);
+  const [pageSize, setPageSize] = useState(2);
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState("");
   const [sortQuery, setSortQuery] = useState("sort=updatedAt,desc");
@@ -25,7 +25,7 @@ const HomePage = (props) => {
 
   useEffect(() => {
     fetchJob();
-  }, [current, pageSize, filter, sortQuery, location, ]);
+  }, [current, pageSize, filter, sortQuery, location]);
 
   const fetchJob = async () => {
     setIsLoading(true);
