@@ -11,7 +11,7 @@ function CompanyCard({ company }) {
     }
   };
   return (
-    <div className="mt-10 mb-10 w-full sm:w-[200px] md:w-[200px] lg:w-[300px] bg-white rounded shadow-md h-[320px] transition-all duration-300 hover:shadow-lg  cursor-pointer">
+    <div className="mt-10 mb-10 w-full sm:w-[200px] md:w-[200px] lg:w-[250px] bg-white rounded shadow-md h-[320px] transition-all duration-300 hover:shadow-lg  cursor-pointer">
       <div className="relative">
         <img
           src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${

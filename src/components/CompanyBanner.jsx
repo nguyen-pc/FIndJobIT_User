@@ -84,7 +84,7 @@ function CompanyBanner({ company }) {
             company?.banner
           }`}
           alt=""
-          className="imageCompany"
+          className="imageCompany h-[300px] mb-10"
         />
         {/* <img
           src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
