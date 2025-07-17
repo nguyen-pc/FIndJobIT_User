@@ -72,8 +72,8 @@ function CompanyDetails() {
       {jobOfCompany && jobOfCompany.length > 0 ? (
         <JobListCard title="Tuyển dụng" jobs={jobOfCompany} />
       ) : (
-        <div className="no-jobs-message">
-          <p>Hiện tại công ty chưa có công việc nào được đăng tuyển.</p>
+        <div className="">
+          <p className="ml-3">Hiện tại công ty chưa có công việc nào được đăng tuyển.</p>
         </div>
       )}
       <Footer />

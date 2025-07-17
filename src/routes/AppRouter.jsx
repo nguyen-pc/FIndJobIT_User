@@ -66,6 +66,9 @@ import EmployerEditJob from "../pages/employer/job/EditJob.jsx";
 import EmployerCVManagement from "../pages/employer/cv/CVManagement.jsx";
 import ResumeManagement from "../pages/admin/resume/ResumeManagement.jsx";
 import SearchJobPage from "../pages/SearchJobPage.jsx";
+import QuestionManagement from "../pages/admin/question-interview/QuestionManagement.jsx";
+import AddQuestion from "../pages/admin/question-interview/AddQuestion.jsx";
+import EditQuestion from "../pages/admin/question-interview/EditQuestion.jsx";
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -86,7 +89,7 @@ export default function AppRouter() {
         <Route path="/company_follow" element={<CompanyFollowPage />} />
         <Route path="/company_list" element={<CompanyList />} />
         <Route path="/recommend-job" element={<RecommendJob />} />
-        <Route  path="search_job" element={<SearchJobPage />}/>
+        <Route path="search_job" element={<SearchJobPage />} />
         {/* route admin */}
         <Route path="/admin/*" element={<HomeAdmin />}>
           <Route path="dashboard" element={<Dashboard />} />
@@ -108,6 +111,10 @@ export default function AppRouter() {
           <Route path="skillManagement" element={<SkillManagement />} />
           <Route path="editSkill/:id" element={<EditSkill />} />
           <Route path="addSkill" element={<AddSkill />} />
+
+          <Route path="questionManagement" element={<QuestionManagement />} />
+          <Route path="question/:id" element={<EditQuestion />} />
+          <Route path="addQuestion" element={<AddQuestion />} />
 
           <Route
             path="permissionManagement"

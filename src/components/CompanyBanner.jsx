@@ -17,14 +17,11 @@ import {
 } from "../config/api";
 
 function CompanyBanner({ company }) {
+  console.log("company", company);
   if (!company) {
     return <div>Loading company details...</div>;
   }
   // console.log("company", company.name);
-  const [nameCompany, setNameCompany] = useState(
-    "Công ty cổ phần viễn thông FPT"
-  );
-  const [companyStaff, setCompanyStaff] = useState(0);
 
   const [follower, setFollower] = useState(false); // Có thể dùng state này để tăng số lượng người theo dõi
   const [isFollowing, setIsFollowing] = useState(false); // Trạng thái mới: theo dõi hay chưa

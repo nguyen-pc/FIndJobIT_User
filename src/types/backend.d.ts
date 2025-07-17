@@ -179,3 +179,24 @@ export interface FollowCompany {
   companyId: number;
   userId: number;
 }
+
+export interface IPosition {
+  idPosition: number;
+  positionName: string;
+  createdAt: string;
+  updatedAt: string | null;
+  createdBy: string;
+  updatedBy: string | null;
+}
+
+export interface IInterview {
+  idQuestion: number;
+  questionName: string;
+  answer: string;
+  createdAt: string;
+  updatedAt: string | null;
+  createdBy: string;
+  updatedBy: string | null;
+  skill: ISkill;
+  position: IPosition;
+}

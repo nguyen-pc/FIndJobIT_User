@@ -259,6 +259,20 @@ const Header = () => {
           <option value="events">Sự kiện</option>
         </select> */}
       </ListItem>
+      <ListItem>
+        <div className="">
+          <input
+            className="w-60 p-1 focus:outline-none text-[13px] border rounded"
+            type="text"
+            placeholder="Tìm kiếm theo công việc, công ty..."
+            value={searchParams.name}
+            onChange={handleSearchChange}
+          />
+          <button className="ml-2" onClick={handleSearch}>
+            🔍
+          </button>
+        </div>
+      </ListItem>
     </List>
   );
 
@@ -310,9 +324,10 @@ const Header = () => {
             defaultValue=""
           >
             <option value="" disabled>
-              Sự kiện
+              Công cụ
             </option>
-            <option value="events">Sự kiện</option>
+            <option value="events">Câu hỏi phỏng vấn</option>
+            <option value="events">Blog IT</option>
           </select>
         </nav>
 

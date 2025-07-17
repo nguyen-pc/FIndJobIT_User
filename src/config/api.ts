@@ -1,6 +1,8 @@
 import {
   IBackendRes,
+  type IInterview,
   type IPermission,
+  type IPosition,
   type IRole,
 } from "./../types/backend.d";
 import {
@@ -459,4 +461,36 @@ export const callFetchRole = (query: string) => {
   return axios.get<IBackendRes<IModelPaginate<IRole>>>(
     `/api/v1/roles?${query}`
   );
+};
+
+// Question Interview
+export const callFetchAllQuestion = (query: string) => {
+  return axios.get<IBackendRes<IModelPaginate<IInterview>>>(
+    `/api/v1/questions/all?${query}`
+  );
+};
+
+export const callFetchQuestionById = (id: string) => {
+  return axios.get<IBackendRes<IInterview>>(`/api/v1/questions/${id}`);
+};
+
+export const callFetchAllPosition = (query: string) => {
+  return axios.get<IBackendRes<IModelPaginate<IPosition>>>(
+    `/api/v1/positions?${query}`
+  );
+};
+
+export const callDeleteQuestion = (id: string) => {
+  return axios.delete<IBackendRes<IInterview>>(`/api/v1/questions/${id}`);
+};
+
+export const callCreateQuestion = (question: any) => {
+  return axios.post<IBackendRes<any>>("/api/v1/questions", {
+    ...question,
+  });
+};
+export const callUpdateQuestion = (question: any) => {
+  return axios.put<IBackendRes<any>>("/api/v1/questions", {
+    ...question,
+  });
 };
