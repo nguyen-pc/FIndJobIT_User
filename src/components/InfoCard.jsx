@@ -80,7 +80,7 @@ function InfoCard({ company }) {
   // };
 
   return (
-    <div className="bg-white/100 p-4 shadow-lg rounded w-[300px] h-[350px] relative ">
+    <div className="bg-white/100 p-4 shadow-lg rounded w-[300px] h-[350px] relative cursor-pointer ">
       {/* Logo và nội dung */}
       <img
         src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${

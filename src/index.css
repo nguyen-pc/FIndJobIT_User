@@ -349,7 +349,6 @@ header {
 
 .nav-menu {
     display: flex;
-    gap: 25px;
     /* Khoảng cách giữa các mục menu */
     align-items: center;
     flex-wrap: wrap;
@@ -366,17 +365,17 @@ header {
     /* Nền trong suốt */
     border: none;
     /* Không có viền */
-    padding: 8px 0px;
+    padding: 0px;
     /* Padding cho mục chọn */
     color: black;
     font-weight: 500;
-    font-size: 10px;
+    font-size: 2px;
     cursor: pointer;
     outline: none;
     /* Bỏ outline khi focus */
     position: relative;
-    /* Dùng cho mũi tên tùy chỉnh */
-    padding-right: 20px;
+
+ 
     /* Khoảng trống cho mũi tên tùy chỉnh */
 }
 
@@ -819,16 +818,17 @@ header {
     -moz-appearance: none;
     background-color: #e6f3fa;
     border: 1px solid #b2d8e8;
-    padding: 10px 25px;
+    padding: 0px;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 8px;
     color: #090a0a;
     cursor: pointer;
     outline: none;
     transition: all 0.3s ease;
     position: relative;
-    padding-right: 40px;
-    min-width: 120px;
+    padding-right: 0px;
+    min-width: auto;
+    margin-right: 30px;
     text-align: center;
 }
 
@@ -1111,7 +1111,7 @@ footer {
     }
 
     .filter-select {
-        width: 80%;
+        width: 60%;
         /* Chiếm nhiều chiều rộng hơn */
         max-width: 300px;
 
@@ -3336,7 +3336,7 @@ header {
 
 .nav-menu {
     display: flex;
-    gap: 25px;
+    gap: 5px;
     /* Khoảng cách giữa các mục menu */
     align-items: center;
     flex-wrap: wrap;
@@ -3353,17 +3353,18 @@ header {
     /* Nền trong suốt */
     border: none;
     /* Không có viền */
-    padding: 8px 0px;
+    padding: 0px 0px;
     /* Padding cho mục chọn */
     color: #070707;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 13px;
     cursor: pointer;
     outline: none;
     /* Bỏ outline khi focus */
     position: relative;
     /* Dùng cho mũi tên tùy chỉnh */
-    padding-right: 20px;
+    padding-right: 0px;
+    
     /* Khoảng trống cho mũi tên tùy chỉnh */
 }
 
@@ -3799,7 +3800,7 @@ footer {
     .nav-menu {
         justify-content: center;
         /* Căn giữa menu trên màn hình nhỏ */
-        gap: 15px;
+        gap: 5px;
     }
 
     .logo {
@@ -6708,4 +6709,32 @@ footer {
     font-weight: 400;
     color: #1ca8c9;
     font-size: 16px;
+}
+.search_input {
+    position: relative;
+    background-image: url(./assets/nen2.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    margin-left: -68px;
+    height: 30vw;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.search_input::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(255, 255, 255, 0) 10%,
+            rgba(255, 255, 255, 0) 50%,
+            rgba(255, 255, 255, 1) 100%);
 }

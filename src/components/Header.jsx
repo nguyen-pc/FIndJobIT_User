@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LOCATION_LIST } from "../config/utils";
-import { callFetchAllSkill, callLogout } from "../config/api";
-import { notification, Select } from "antd";
+import { Link, useNavigate } from "react-router-dom"; // Bỏ useLocation vì không cần thiết cho search
+import { callLogout } from "../config/api"; // Bỏ callFetchAllSkill, LOCATION_LIST
+import { notification } from "antd"; // Bỏ Select
 import profile from "../assets/profile 1.png";
 import job from "../assets/job.png";
 import CV from "../assets/cv.png";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setLogoutAction } from "../redux/slice/accountSlide";
 import Button from "@mui/material/Button";
-import queryString from "query-string";
-import { sfIn } from "spring-filter-query-builder";
+// Bỏ queryString, sfIn
 import {
   Box,
   Drawer,
@@ -23,35 +21,28 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-const { Option = Select.Option } = Select;
-
 const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  // Bỏ useLocation
   const dispatch = useAppDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
-  const optionsLocation = LOCATION_LIST;
-  const [optionsSkills, setOptionsSkills] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState([]);
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const [searchOpacity, setSearchOpacity] = useState(1);
-  const [headerHeight, setHeaderHeight] = useState(250);
-  const [searchParams, setSearchParams] = useState({
-    name: "",
-    salary: "",
-    level: [],
-    current: 1,
-    pageSize: 15,
-  });
+
+  const [quickSearchTerm, setQuickSearchTerm] = useState("");
+
+  const handleQuickSearchKeyDown = (e) => {
+    if (e.key === "Enter") {
+      navigate(`/job_list?name=${encodeURIComponent(quickSearchTerm)}`);
+    }
+  };
+
+  // Bỏ optionsLocation, optionsSkills, selectedLocation, selectedSkills, searchOpacity, headerHeight, searchParams
 
   const [showJobManagementDropdown, setShowJobManagementDropdown] =
-    useState(false); // Trạng thái hiển thị menu con quản lý việc làm
-  const [showUserDropdown, setShowUserDropdown] = useState(false); // Trạng thái hiển thị menu chính của người dùng
-
-  // Thêm trạng thái cho menu con của Quản lý CV và Cá nhân & Bảo mật
+    useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [showCvManagementDropdown, setShowCvManagementDropdown] =
     useState(false);
   const [showSecurityDropdown, setShowSecurityDropdown] = useState(false);
@@ -60,13 +51,11 @@ const Header = () => {
     (state) => state.account.isAuthenticated
   );
   const user = useAppSelector((state) => state.account.user);
-  // console.log("user", user);
 
-  // Hàm xử lý khi chọn từ các dropdown filter trên thanh điều hướng
   const handleSelectChange = (e) => {
     const value = e.target.value;
     if (value === "jobs" || value === "featured-jobs") {
-      navigate("/job-list"); // Điều hướng đến trang danh sách công việc mới
+      navigate("/job-list");
     } else if (value) {
       const section = document.getElementById(value);
       if (section) {
@@ -88,135 +77,17 @@ const Header = () => {
     const res = await callLogout();
     if (res && res && +res.statusCode === 200) {
       dispatch(setLogoutAction({}));
-      // message.success("Đăng xuất thành công");
+      notification.success({
+        message: "Đăng xuất thành công",
+      });
       navigate("/");
     }
   };
 
-  // Fetch danh sách skill từ backend
-  useEffect(() => {
-    const fetchSkill = async () => {
-      let query = `page=1&size=100&sort=createdAt,desc`;
-      const res = await callFetchAllSkill(query);
-      if (res && res.data) {
-        const arr =
-          res.data.result?.map((item) => ({
-            label: item.name,
-            value: item.id + "",
-          })) || [];
-        setOptionsSkills(arr);
-      }
-    };
-    fetchSkill();
-  }, []);
+  // Bỏ useEffect để fetch skill và useEffect lắng nghe scroll (vì không còn search bar)
 
-  // Lắng nghe scroll để thay đổi opacity header search và chiều cao header
-  useEffect(() => {
-    const handleScroll = () => {
-      const threshold = 100;
-      const fadeDistance = 150;
-      const initialHeaderHeight = 250;
-      const minHeaderHeight = 80;
-      const scrollY = window.scrollY;
-      let newOpacity = 1;
-      if (scrollY > threshold) {
-        newOpacity = Math.max(0, 1 - (scrollY - threshold) / fadeDistance);
-      }
-      setSearchOpacity(newOpacity);
-      let newHeight = initialHeaderHeight;
-      if (scrollY > threshold) {
-        newHeight = Math.max(
-          minHeaderHeight,
-          initialHeaderHeight - (scrollY - threshold) * 0.5
-        );
-      }
-      setHeaderHeight(newHeight);
-    };
+  // Bỏ handleClearFilters, onFinish, handleSearchChange, buildQuery, handleSearch
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const handleClearFilters = () => {
-    setSelectedLocation([]);
-    setSelectedSkills([]);
-  };
-
-  // Hàm onFinish nhận query được build từ các lựa chọn
-  const onFinish = (query) => {
-    if (!query) {
-      notification.error({
-        message: "Có lỗi xảy ra",
-        description: "Vui lòng chọn tiêu chí để search",
-      });
-      return;
-    }
-    navigate(`/search_job?${query}`);
-  };
-  const handleSearchChange = (e) => {
-    setSearchParams({ ...searchParams, name: e.target.value });
-  };
-
-  const buildQuery = (params, sort, filter) => {
-    // if (searchParams.name === "") {
-    //   return "";
-    // }
-    const clone = { ...params };
-    let parts = [];
-    if (clone.name) parts.push(`name ~ '${clone.name}'`);
-    if (clone.salary) parts.push(`salary ~ '${clone.salary}'`);
-    if (clone.level && clone.level.length > 0) {
-      parts.push(sfIn("level", clone.level));
-    }
-
-    clone.filter = parts.join(" and ");
-    if (!clone.filter) delete clone.filter;
-
-    // Chuyển đổi phân trang: current => page, pageSize => size
-    clone.page = clone.current;
-    clone.size = clone.pageSize;
-    delete clone.current;
-    delete clone.pageSize;
-    delete clone.name;
-    delete clone.salary;
-    delete clone.level;
-    let temp = queryString.stringify(clone);
-
-    let sortBy = "";
-    const fields = ["name", "salary", "createdAt", "updatedAt"];
-    if (sort) {
-      for (const field of fields) {
-        if (sort[field]) {
-          sortBy = `sort=${field},${sort[field] === "ascend" ? "asc" : "desc"}`;
-          break; // Nếu chỉ xử lý 1 trường sắp xếp, loại bỏ break nếu cần nhiều trường
-        }
-      }
-    }
-
-    if (!sortBy) {
-      temp = `${temp}&sort=updatedAt,desc`;
-    } else {
-      temp = `${temp}&${sortBy}`;
-    }
-    console.log("Base query:", temp);
-    return temp;
-  };
-
-  // Xây dựng query và truyền cho onFinish khi click search button
-  const handleSearch = () => {
-    const baseQuery = buildQuery(searchParams, {}, null);
-    let extraQuery = "";
-    if (selectedLocation.length) {
-      extraQuery += `&location=${selectedLocation.join(",")}`;
-    }
-    if (selectedSkills.length) {
-      extraQuery += `&skills=${selectedSkills.join(",")}`;
-    }
-    const finalQuery = baseQuery + extraQuery;
-    onFinish(finalQuery);
-  };
-
-  // Các mục navigation dùng chung
   const navItems = (
     <List>
       <ListItem
@@ -248,16 +119,6 @@ const Header = () => {
       </ListItem>
       <ListItem>
         <ListItemText primary="Công cụ" />
-        {/* <select
-          className="filter-select"
-          onChange={handleSelectChange}
-          defaultValue=""
-        >
-          <option value="" disabled>
-            Sự kiện
-          </option>
-          <option value="events">Sự kiện</option>
-        </select> */}
       </ListItem>
     </List>
   );
@@ -265,31 +126,31 @@ const Header = () => {
   return (
     <header
       className="header"
-      style={{
-        height: `${headerHeight}px`,
-        transition: "height 0.3s ease",
-        overflow: "visible", // Quan trọng để dropdown không bị cắt
-      }}
+      // Loại bỏ style height và transition liên quan đến search bar
+      style={{ overflow: "visible" }}
     >
-      <div className="header-top flex flex-row items-center justify-between">
-        <Link to="/" className="logo">
-          NextDev
-        </Link>
-        {/* <div className=" ml-10  w-60 rounded   text-center pt-1 h-10 border text-sm">
+      <div className="header-top flex flex-wrap items-center justify-between  ">
+        <div className="flex items-center gap-2">
+          <Link to="/" className="logo text-2xl font-bold text-[#1C9EAF]">
+            NextDev
+          </Link>
+
+          {/* Thanh tìm kiếm nhỏ cạnh logo */}
           <input
             type="text"
-            placeholder="Tìm kiếm theo công việc, công ty..."
-            className="w-60 p-1  focus:outline-none text-[13px]"
+            placeholder="Tìm công việc..."
+            value={quickSearchTerm}
+            onChange={(e) => setQuickSearchTerm(e.target.value)}
+            onKeyDown={handleQuickSearchKeyDown}
+            className="hidden sm:block px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] w-70"
           />
-        </div> */}
+        </div>
 
-        {/* Các phần Navigation khác */}
         <nav className="nav-menu md:block! hidden!">
           <button
             onClick={() => navigate("/job_list")}
             className="filter-select"
           >
-            {" "}
             Việc làm HOT
           </button>
           <button
@@ -326,18 +187,15 @@ const Header = () => {
             )}
             <div
               className="user-menu-container"
-              onMouseEnter={() => setShowUserDropdown(true)} // Khi chuột vào container
-              onMouseLeave={() => setShowUserDropdown(false)} // Khi chuột rời container
+              onMouseEnter={() => setShowUserDropdown(true)}
+              onMouseLeave={() => setShowUserDropdown(false)}
             >
               <button className="user-button">
-                {" "}
-                {/* Không có onClick ở đây nữa */}
                 <span className="user-icon">👤</span> {user.name}
               </button>
 
-              {showUserDropdown && ( // Hiển thị menu chính của người dùng nếu showUserDropdown là true
+              {showUserDropdown && (
                 <div className="user-dropdown">
-                  {/* Header của dropdown người dùng */}
                   <div className="dropdown-header">
                     <img
                       className="dropdown-avatar"
@@ -351,12 +209,10 @@ const Header = () => {
                     </div>
                   </div>
 
-                  {/* Mục cha "Quản lý việc làm" với mũi tên */}
                   <div
                     className="dropdown-item job-management-item"
                     onClick={(e) => {
-                      // Sử dụng onClick để mở/đóng menu con
-                      e.stopPropagation(); // Ngăn chặn đóng menu chính khi nhấp vào mục này
+                      e.stopPropagation();
                       setShowJobManagementDropdown(!showJobManagementDropdown);
                     }}
                   >
@@ -421,7 +277,6 @@ const Header = () => {
                     )}
                   </div>
 
-                  {/* Mục cha "Quản lý CV" với mũi tên */}
                   <div
                     className="dropdown-item cv-management-item"
                     onClick={(e) => {
@@ -481,7 +336,6 @@ const Header = () => {
                     )}
                   </div>
 
-                  {/* Mục cha "Cá nhân và bảo mật" với mũi tên */}
                   <div
                     className="dropdown-item security-item"
                     onClick={(e) => {
@@ -563,76 +417,16 @@ const Header = () => {
               onClick={() => navigate("/signin")}
               className="p-2 rounded bg-[#1C9EAF] text-white :hover:bg-[#1C9EAF]/90 "
             >
-              {" "}
               Đăng nhập
             </button>
           </div>
         )}
-        {/* Mobile Navigation: IconButton mở Drawer */}
         {(isMobile || isTablet) && (
           <IconButton onClick={() => setDrawerOpen(true)}>
             <MenuIcon />
           </IconButton>
         )}
-
-        {/* Container cho menu người dùng và dropdown của nó */}
       </div>
-      {/* Phần header search */}
-      <div
-        className="header-search hidden! lg:block!"
-        style={{ opacity: searchOpacity, transition: "opacity 0.3s ease" }}
-      >
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Tìm kiếm theo công việc, công ty..."
-            value={searchParams.name}
-            onChange={handleSearchChange}
-          />
-          <button className="search-button" onClick={handleSearch}>
-            🔍
-          </button>
-        </div>
-        <div
-          className="filters mt-2"
-          style={{ display: "flex", gap: "1rem", alignItems: "center" }}
-        >
-          {/* Select đa lựa chọn cho Địa điểm */}
-          <Select
-            mode="multiple"
-            allowClear
-            placeholder="Chọn Địa điểm"
-            style={{ minWidth: 200 }}
-            value={selectedLocation}
-            onChange={(value) => setSelectedLocation(value)}
-          >
-            {optionsLocation.map((loc) => (
-              <Option key={loc.value} value={loc.value}>
-                {loc.label}
-              </Option>
-            ))}
-          </Select>
-          {/* Select đa lựa chọn cho Kỹ năng */}
-          <Select
-            mode="multiple"
-            allowClear
-            placeholder="Chọn Kỹ năng"
-            style={{ minWidth: 200 }}
-            value={selectedSkills}
-            onChange={(value) => setSelectedSkills(value)}
-          >
-            {optionsSkills.map((skill) => (
-              <Option key={skill.value} value={skill.value}>
-                {skill.label}
-              </Option>
-            ))}
-          </Select>
-          <button className="filter-clear-button" onClick={handleClearFilters}>
-            Xóa bộ lọc
-          </button>
-        </div>
-      </div>
-      {/* Drawer cho Mobile Navigation */}
       <Drawer
         anchor="left"
         open={drawerOpen}

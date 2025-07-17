@@ -6,7 +6,12 @@ import banner from "../assets/background2.png";
 import { SearchOutlined } from "@ant-design/icons";
 import { Input, Pagination } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleRight,
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
@@ -90,26 +95,6 @@ function CompanyList() {
     ));
   };
 
-  // const handleSearch = () => {
-  //   setCurrentPage(1);
-  //   setSearchQuery(searchTerm);
-  // };
-
-  // const handleKeyDown = (e) => {
-  //   if (e.key === "Enter") handleSearch();
-  // };
-  // const handleWatchMore = (e) => {};
-  // const filteredCompanies = companies.filter((c) =>
-  //   c.title.toLowerCase().includes(searchQuery.toLowerCase())
-  // );
-
-  // const indexOfLastCompany = currentPage * companiesPerPage;
-  // const indexOfFirstCompany = indexOfLastCompany - companiesPerPage;
-  // const currentCompanies = filteredCompanies.slice(
-  //   indexOfFirstCompany,
-  //   indexOfLastCompany
-  // );
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -145,13 +130,54 @@ function CompanyList() {
               </div>
               {filteredCompanies.length > companiesPerPage && (
                 <div className="pagination-container flex justify-center mt-8 mb-8">
-                  <Pagination
-                    current={currentPage}
-                    pageSize={companiesPerPage}
-                    total={filteredCompanies.length}
-                    onChange={handlePageChange}
-                    showSizeChanger={false}
-                  />
+                  {total > pageSize && (
+                    <div className="pagination flex gap-2 items-center text-blue-600">
+                      {/* Nút trang trước */}
+                      {current > 1 ? (
+                        <span
+                          onClick={() =>
+                            handleOnchangePage({
+                              current: current - 1,
+                              pageSize,
+                            })
+                          }
+                          className="cursor-pointer hover:text-blue-800"
+                        >
+                          <FontAwesomeIcon icon={faChevronLeft} />
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">
+                          <FontAwesomeIcon icon={faChevronLeft} />
+                        </span>
+                      )}
+
+                      {/* Hiển thị số trang */}
+                      {renderPageNumbers(
+                        totalCompanyPages,
+                        current,
+                        handleOnchangePage
+                      )}
+
+                      {/* Nút trang sau */}
+                      {current < totalCompanyPages ? (
+                        <span
+                          onClick={() =>
+                            handleOnchangePage({
+                              current: current + 1,
+                              pageSize,
+                            })
+                          }
+                          className="cursor-pointer hover:text-blue-800"
+                        >
+                          <FontAwesomeIcon icon={faChevronRight} />
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">
+                          <FontAwesomeIcon icon={faChevronRight} />
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </>
@@ -161,56 +187,6 @@ function CompanyList() {
         </div>
       ) : (
         <>
-          {/* CÔNG TY NỔI BẬT */}
-          {/* <div className="HotCompany ml-20 " style={{ padding: "0px " }}>
-            <div className="mt-10  flex ">
-              <p
-                className="text-2xl font-semibold "
-                style={{ color: "#1C9EAF" }}
-              >
-                DANH SÁCH CÔNG TY NỔI BẬT
-              </p>
-              <div className="rounded-full border md:w-auto h-[30px] pl-2.5 ml-[10px]">
-                <div
-                  className="width-30 cursor-pointer hover:text-[#1C9EAF] duration-300"
-                  onClick={() => navigate("/")}
-                >
-                  <span className=" text-xs mr-2 ">Xem thêm</span>
-                  <FontAwesomeIcon
-                    icon={faAngleRight}
-                    className="text-xs mr-2 "
-                  />
-                </div>
-              </div>
-            </div>
-            <div className=" flex mb-20">
-              <div className="w-full h-[400px] flex relative ">
-                {companies.slice(0, 4).map((c, i) => (
-                  <div
-                    key={i}
-                    className="relative mr-9"
-                    onMouseEnter={() => setHoveredHotIndex(i)}
-                    onMouseLeave={() => setHoveredHotIndex(null)}
-                  >
-                    <CompanyCard company={c} />
-                    <div
-                      className={`
-        absolute top-3 -left-16 mt-2 z-50 transition-all duration-900
-        ${
-          hoveredHotIndex === i
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-2 pointer-events-none"
-        }
-      `}
-                    >
-                      <InfoCard company={c} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div> */}
-
           {/* CÔNG TY ĐƯỢC YÊU THÍCH */}
 
           <div className="HotCompany ml-20 o" style={{ padding: "0px " }}>
@@ -282,36 +258,44 @@ function CompanyList() {
               </div>
               <div className="pagination-container flex justify-center mt-8 mb-8">
                 {total > pageSize && (
-                  <div className="pagination">
+                  <div className="pagination flex gap-2 items-center text-blue-600">
                     {/* Nút trang trước */}
                     {current > 1 ? (
                       <span
                         onClick={() =>
                           handleOnchangePage({ current: current - 1, pageSize })
                         }
+                        className="cursor-pointer hover:text-blue-800"
                       >
-                        ⬅️
+                        <FontAwesomeIcon icon={faChevronLeft} />
                       </span>
                     ) : (
-                      <span className="disabled">⬅️</span>
+                      <span className="text-gray-400">
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                      </span>
                     )}
+
                     {/* Hiển thị số trang */}
                     {renderPageNumbers(
                       totalCompanyPages,
                       current,
                       handleOnchangePage
                     )}
+
                     {/* Nút trang sau */}
                     {current < totalCompanyPages ? (
                       <span
                         onClick={() =>
                           handleOnchangePage({ current: current + 1, pageSize })
                         }
+                        className="cursor-pointer hover:text-blue-800"
                       >
-                        ➡️
+                        <FontAwesomeIcon icon={faChevronRight} />
                       </span>
                     ) : (
-                      <span className="disabled">➡️</span>
+                      <span className="text-gray-400">
+                        <FontAwesomeIcon icon={faChevronRight} />
+                      </span>
                     )}
                   </div>
                 )}
