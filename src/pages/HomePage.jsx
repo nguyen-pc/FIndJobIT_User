@@ -49,7 +49,7 @@ const HomePage = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(4);
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState("");
   const [sortQuery, setSortQuery] = useState("sort=updatedAt,desc");
@@ -239,93 +239,93 @@ const HomePage = (props) => {
   return (
     <div className="homepage-wrapper">
       <Header />
+      <div className="search_input ">
+        <div className="search-section my-12 px-4">
+          <div className="text-3xl md:text-4xl font-bold text-center text-white  mb-8">
+            Tìm kiếm công việc mơ ước của bạn
+          </div>
 
-      <main className="main-content">
-        {/* ======== THANH TÌM KIẾM ======== */}
-        <div className="search_input ">
-          <div className="search-section my-12 px-4">
-            <div className="text-3xl md:text-4xl font-bold text-center text-white  mb-8">
-              Tìm kiếm công việc mơ ước của bạn
-            </div>
-
-            <div className=" p-6 rounded-xl shadow-lg max-w-screen-lg mx-auto">
-              <div className=" flex flex-wrap gap-4 justify-between">
-                {/* Ô nhập nội dung tìm kiếm */}
-                <input
-                  type="text"
-                  placeholder="Tìm kiếm theo công việc, công ty..."
-                  value={searchParams.name}
-                  onChange={handleSearchChange}
-                  className="flex-1 bg-white ml-3 min-w-[720px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1C9EAF]"
-                />
-                {/* Nút Tìm kiếm */}
-                <button
-                  className="bg-[#1C9EAF] rounded text-white px-4 py-2 rounded-lg hover:bg-[#1C9EAF]/90 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] flex items-center justify-center gap-2"
-                  onClick={handleSearch}
+          <div className=" p-6 rounded-xl shadow-lg max-w-screen-lg mx-auto">
+            <div className=" flex flex-wrap gap-4 justify-between">
+              {/* Ô nhập nội dung tìm kiếm */}
+              <input
+                type="text"
+                placeholder="Tìm kiếm theo công việc, công ty..."
+                value={searchParams.name}
+                onChange={handleSearchChange}
+                className="flex-1 bg-white ml-3 min-w-[720px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1C9EAF]"
+              />
+              {/* Nút Tìm kiếm */}
+              <button
+                className="bg-[#1C9EAF] rounded text-white px-4 py-2 rounded-lg hover:bg-[#1C9EAF]/90 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] flex items-center justify-center gap-2"
+                onClick={handleSearch}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Tìm kiếm
-                </button>
-                {/* Lọc địa điểm */}
-                <div className="min-w-[250px] flex-1">
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    placeholder="Địa điểm"
-                    style={{ width: "100%" }}
-                    value={selectedLocation}
-                    onChange={(value) => setSelectedLocation(value)}
-                    className="custom-select"
-                  >
-                    {optionsLocation.map((loc) => (
-                      <Option key={loc.value} value={loc.value}>
-                        {loc.label}
-                      </Option>
-                    ))}
-                  </Select>
-                </div>
-
-                {/* Lọc kỹ năng */}
-                <div className="min-w-[200px] flex-1">
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    placeholder="Kỹ năng"
-                    style={{ width: "100%" }}
-                    value={selectedSkills}
-                    onChange={(value) => setSelectedSkills(value)}
-                    className="custom-select"
-                  >
-                    {optionsSkills.map((skill) => (
-                      <Option key={skill.value} value={skill.value}>
-                        {skill.label}
-                      </Option>
-                    ))}
-                  </Select>
-                </div>
-
-                {/* Nút Xóa bộ lọc */}
-                <button
-                  className=" rounded bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                  onClick={handleClearFilters}
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Tìm kiếm
+              </button>
+              {/* Lọc địa điểm */}
+              <div className="min-w-[250px] flex-1">
+                <Select
+                  mode="multiple"
+                  allowClear
+                  placeholder="Địa điểm"
+                  style={{ width: "100%" }}
+                  value={selectedLocation}
+                  onChange={(value) => setSelectedLocation(value)}
+                  className="custom-select"
                 >
-                  Xóa lọc
-                </button>
+                  {optionsLocation.map((loc) => (
+                    <Option key={loc.value} value={loc.value}>
+                      {loc.label}
+                    </Option>
+                  ))}
+                </Select>
               </div>
+
+              {/* Lọc kỹ năng */}
+              <div className="min-w-[200px] flex-1">
+                <Select
+                  mode="multiple"
+                  allowClear
+                  placeholder="Kỹ năng"
+                  style={{ width: "100%" }}
+                  value={selectedSkills}
+                  onChange={(value) => setSelectedSkills(value)}
+                  className="custom-select"
+                >
+                  {optionsSkills.map((skill) => (
+                    <Option key={skill.value} value={skill.value}>
+                      {skill.label}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+
+              {/* Nút Xóa bộ lọc */}
+              <button
+                className=" rounded bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                onClick={handleClearFilters}
+              >
+                Xóa lọc
+              </button>
             </div>
           </div>
         </div>
+      </div>
+
+      <main className="main-content">
+        {/* ======== THANH TÌM KIẾM ======== */}
 
         {/* slide */}
         <div className="mt-10  ml-10" style={{ background: "" }}>
@@ -398,43 +398,43 @@ const HomePage = (props) => {
         </div>
 
         {/* -------- Featured Jobs -------- */}
-        <h2 className=" text-center text-[#1C9EAF] text-[28px] my-10">
-          {" "}
-          {/* Thêm my-10 để tạo khoảng cách */}
-          Việc làm nổi bật
-        </h2>
-        <CardJob displayJob={displayJob} isLoading={isLoading} />
-        {total > pageSize && (
-          <div className="pagination">
-            {current > 1 ? (
-              <span
-                onClick={() =>
-                  handleOnchangePage({ current: current - 1, pageSize })
-                }
-              >
-                <FontAwesomeIcon icon={faArrowLeft} />
-              </span>
-            ) : (
-              <span className="disabled">
-                <FontAwesomeIcon icon={faArrowLeft} />
-              </span>
-            )}
+        <div className="ml-12">
+          <p className="text-2xl font-semibold " style={{ color: "#1C9EAF" }}>
+            Việc làm nổi bật
+          </p>
+          <CardJob displayJob={displayJob} isLoading={isLoading} />
+          {total > pageSize && (
+            <div className="pagination">
+              {current > 1 ? (
+                <span
+                  onClick={() =>
+                    handleOnchangePage({ current: current - 1, pageSize })
+                  }
+                >
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                </span>
+              ) : (
+                <span className="disabled">
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                </span>
+              )}
 
-            {current < totalJobPages ? (
-              <span
-                onClick={() =>
-                  handleOnchangePage({ current: current + 1, pageSize })
-                }
-              >
-                <FontAwesomeIcon icon={faArrowRight} />
-              </span>
-            ) : (
-              <span className="disabled">
-                <FontAwesomeIcon icon={faArrowRight} />
-              </span>
-            )}
-          </div>
-        )}
+              {current < totalJobPages ? (
+                <span
+                  onClick={() =>
+                    handleOnchangePage({ current: current + 1, pageSize })
+                  }
+                >
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </span>
+              ) : (
+                <span className="disabled">
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </span>
+              )}
+            </div>
+          )}
+        </div>
       </main>
 
       <Footer />
