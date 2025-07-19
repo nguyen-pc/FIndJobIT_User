@@ -52,8 +52,7 @@ const HotJobs = (props) => {
     autoplaySpeed: 1000, // ← Thời gian giữa mỗi lần chuyển (ms)
     className: "myCustomCarousel",
   };
-  const { showPagination = false } = props;
-
+  const { showHeader = true, showPagination = false } = props;
   // displayJob sẽ lưu trữ MỘT đối tượng job duy nhất, không phải mảng
   const [displayJob, setDisplayJob] = useState(null);
   const [displayCompanyLikest, setDisplayCompanyLikest] = useState([]);
@@ -256,7 +255,7 @@ const HotJobs = (props) => {
 
   return (
     <div className="homepage-wrapper">
-      <Header />
+      {showHeader && <Header />}
       <div
         className="search_input2 text-white bg-cover bg-center relative"
         style={{

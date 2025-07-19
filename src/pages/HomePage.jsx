@@ -6,6 +6,7 @@ import CompanyCard from "../components/CompanyCard"; // Import CompanyCard
 import InfoCard from "../components/InfoCard"; // Import InfoCard nếu bạn muốn hover effect
 import CardJob from "../components/card/CardJob";
 import CardCompany from "../components/card/CardCompany";
+import HotJobs from "../pages/HotJobs";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -396,7 +397,9 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
-
+        <div className="-ml-15">
+          <HotJobs showHeader={false} />
+        </div>
         {/* -------- Featured Jobs -------- */}
         <div className="ml-12">
           <p className="text-2xl font-semibold " style={{ color: "#1C9EAF" }}>

@@ -5,8 +5,7 @@ const CompanyContact = ({ title, address, mapImage, onClickMap }) => {
     address
   )}&output=embed`;
   return (
-    <div className="contact-card">
-      <div className="contact-header">{title}</div>
+    <div className="w-[400px] bg-white">
       <div className="contact-body">
         <div className="contact-address">
           <span className="dot-icon">📍</span> {address}

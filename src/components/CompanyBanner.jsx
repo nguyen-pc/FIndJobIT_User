@@ -87,7 +87,7 @@ function CompanyBanner({ company }) {
             company?.banner
           }`}
           alt=""
-          className="imageCompany h-[300px] mb-10"
+          className="imageCompany h-[300px] mb-10 object-cover"
         />
         {/* <img
           src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
@@ -96,32 +96,17 @@ function CompanyBanner({ company }) {
           alt=""
           className="imageBackground"
         /> */}
-        <div className="logo_company">
+        <div className="absolute top-25 z-50 bg-white rounded p-3 left-20  ">
           <img
             src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
               company?.logo
             }`}
             alt=""
-            className="img_logo_company"
+            className="w-[150px]"
           />
         </div>
-        <div className="company_details_banner">
-          <div className="company_name_banner">{company.name}</div>
-          {/* <div className="company_detail1_banner">{companyStaff} nhân viên</div> */}
-          <div className="company_detail2_banner">
-            {counter} người theo dõi {/* Hiển thị số người theo dõi từ state */}
-          </div>
-        </div>
-        {/* Thêm onClick handler và className động */}
-        <div
-          className={`Button_follow ${isFollowing ? "Button_followed" : ""}`}
-          onClick={handleFollowClick}
-        >
-          {/* Thay đổi icon dựa trên trạng thái isFollowing */}
-          <img src={isFollowing ? HeartFilled : Heart} alt="" />
-          <div>{isFollowing ? "Đang theo dõi" : "Theo dõi"}</div>
-        </div>
       </div>
+      
     </>
   );
 }

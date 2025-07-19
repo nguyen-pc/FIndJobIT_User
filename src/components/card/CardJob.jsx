@@ -47,14 +47,14 @@ const CardJob = ({ displayJob, isLoading }) => {
     <section className="featured-jobs" id="jobs">
       {/* <h2>Việc làm nổi bật</h2> */}
 
-      <div className="jobs-list m-0">
+      <div className="jobs-list gap-4 m-0">
         {isLoading ? (
           <Spin spinning={isLoading} tip="Loading..."></Spin>
         ) : displayJob && displayJob.length > 0 ? (
           displayJob.map((job, index) => (
             <div
               key={job.id}
-              className="rounded-xl overflow-hidden cursor-pointer shadow-md hover:scale-[1.02] transition w-[300px] h-[350px] bg-transparent"
+              className="rounded-xl overflow-hidden cursor-pointer shadow-md hover:scale-[1.02] transition w-[250px] h-[350px] bg-transparent"
               onClick={() => handleViewDetailJob(job)}
             >
               {/* Ảnh nền nửa trên */}
