@@ -63,7 +63,7 @@ const CompanyAboutUs = ({ title, description, company }) => {
   };
 
   return (
-    <Card className="w-[400px]" title={<span>{title}</span>} bordered={false}>
+    <Card className="w-[700px]" title={<span>{title}</span>} bordered={false}>
       <img
         src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
           company?.logo

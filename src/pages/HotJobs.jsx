@@ -257,7 +257,7 @@ const HotJobs = (props) => {
     <div className="homepage-wrapper">
       {showHeader && <Header />}
       <div
-        className="search_input2 text-white bg-cover bg-center relative"
+        className="search_input3 text-white bg-cover bg-center relative"
         style={{
           backgroundImage: `url(${selectedBackground})`,
           minHeight: "80vh",

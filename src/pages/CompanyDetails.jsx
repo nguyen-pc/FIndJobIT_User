@@ -133,7 +133,7 @@ function CompanyDetails() {
       {/* Layout 2 cột */}
       <div className="flex flex-col lg:flex-row gap-8 px-8 mt-8">
         {/* Cột trái: Giới thiệu & Liên hệ */}
-        <div className="lg:w-1/4 w-full ">
+        <div className="lg:w-2/4 w-full ">
           <CompanyAboutUs
             company={companyDetail}
             title="Về chúng tôi"
@@ -145,13 +145,12 @@ function CompanyDetails() {
             title="Thông tin liên hệ"
             address={companyDetail?.address}
           />
-
         </div>
 
         {/* Cột phải: Danh sách việc làm */}
-        <div className="lg:w-3/4 w-full ml-[20px] ">
-          <div className="flex gap-2 mb-4 ml-20 bg-white rounded p-2 text-xs">
-            <div className="text-gray-800 mt-3 ml-4 mr-10 ">
+        <div className="lg:w-2/4 w-full -ml-6">
+          <div className="flex gap-2 mb-4 bg-white rounded p-2 text-xs">
+            <div className="text-gray-800 mt-3 ml-20 mr-10 ">
               {followerCount} người đang theo dõi
             </div>
             <button

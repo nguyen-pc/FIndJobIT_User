@@ -361,7 +361,7 @@ const HomePage = (props) => {
               {/* Thêm mt-2 md:mt-0 cho responsive */}
               <div
                 className="width-30 cursor-pointer hover:text-[#1C9EAF] duration-300"
-                onClick={() => navigate("/companies")}
+                onClick={() => navigate("/company_list")}
               >
                 <span className=" text-xs mr-2 ">Xem thêm</span>
                 <FontAwesomeIcon
@@ -397,11 +397,11 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
-        <div className="-ml-15">
+        <div className="-ml-47">
           <HotJobs showHeader={false} />
         </div>
         {/* -------- Featured Jobs -------- */}
-        <div className="ml-12">
+        <div className="ml-25!">
           <p className="text-2xl font-semibold " style={{ color: "#1C9EAF" }}>
             Việc làm nổi bật
           </p>
