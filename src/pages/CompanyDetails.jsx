@@ -145,6 +145,7 @@ function CompanyDetails() {
             title="Thông tin liên hệ"
             address={companyDetail?.address}
           />
+
         </div>
 
         {/* Cột phải: Danh sách việc làm */}

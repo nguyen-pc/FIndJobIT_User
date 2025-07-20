@@ -7,6 +7,7 @@ import jobReducer from "./slice/jobSlide";
 import permissionReducer from "./slice/permissionSlide";
 import roleReducer from "./slice/roleSlide";
 import resumeReducer from "./slice/ResumeSlide";
+import interviewReducer from "./slice/questionSlide";
 export const store = configureStore({
   reducer: {
     account: accountReducer,
@@ -17,6 +18,7 @@ export const store = configureStore({
     permission: permissionReducer,
     role: roleReducer,
     resume: resumeReducer,
+    interview: interviewReducer,
   },
 });
 
