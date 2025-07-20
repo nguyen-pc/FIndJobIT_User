@@ -8,6 +8,7 @@ import { convertSlug, getLocationName } from "../../config/utils";
 import { Spin } from "antd";
 import { useAppSelector } from "../../redux/hooks";
 import axios from "axios";
+import nen3 from "../../assets/nen3.jpg";
 
 dayjs.extend(relativeTime);
 
@@ -46,72 +47,85 @@ const CardJob = ({ displayJob, isLoading }) => {
     <section className="featured-jobs" id="jobs">
       {/* <h2>Việc làm nổi bật</h2> */}
 
-      <div className="jobs-list">
+      <div className="jobs-list gap-4 m-0">
         {isLoading ? (
           <Spin spinning={isLoading} tip="Loading..."></Spin>
         ) : displayJob && displayJob.length > 0 ? (
-          displayJob.map((job) => (
+          displayJob.map((job, index) => (
             <div
-              className="job-card"
               key={job.id}
+              className="rounded-xl overflow-hidden cursor-pointer shadow-md hover:scale-[1.02] transition w-[250px] h-[350px] bg-transparent"
               onClick={() => handleViewDetailJob(job)}
             >
-              {/* Header gồm logo + tên công ty + nút yêu thích */}
-              <div className="job-card-header">
-                <img
-                  className="job-company-logo"
-                  src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
-                    job?.company?.logo
-                  }`}
-                  alt={job.company}
-                />
-                <span className="job-company-name">
-                  {" "}
+              {/* Ảnh nền nửa trên */}
+              <div
+                className="h-1/3 bg-cover bg-center bg-no-repeat relative"
+                style={{ backgroundImage: `url(${nen3})` }}
+              >
+                {/* Hình ảnh công ty (logo) đè lên ảnh nền */}
+                <div className="absolute top-2 left-2 w-18 h-18 bg-white rounded p-1 shadow">
+                  <img
+                    src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
+                      job?.company?.logo
+                    }`}
+                    alt={job.name}
+                    className="object-contain w-full h-full"
+                  />
+                </div>
+                <p className=" absolute top-20 left-2 text-xm italic text-white truncate">
                   {typeof job.company === "object"
                     ? job.company.name
                     : job.company}
-                </span>
-                {/* <img
-                  className="w-[100%]"
-                  src={isFavorite ? HeartFilled : Heart}
-                  alt=""
-                /> */}
+                </p>
+
+                {/* Nhãn ở góc trên trái */}
+                <div className="absolute top-2 right-2 flex gap-1">
+                  <span className="bg-green-600 text-white text-xs px-2 py-0.5 rounded font-semibold">
+                    {getLocationName(job.location)}
+                  </span>
+                </div>
               </div>
-              <h3>{job.name}</h3>
-              <div>
-                <ThunderboltOutlined style={{ color: "orange" }} />
-                &nbsp;
-                {(job.salary + "")?.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} đ
+
+              {/* Nội dung mô tả (nửa dưới) */}
+              <div className="h-1/2 p-3 text-black">
+                <h3 className="text-base font-bold truncate flex">
+                  <div className=" font-medium font-san serif text-xl text-[#1C9EAF]">
+                    {job.name}
+                  </div>
+                </h3>
+
+                <p className="text-sm text-gray-500 mt-1">
+                  Lương:{" "}
+                  {(job.salary + "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")} đ{" "}
+                  <br />
+                  <div className="flex mt-2">
+                    Yêu cầu:
+                    {Array.isArray(job.skills) && job.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-2 ml-2">
+                        {job.skills.map((skill) => (
+                          <span
+                            key={skill.id}
+                            className="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded"
+                          >
+                            {skill.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </p>
+                <p className="text-sm text-gray-400">
+                  {job.updatedAt
+                    ? dayjs(job.updatedAt).locale("en").fromNow()
+                    : dayjs(job.createdAt).locale("en").fromNow()}
+                </p>
               </div>
-              <div>
-                <EnvironmentOutlined style={{ color: "#58aaab" }} />
-                &nbsp;{getLocationName(job.location)}
-              </div>
-              <div>
-                {job.updatedAt
-                  ? dayjs(job.updatedAt).locale("en").fromNow()
-                  : dayjs(job.createdAt).locale("en").fromNow()}
-              </div>
-              <button>Ứng tuyển ngay</button>
             </div>
           ))
         ) : (
           <p>Không có việc làm nào.</p>
         )}
       </div>
-
-      {/* Pagination nếu cần */}
-      {/* {total > pageSize && (
-        <div className="pagination">
-          <span onClick={() => handleOnchangePage({ current: current - 1 })}>
-            ⬅️
-          </span>
-          
-          <span onClick={() => handleOnchangePage({ current: current + 1 })}>
-            ➡️
-          </span>
-        </div>
-      )} */}
     </section>
   );
 };

@@ -23,9 +23,9 @@ const JobListCard = ({ title, jobs }) => {
   };
 
   return (
-    <div className="joblist-card">
+    <div className="ml-20 bg-white">
       <div className="joblist-header">{title}</div>
-      <div className="joblist-search">
+      <div className="joblist-search w-90 center ml-10">
         <Input
           placeholder="Tìm công việc, vị trí ứng tuyển"
           prefix={<SearchOutlined />}

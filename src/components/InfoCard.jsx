@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { FaUserPlus } from "react-icons/fa";
-
+import { FaHeart, FaRegHeart, FaUserPlus, FaCopy } from "react-icons/fa";
 import parse from "html-react-parser";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   cancelFollowCompany,
   checkCompanyStatus,
@@ -14,13 +15,12 @@ import {
 import { useAppSelector } from "../redux/hooks";
 import { convertSlug } from "../config/utils";
 import { useNavigate } from "react-router-dom";
+
 function InfoCard({ company }) {
   const navigate = useNavigate();
-  const [liked, setLiked] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [counter, setCounter] = useState(0);
 
-  const [follower, setFollower] = useState(false); // Có thể dùng state này để tăng số lượng người theo dõi
-  const [isFollowing, setIsFollowing] = useState(false); // Trạng thái mới: theo dõi hay chưa
-  const [counter, setCounter] = useState(0); // Biến đếm số người theo dõi
   const isAuthenticated = useAppSelector(
     (state) => state.account.isAuthenticated
   );
@@ -40,8 +40,7 @@ function InfoCard({ company }) {
           const res = await checkCompanyStatus(company.id, user.id);
           const count = await countUserFollowCompany(company.id);
 
-          setCounter(count.data.followerCount); // Cập nhật số người theo dõi từ
-          // Giả sử API trả về { followed: true/false }
+          setCounter(count.data.followerCount);
           setIsFollowing(res.data.followed);
         } catch (error) {
           console.error("Error checking follow status", error);
@@ -49,7 +48,8 @@ function InfoCard({ company }) {
       }
     };
     getFollowState();
-  }, [company, user, isAuthenticated, counter]);
+  }, [company, user, isAuthenticated]);
+
   const handleFollowClick = async () => {
     const payload = {
       companyId: company.id,
@@ -57,68 +57,89 @@ function InfoCard({ company }) {
     };
     try {
       if (!isFollowing) {
-        console.log("Follow company payload:", payload, isFollowing);
-        const response = await followCompany(payload);
-        const like = await likeCompany(company.id);
-        if (response.data) {
-          setIsFollowing(true);
-        } else {
-          console.error("Follow job failed:", response.message);
-        }
+        await followCompany(payload);
+        await likeCompany(company.id);
+        setIsFollowing(true);
+        setCounter((prev) => prev + 1);
       } else {
-        const response = await cancelFollowCompany(payload);
-        const dislike = await disLikeCompany(company.id);
+        await cancelFollowCompany(payload);
+        await disLikeCompany(company.id);
         setIsFollowing(false);
+        setCounter((prev) => prev - 1);
       }
     } catch (error) {
       console.error("Error following company", error);
     }
   };
 
-  // const toggleLike = () => {
-  //   setLiked(!liked);
-  // };
+  const handleCopy = async () => {
+    try {
+      const link = `${window.location.origin}/company/${convertSlug(
+        company?.name
+      )}?id=${company?.id}`;
+      await navigator.clipboard.writeText(link);
+      toast.success("Đã sao chép liên kết!", { autoClose: 1000 });
+    } catch (err) {
+      toast.error("Lỗi khi sao chép liên kết");
+    }
+  };
 
   return (
-    <div className="bg-white/100 p-4 shadow-lg rounded w-[300px] h-[350px] relative cursor-pointer ">
-      {/* Logo và nội dung */}
-      <img
-        src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
-          company?.logo
-        }`}
-        alt="logo"
-        className="w-12 mb-2"
-      />
-      <p className="font-bold">{company.title}</p>
-      <p className="text-sm text-gray-600 line-clamp-6">
-        {parse(company.description ?? "")}
-      </p>
-      <p className="text-sm text-gray-600 line-clamp-4 font-semibold flex">
-        <FaUserPlus className="mr-3 mt-1" /> {company.likeCount}{" "}
-        <span className="ml-1 font-normal">người theo dõi</span>
-      </p>
-      {/* Button thích */}
-      <div className="flex">
+    <>
+      <div className="bg-white/100 p-4 shadow-lg rounded w-[300px] h-[350px] relative cursor-pointer">
+        <img
+          src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
+            company?.logo
+          }`}
+          alt="logo"
+          className="w-12 mb-2"
+        />
+        <p className="font-bold">{company.title}</p>
+        <p className="text-sm text-gray-600 line-clamp-6">
+          {parse(company.description ?? "")}
+        </p>
+        <p className="text-sm text-gray-600 line-clamp-4 font-semibold flex">
+          <FaUserPlus className="mr-3 mt-1" />
+          {counter} <span className="ml-1 font-normal">người theo dõi</span>
+        </p>
+
+        <div className="flex">
+          <div className="flex gap-2 absolute text-xs">
+            <button
+              onClick={handleFollowClick}
+              className="px-3 py-2 flex items-center   text-[#1C9EAF] text-[10px]"
+              title={isFollowing ? "Bỏ thích" : "Thích"}
+            >
+              {isFollowing ? <FaHeart /> : <FaRegHeart />}
+              <span className="ml-2">Thích</span>
+            </button>
+
+            <button
+              onClick={handleCopy}
+              className="px-3 py-2 flex items-center   text-[#1C9EAF] text-xs"
+              title="Sao chép liên kết"
+            >
+              <FaCopy />
+              <span className="ml-2">Sao chép Link</span>
+            </button>
+          </div>
+        </div>
         <button
           onClick={() => handleViewDetailCompanyJob(company?.name, company?.id)}
-          className="absolute bg-[#1c9eaf] bottom-4 left w-23 h-11 flex flex-col items-center justify-center border rounded text-white text-sm focus:outline-none"
+          className="absolute bg-[#1c9eaf] bottom-4 left-4 px-3 py-2 rounded text-white text-sm"
         >
-          <span className="text-xs">Xem chi tiết</span>
-        </button>
-        <button
-          onClick={handleFollowClick}
-          className="absolute bottom-4 right-4  w-26 h-11 flex  items-center justify-center border rounded text-[#1C9EAF] text-xs focus:outline-none"
-          title={isFollowing ? "Bỏ thích" : "Thích"}
-        >
-          {isFollowing ? (
-            <FaHeart className="text-xm" />
-          ) : (
-            <FaRegHeart className="text-xm" />
-          )}
-          <span className="text-sm ml-2">Thích</span>
+          Xem chi tiết
         </button>
       </div>
-    </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar
+        closeOnClick
+        pauseOnHover={false}
+        draggable={false}
+      />
+    </>
   );
 }
 

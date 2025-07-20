@@ -9,6 +9,10 @@ import CardJob from "../components/card/CardJob";
 import { useAppSelector } from "../redux/hooks";
 import JobCardRecommend from "../components/JobCardRecommend";
 import Footer from "../components/Footer";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 const JobListPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,14 +23,14 @@ const JobListPage = () => {
   //Lấy công việc mới nhất
   const [displayJob, setDisplayJob] = useState(null);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(4);
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState("");
 
   //Lấy công việc phổ biến
   const [displayJobPopular, setDisplayJobPopular] = useState(null);
   const [currentPopular, setCurrenPopular] = useState(1);
-  const [pageSizePopular, setPageSizePopular] = useState(2);
+  const [pageSizePopular, setPageSizePopular] = useState(4);
   const [totalPopular, setTotalPopular] = useState(0);
   const [filterPopular, setFilterPopular] = useState("");
 
@@ -174,13 +178,17 @@ const JobListPage = () => {
   // Render phân trang (ví dụ với số trang)
   const renderPageNumbers = (totalPages, currentPage, onChange) => {
     return Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
-      <span
+      <button
         key={num}
-        className={currentPage === num ? "active" : ""}
+        className={`mx-1 px-3 py-1 border rounded ${
+          currentPage === num
+            ? "bg-[#1C9EAF] text-white"
+            : "hover:bg-gray-200 text-gray-700"
+        }`}
         onClick={() => onChange({ current: num, pageSize })}
       >
         {num}
-      </span>
+      </button>
     ));
   };
 
@@ -204,7 +212,7 @@ const JobListPage = () => {
               >
                 <span className=" text-xs mr-2 ">Xem thêm</span>
                 <FontAwesomeIcon
-                  icon={faAngleRight}
+                  icon={faChevronRight}
                   className="text-xs mr-2 "
                 />
               </div>
@@ -215,33 +223,43 @@ const JobListPage = () => {
               <CardJob displayJob={displayJob} isLoading={isLoading} />
             </div>
             {total > pageSize && (
-              <div className="pagination">
+              <div className="pagination flex justify-center mt-4 items-center gap-1">
                 {/* Nút trang trước */}
-                {current > 1 ? (
-                  <span
-                    onClick={() =>
-                      handleOnchangePage({ current: current - 1, pageSize })
-                    }
-                  >
-                    ⬅️
+                <button
+                  className={`px-2 py-1  ${
+                    current > 1 ? "" : "text-gray-400 cursor-not-allowed"
+                  }`}
+                  onClick={() =>
+                    current > 1 &&
+                    handleOnchangePage({ current: current - 1, pageSize })
+                  }
+                  disabled={current <= 1}
+                >
+                  <span>
+                    <FontAwesomeIcon icon={faChevronLeft} />
                   </span>
-                ) : (
-                  <span className="disabled">⬅️</span>
-                )}
+                </button>
+
                 {/* Hiển thị số trang */}
                 {renderPageNumbers(totalJobPages, current, handleOnchangePage)}
+
                 {/* Nút trang sau */}
-                {current < totalJobPages ? (
-                  <span
-                    onClick={() =>
-                      handleOnchangePage({ current: current + 1, pageSize })
-                    }
-                  >
-                    ➡️
+                <button
+                  className={`px-2 py-1 ${
+                    current < totalJobPages
+                      ? ""
+                      : "text-gray-400 cursor-not-allowed"
+                  }`}
+                  onClick={() =>
+                    current < totalJobPages &&
+                    handleOnchangePage({ current: current + 1, pageSize })
+                  }
+                  disabled={current >= totalJobPages}
+                >
+                  <span>
+                    <FontAwesomeIcon icon={faChevronRight} />
                   </span>
-                ) : (
-                  <span className="disabled">➡️</span>
-                )}
+                </button>
               </div>
             )}
           </div>
@@ -262,10 +280,9 @@ const JobListPage = () => {
                 onClick={() => navigate("/")}
               >
                 <span className=" text-xs mr-2 ">Xem thêm</span>
-                <FontAwesomeIcon
-                  icon={faAngleRight}
-                  className="text-xs mr-2 "
-                />
+                <span>
+                  <FontAwesomeIcon icon={faChevronRight} className="" />
+                </span>
               </div>
             </div>
           </div>
@@ -274,43 +291,69 @@ const JobListPage = () => {
               <CardJob displayJob={displayJobPopular} isLoading={isLoading} />
             </div>
             {totalPopular > pageSizePopular && (
-              <div className="pagination">
+              <div className="pagination flex justify-center mt-4 items-center gap-1">
                 {/* Nút trang trước */}
-                {currentPopular > 1 ? (
-                  <span
-                    onClick={() =>
-                      handleOnchangePagePopular({
-                        currentPopular: currentPopular - 1,
-                        pageSizePopular,
-                      })
-                    }
-                  >
-                    ⬅️
+                <button
+                  className={`px-2 py-1 ${
+                    currentPopular > 1 ? "" : "text-gray-400 cursor-not-allowed"
+                  }`}
+                  onClick={() =>
+                    currentPopular > 1 &&
+                    handleOnchangePagePopular({
+                      currentPopular: currentPopular - 1,
+                      pageSizePopular,
+                    })
+                  }
+                  disabled={currentPopular <= 1}
+                >
+                  <span>
+                    <FontAwesomeIcon icon={faChevronLeft} />
                   </span>
-                ) : (
-                  <span className="disabled">⬅️</span>
-                )}
+                </button>
+
                 {/* Hiển thị số trang */}
-                {renderPageNumbers(
-                  totalJobPagesPopular,
-                  currentPopular,
-                  handleOnchangePagePopular
-                )}
-                {/* Nút trang sau */}
-                {currentPopular < totalJobPagesPopular ? (
-                  <span
+                {Array.from(
+                  { length: totalJobPagesPopular },
+                  (_, i) => i + 1
+                ).map((num) => (
+                  <button
+                    key={num}
+                    className={`mx-1 px-3 py-1 border rounded ${
+                      currentPopular === num
+                        ? "bg-[#1C9EAF] text-white"
+                        : " text-gray-700"
+                    }`}
                     onClick={() =>
                       handleOnchangePagePopular({
-                        currentPopular: currentPopular + 1,
+                        currentPopular: num,
                         pageSizePopular,
                       })
                     }
                   >
-                    ➡️
+                    {num}
+                  </button>
+                ))}
+
+                {/* Nút trang sau */}
+                <button
+                  className={`px-2 py-1  rounded ${
+                    currentPopular < totalJobPagesPopular
+                      ? ""
+                      : "text-gray-400 cursor-not-allowed"
+                  }`}
+                  onClick={() =>
+                    currentPopular < totalJobPagesPopular &&
+                    handleOnchangePagePopular({
+                      currentPopular: currentPopular + 1,
+                      pageSizePopular,
+                    })
+                  }
+                  disabled={currentPopular >= totalJobPagesPopular}
+                >
+                  <span>
+                    <FontAwesomeIcon icon={faChevronRight} />
                   </span>
-                ) : (
-                  <span className="disabled">➡️</span>
-                )}
+                </button>
               </div>
             )}
           </div>
@@ -332,7 +375,7 @@ const JobListPage = () => {
               >
                 <span className=" text-xs mr-2 ">Xem thêm</span>
                 <FontAwesomeIcon
-                  icon={faAngleRight}
+                  icon={faChevronRight}
                   className="text-xs mr-2 "
                 />
               </div>

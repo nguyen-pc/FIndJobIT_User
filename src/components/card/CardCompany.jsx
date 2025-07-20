@@ -22,7 +22,9 @@ const CardCompany = ({ company }) => {
         }`}
         alt={company.name}
       />
-      <h3 className="text-center font-semibold text-sm">{company.name}</h3>
+      <div className="text-center line-clamp-2 font-semibold text-[20px] h-20 ">
+        {company.name}
+      </div>
     </div>
   );
 };

@@ -156,13 +156,13 @@ const Header = () => {
             value={quickSearchTerm}
             onChange={(e) => setQuickSearchTerm(e.target.value)}
             onKeyDown={handleQuickSearchKeyDown}
-            className="hidden sm:block px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] w-70"
+            className="hidden sm:block px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] w-60"
           />
         </div>
 
         <nav className="nav-menu md:block! hidden!">
           <button
-            onClick={() => navigate("/job_list")}
+            onClick={() => navigate("/hotjobs")}
             className="filter-select"
           >
             Việc làm HOT
