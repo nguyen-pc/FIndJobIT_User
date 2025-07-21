@@ -7,6 +7,7 @@ import InfoCard from "../components/InfoCard"; // Import InfoCard nếu bạn mu
 import CardJob from "../components/card/CardJob";
 import CardCompany from "../components/card/CardCompany";
 import HotJobs from "../pages/HotJobs";
+import JobListPage from "./JobListPage";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -238,7 +239,7 @@ const HomePage = (props) => {
   };
 
   return (
-    <div className="homepage-wrapper">
+    <div className="homepage-wrapper  overflow-x-hidden">
       <Header />
       <div className="search_input ">
         <div className="search-section my-12 px-4">
@@ -397,9 +398,7 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
-        <div className="-ml-15">
-          <HotJobs showHeader={false} />
-        </div>
+
         {/* -------- Featured Jobs -------- */}
         <div className="ml-12">
           <p className="text-2xl font-semibold " style={{ color: "#1C9EAF" }}>
@@ -439,7 +438,12 @@ const HomePage = (props) => {
           )}
         </div>
       </main>
-
+      <div className="search_input">
+        <HotJobs showHeader={false} />
+      </div>
+      <div className="">
+        <JobListPage showHeader={false} />
+      </div>
       <Footer />
     </div>
   );

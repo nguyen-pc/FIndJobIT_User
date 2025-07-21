@@ -14,7 +14,9 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-const JobListPage = () => {
+const JobListPage = (props) => {
+  const { showHeader = true, showPagination = false } = props;
+
   const [isLoading, setIsLoading] = useState(false);
   const [sortQuery, setSortQuery] = useState("sort=updatedAt,desc");
   const navigate = useNavigate();
@@ -194,7 +196,7 @@ const JobListPage = () => {
 
   return (
     <>
-      <Header />
+      {showHeader && <Header />}
       <div>
         {/* Công việc mới nhất */}
         <div className="HotCompany ml-20 " style={{ padding: "0px " }}>

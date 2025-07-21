@@ -6666,7 +6666,7 @@ footer {
     background-size: cover;
     background-position: center;
     width: 100vw;
-    margin-left: 0px;
+    margin-left: -212px;
     height: 30vw;
     z-index: 0;
     overflow: hidden;
@@ -6683,6 +6683,34 @@ footer {
     pointer-events: none;
 background: linear-gradient(to bottom,
             rgba(255,255,255,1) 0%,
+            rgba(28, 158, 175, 0) 10%,
+            rgba(28, 158, 175, 0) 80%,
+            rgba(255, 255, 255, 1) 100%);
+}
+.search_input3 {
+    position: relative;
+    background-image: url(./assets/nen4.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    margin-left: 0px;
+    height: 30vw;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.search_input3::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100vw;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 1) 0%,
             rgba(28, 158, 175, 0) 10%,
             rgba(28, 158, 175, 0) 80%,
             rgba(255, 255, 255, 1) 100%);

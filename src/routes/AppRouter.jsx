@@ -16,6 +16,8 @@ import TestTailwind from "../components/testtailwind";
 import RecommendJob from "../pages/RecommendJob";
 import CompanyList from "../pages/CompanyList";
 import HotJobs from "../pages/HotJobs.jsx";
+import InterviewQuestion from "../pages/InterviewQuestion.jsx";
+
 //admin route
 import HomeAdmin from "../pages/admin/Home";
 
@@ -88,6 +90,7 @@ export default function AppRouter() {
         <Route path="/recommend-job" element={<RecommendJob />} />
         <Route path="search_job" element={<SearchJobPage />} />
         <Route path="/hotjobs" element={<HotJobs />} />
+        <Route path="/interview_question" element={<InterviewQuestion />} />
         {/* route admin */}
         <Route path="/admin/*" element={<HomeAdmin />}>
           <Route path="dashboard" element={<Dashboard />} />

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Bỏ useLocation vì không cần thiết cho search
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Bỏ useLocation vì không cần thiết cho search
 import { callLogout } from "../config/api"; // Bỏ callFetchAllSkill, LOCATION_LIST
-import { notification } from "antd"; // Bỏ Select
+import { Dropdown, notification } from "antd"; // Bỏ Select
 import profile from "../assets/profile 1.png";
 import job from "../assets/job.png";
 import CV from "../assets/cv.png";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setLogoutAction } from "../redux/slice/accountSlide";
 import Button from "@mui/material/Button";
+
 // Bỏ queryString, sfIn
 import {
   Box,
@@ -20,9 +21,13 @@ import {
   useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import queryString from "query-string";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedLocation, setSelectedLocation] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
   // Bỏ useLocation
   const dispatch = useAppDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -30,11 +35,80 @@ const Header = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
+  const [searchParams, setSearchParams] = useState({
+    name: "",
+    salary: "",
+    level: [],
+    current: 1, // Đây là current cho việc search, không phải cho pagination của job
+    pageSize: 15, // Đây là pageSize cho việc search, không phải cho pagination của job
+  });
+  const handleSearchChange = (e) => {
+    setSearchParams({ ...searchParams, name: e.target.value });
+  };
+
+  const buildQuery = (params, sort, filter) => {
+    const clone = { ...params };
+    let parts = [];
+    if (clone.name) parts.push(`name ~ '${clone.name}'`);
+    if (clone.salary) parts.push(`salary ~ '${clone.salary}'`);
+    if (clone.level && clone.level.length > 0) {
+      parts.push(sfIn("level", clone.level));
+    }
+
+    clone.filter = parts.join(" and ");
+    if (!clone.filter) delete clone.filter;
+
+    clone.page = clone.current;
+    clone.size = clone.pageSize;
+    delete clone.current;
+    delete clone.pageSize;
+    delete clone.name;
+    delete clone.salary;
+    delete clone.level;
+    let temp = queryString.stringify(clone);
+
+    let sortBy = "";
+    const fields = ["name", "salary", "createdAt", "updatedAt"];
+    if (sort) {
+      for (const field of fields) {
+        if (sort[field]) {
+          sortBy = `sort=${field},${sort[field] === "ascend" ? "asc" : "desc"}`;
+          break;
+        }
+      }
+    }
+
+    if (!sortBy) {
+      temp = `${temp}&sort=updatedAt,desc`;
+    } else {
+      temp = `${temp}&${sortBy}`;
+    }
+    // console.log("Base query:", temp); // Giữ console.log để debug nếu cần
+    return temp;
+  };
+
   const [quickSearchTerm, setQuickSearchTerm] = useState("");
 
   const handleQuickSearchKeyDown = (e) => {
     if (e.key === "Enter") {
-      navigate(`/job_list?name=${encodeURIComponent(quickSearchTerm)}`);
+      const baseQuery = buildQuery(searchParams, {}, null);
+      let extraQuery = "";
+      if (selectedLocation.length) {
+        extraQuery += `&location=${selectedLocation.join(",")}`;
+      }
+      if (selectedSkills.length) {
+        extraQuery += `&skills=${selectedSkills.join(",")}`;
+      }
+      const finalQuery = baseQuery + extraQuery;
+
+      if (!finalQuery) {
+        notification.error({
+          message: "Có lỗi xảy ra",
+          description: "Vui lòng chọn tiêu chí để search",
+        });
+        return;
+      }
+      navigate(`/search_job?${finalQuery}`);
     }
   };
 
@@ -123,13 +197,30 @@ const Header = () => {
     </List>
   );
 
+  const items = [
+    {
+      key: "1",
+      label: (
+        <p
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.antgroup.com"
+          className="align-items-center flex gap-2 justify-center"
+          onClick={() => navigate("/interview_question")}
+        >
+          Câu hỏi phỏng vấn
+        </p>
+      ),
+    },
+  ];
+
   return (
     <header
       className="header"
       // Loại bỏ style height và transition liên quan đến search bar
       style={{ overflow: "visible" }}
     >
-      <div className="header-top flex flex-wrap items-center justify-between  ">
+      <div className="header-top flex-nowrap flex items-center justify-between px-4 ">
         <div className="flex items-center gap-2">
           <Link to="/" className="logo text-2xl font-bold text-[#1C9EAF]">
             NextDev
@@ -139,10 +230,10 @@ const Header = () => {
           <input
             type="text"
             placeholder="Tìm công việc..."
-            value={quickSearchTerm}
-            onChange={(e) => setQuickSearchTerm(e.target.value)}
+            value={searchParams.name}
+            onChange={handleSearchChange}
             onKeyDown={handleQuickSearchKeyDown}
-            className="hidden sm:block px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] w-60"
+            className="hidden sm:block px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] w-70"
           />
         </div>
 
@@ -165,16 +256,11 @@ const Header = () => {
           >
             Công ty
           </button>
-          <select
-            className="filter-select"
-            onChange={handleSelectChange}
-            defaultValue=""
-          >
-            <option value="" disabled>
-              Sự kiện
-            </option>
-            <option value="events">Sự kiện</option>
-          </select>
+          <Dropdown menu={{ items }} placement="bottom">
+            <Button className="filter-select text-transform-none">
+              Công cụ
+            </Button>
+          </Dropdown>
         </nav>
 
         {user && isAuthenticated ? (
