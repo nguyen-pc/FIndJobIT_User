@@ -17,7 +17,7 @@ import RecommendJob from "../pages/RecommendJob";
 import CompanyList from "../pages/CompanyList";
 import HotJobs from "../pages/HotJobs.jsx";
 import InterviewQuestion from "../pages/InterviewQuestion.jsx";
-
+import AboutUs from "../pages/AboutUs.jsx";
 //admin route
 import HomeAdmin from "../pages/admin/Home";
 
@@ -91,6 +91,7 @@ export default function AppRouter() {
         <Route path="search_job" element={<SearchJobPage />} />
         <Route path="/hotjobs" element={<HotJobs />} />
         <Route path="/interview_question" element={<InterviewQuestion />} />
+        <Route path="/about" element={<AboutUs />} />
         {/* route admin */}
         <Route path="/admin/*" element={<HomeAdmin />}>
           <Route path="dashboard" element={<Dashboard />} />
