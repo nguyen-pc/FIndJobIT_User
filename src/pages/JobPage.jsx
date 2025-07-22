@@ -7,7 +7,13 @@ import Footer from "../components/Footer";
 import salary from "../assets/salary.png";
 import location_1 from "../assets/location_1.png";
 import skill from "../assets/skill.png";
-import tim from "../assets/tim.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faMoneyBill,
+  faWebAwesome,
+  faLocationDot,
+} from "@fortawesome/free-solid-svg-icons";
+
 import {
   callFetchJobById,
   cancelFollowJob,
@@ -22,7 +28,7 @@ import ReviewCVModal from "../components/ReviewCVModal";
 import { useAppSelector } from "../redux/hooks";
 import Heart from "../assets/heart.png";
 import HeartFilled from "../assets/heart-filled.png";
-
+import RecommendJob from "./RecommendJob";
 const JobPage = () => {
   const navigate = useNavigate();
   const { jobId } = useParams();
@@ -116,39 +122,43 @@ const JobPage = () => {
                     : "Vị trí công việc không xác định"}
                 </h2>
                 <div className="job-meta-grid">
-                  <span className="job-meta-item">
-                    <img src={salary} alt="Thu nhập" className="salary-icon" />
-                    <strong>Thu nhập:</strong> <br />
-                    <span>
-                      {jobDetail && (
-                        <span>
-                          {(jobDetail.salary + "")?.replace(
-                            /\B(?=(\d{3})+(?!\d))/g,
-                            ","
-                          )}{" "}
-                          đ
-                        </span>
-                      )}
-                    </span>
-                  </span>
-                  <span className="job-meta-item">
-                    <img
-                      src={location_1}
-                      alt="Địa điểm"
-                      className="salary-icon"
-                    />
-                    <strong>Địa điểm:</strong> <br />
-                    {jobDetail ? jobDetail.location : ""}
-                  </span>
-                  <span className="job-meta-item">
-                    <img
-                      src={skill}
-                      alt="Kinh nghiệm"
-                      className="salary-icon"
-                    />
-                    <strong>Kinh nghiệm:</strong>
-                    <br /> Không có
-                  </span>
+                  <div className="job-meta-item flex">
+                    <div className="flex items-center justify-center mr-3 text-2xl text-white bg-[#1c9eaf] w-15 h-15 p-1 rounded-full">
+                      <FontAwesomeIcon className="" icon={faMoneyBill} />
+                    </div>
+                    <div className="block">
+                      <strong>Thu nhập:</strong> <br />
+                      <span>
+                        {jobDetail && (
+                          <span>
+                            {(jobDetail.salary + "")?.replace(
+                              /\B(?=(\d{3})+(?!\d))/g,
+                              ","
+                            )}{" "}
+                            đ
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="job-meta-item flex">
+                    <div className="flex items-center justify-center mr-3 text-2xl text-white bg-[#1c9eaf] w-15 h-15 p-1 rounded-full">
+                      <FontAwesomeIcon icon={faLocationDot} />
+                    </div>
+                    <div className="block">
+                      <strong>Địa điểm:</strong> <br />
+                      {jobDetail ? jobDetail.location : ""}
+                    </div>
+                  </div>
+                  <div className="job-meta-item flex">
+                    <div className="flex items-center justify-center mr-3 text-2xl text-white bg-[#1c9eaf] w-15 h-15 p-1 rounded-full">
+                      <FontAwesomeIcon icon={faWebAwesome} />
+                    </div>
+                    <div className="block">
+                      <strong>Kinh nghiệm:</strong>
+                      <div>Không có</div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="job-info-and-actions">
@@ -259,6 +269,7 @@ const JobPage = () => {
             </div>
           </div>
         </div>
+        {/* <RecommendJob /> */}
       </div>
       <ApplyModal
         isModalOpen={isModalOpen}

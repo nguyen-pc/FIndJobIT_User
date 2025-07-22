@@ -444,7 +444,6 @@ const HomePage = (props) => {
       <div className="">
         <JobListPage showHeader={false} />
       </div>
-      <Footer />
     </div>
   );
 };

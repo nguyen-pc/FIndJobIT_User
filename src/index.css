@@ -2099,27 +2099,7 @@ footer {
     /* Căn đều các mục */
 }
 
-.job-meta-item {
-    display: flex;
-    flex-direction: column;
-    /* Xếp chữ xuống dưới icon */
-    align-items: center;
-    /* Căn giữa nội dung trong mỗi item */
-    text-align: center;
-    /* Căn giữa văn bản */
-    font-size: 0.9em;
-    /* Kích thước chữ nhỏ hơn một chút */
-    color: #555;
-    flex: 1 1 auto;
-    /* Cho phép item co giãn và tự động xuống dòng */
-    min-width: 120px;
-    /* Đảm bảo mỗi item có chiều rộng tối thiểu */
-}
 
-.job-meta-item strong {
-    color: #060101;
-    margin-bottom: 3px;
-}
 
 .salary-icon {
     width: 24px;
@@ -2442,19 +2422,8 @@ footer {
     margin-bottom: 25px;
 }
 
-.job-meta-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-size: 1em;
-    color: #555;
-}
 
-.job-meta-item strong {
-    color: #333;
-    font-size: 1.1em;
-    margin-bottom: 5px;
-}
+
 
 .salary-icon {
     /* Used for salary, location, skill icons */
@@ -4861,7 +4830,6 @@ footer {
 
 .job-meta-item {
     display: flex;
-    flex-direction: column;
     /* Xếp chữ xuống dưới icon */
     align-items: center;
     /* Căn giữa nội dung trong mỗi item */
@@ -4870,9 +4838,8 @@ footer {
     font-size: 0.9em;
     /* Kích thước chữ nhỏ hơn một chút */
     color: #555;
-    flex: 1 1 auto;
     /* Cho phép item co giãn và tự động xuống dòng */
-    min-width: 120px;
+    min-width: 220px;
     /* Đảm bảo mỗi item có chiều rộng tối thiểu */
 }
 
@@ -5202,19 +5169,7 @@ footer {
     margin-bottom: 25px;
 }
 
-.job-meta-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-size: 1em;
-    color: #555;
-}
 
-.job-meta-item strong {
-    color: #333;
-    font-size: 1.1em;
-    margin-bottom: 5px;
-}
 
 .salary-icon {
     /* Used for salary, location, skill icons */

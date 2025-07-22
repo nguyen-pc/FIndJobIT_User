@@ -258,7 +258,7 @@ const HotJobs = (props) => {
         className="search_input3 text-white bg-cover bg-center relative"
         style={{
           backgroundImage: `url(${selectedBackground})`,
-          minHeight: "80vh",
+          minHeight: "50vh",
           transition: "background-image 0.5s ease-in-out",
         }}
       >
@@ -402,8 +402,6 @@ const HotJobs = (props) => {
         </div>
       </div>
       <JobListPage showHeader={false} />
-
-      <Footer />
     </div>
   );
 };
