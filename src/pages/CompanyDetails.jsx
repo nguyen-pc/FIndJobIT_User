@@ -125,7 +125,7 @@ function CompanyDetails() {
   };
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <Header />
 
       <CompanyBanner company={companyDetail} />
