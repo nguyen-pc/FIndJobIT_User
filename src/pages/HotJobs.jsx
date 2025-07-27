@@ -2,19 +2,17 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import JobListPage from "./JobListPage";
-// import CardJob from "../components/card/CardJob"; // <-- BỎ DÒNG NÀY
 import CardCompany from "../components/card/CardCompany";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { motion, AnimatePresence } from "framer-motion";
-
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   callFetchJob,
   callFetchCompanyLikest,
   callFetchAllSkill,
-} from "../config/api"; // Import callFetchAllSkill và các API khác
+} from "../config/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faInfo,
@@ -24,19 +22,18 @@ import {
   faAngleRight,
   faSackDollar,
   faLocationDot,
-  faWebAwesome, // Thêm faAngleRight cho nút "Xem thêm"
+  faWebAwesome,
 } from "@fortawesome/free-solid-svg-icons";
 import nen1 from "../assets/nen4.png";
 import nen2 from "../assets/nen2.jpg";
 import nen3 from "../assets/nen.jpg";
 import nen4 from "../assets/nen5.jpeg";
-// Import các thành phần Ant Design và utils cần thiết cho thanh tìm kiếm
 import { Select, notification } from "antd";
 import { LOCATION_LIST } from "../config/utils";
 import queryString from "query-string";
 import { sfIn } from "spring-filter-query-builder";
 
-const { Option } = Select; // Destructure Option từ Select
+const { Option } = Select;
 
 const HotJobs = (props) => {
   var settings = {
@@ -46,30 +43,46 @@ const HotJobs = (props) => {
     slidesToShow: 4,
     slidesToScroll: 3,
     arrows: true,
-    autoplay: true, // ← Bật tự động chạy
-    autoplaySpeed: 1000, // ← Thời gian giữa mỗi lần chuyển (ms)
+    autoplay: true,
+    autoplaySpeed: 1000,
     className: "myCustomCarousel",
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 2,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
-  const { showHeader = true, showPagination = false } = props;
-  // displayJob sẽ lưu trữ MỘT đối tượng job duy nhất, không phải mảng
+
+  const { showHeader = true } = props;
   const [displayJob, setDisplayJob] = useState(null);
   const [displayCompanyLikest, setDisplayCompanyLikest] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(4);
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState("");
   const [sortQuery, setSortQuery] = useState("sort=updatedAt,desc");
   const navigate = useNavigate();
-  const [searchParamsUrl, setSearchParamsUrl] = useSearchParams(); // Đổi tên để tránh xung đột nếu có
-
-  // === THÊM DÒNG NÀY ĐỂ KHẮC PHỤC LỖI ===
-  const [hoveredFavoriteIndex, setHoveredFavoriteIndex] = useState(null);
-  // ======================================
+  const [searchParamsUrl, setSearchParamsUrl] = useSearchParams();
   const [jobList, setJobList] = useState([]);
-
-  // === THÊM CÁC STATE VÀ LOGIC TỪ HEADER SANG ĐÂY ===
   const optionsLocation = LOCATION_LIST;
   const [optionsSkills, setOptionsSkills] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
@@ -78,11 +91,10 @@ const HotJobs = (props) => {
     name: "",
     salary: "",
     level: [],
-    current: 1, // Đây là current cho việc search, không phải cho pagination của job
-    pageSize: 15, // Đây là pageSize cho việc search, không phải cho pagination của job
+    current: 1,
+    pageSize: 15,
   });
 
-  // Fetch danh sách skill từ backend (chuyển từ Header)
   useEffect(() => {
     const fetchSkill = async () => {
       let query = `page=1&size=100&sort=createdAt,desc`;
@@ -140,7 +152,6 @@ const HotJobs = (props) => {
     } else {
       temp = `${temp}&${sortBy}`;
     }
-    // console.log("Base query:", temp); // Giữ console.log để debug nếu cần
     return temp;
   };
 
@@ -176,18 +187,17 @@ const HotJobs = (props) => {
       pageSize: 15,
     });
   };
-  // === KẾT THÚC THÊM CÁC STATE VÀ LOGIC TỪ HEADER ===
 
-  const location = useLocation(); // Giữ location vì nó vẫn được dùng trong useEffect fetchJob
+  const location = useLocation();
 
   useEffect(() => {
     fetchJob();
-    fetchCompanyLikest(); // Gọi API để lấy danh sách công ty được yêu thích
+    fetchCompanyLikest();
   }, [current, pageSize, filter, sortQuery, location]);
 
   const fetchJob = async () => {
     setIsLoading(true);
-    let query = `page=${current}&size=${pageSize}`; // Sử dụng pageSize để lấy số lượng job mong muốn
+    let query = `page=${current}&size=${pageSize}`;
     if (filter) {
       query += `&${filter}`;
     }
@@ -196,9 +206,8 @@ const HotJobs = (props) => {
     }
 
     const res = await callFetchJob(query);
-    console.log("res job", res);
     if (res && res.data) {
-      setJobList(res.data.result); // Lưu toàn bộ danh sách
+      setJobList(res.data.result);
       setDisplayJob(res.data.result?.[0] || null);
       setTotal(res.data.meta.total);
     }
@@ -208,9 +217,7 @@ const HotJobs = (props) => {
   const fetchCompanyLikest = async () => {
     setIsLoading(true);
     const res = await callFetchCompanyLikest();
-    console.log("res likest company", res);
     if (res && res.data) {
-      // Chỉ lấy 4 công ty đầu tiên nếu có nhiều hơn
       setDisplayCompanyLikest(res.data.slice(0, 4));
     }
     setIsLoading(false);
@@ -245,14 +252,13 @@ const HotJobs = (props) => {
       </span>
     ));
   };
-  const [selectedIndex, setSelectedIndex] = useState(0);
 
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const backgrounds = [nen1, nen2, nen3, nen4];
-  const backgroundIndex = displayJob ? displayJob.id % backgrounds.length : 0;
   const selectedBackground = backgrounds[selectedIndex % backgrounds.length];
 
   return (
-    <div className="homepage-wrapper overflow-x-hidden">
+    <div className=" overflow-x-hidden">
       {showHeader && <Header />}
       <div
         className="search_input3 text-white bg-cover bg-center relative"
@@ -263,24 +269,23 @@ const HotJobs = (props) => {
         }}
       >
         <div className="ml-12">
-          {/* HIỂN THỊ THÔNG TIN JOB DUY NHẤT Ở ĐÂY */}
           <AnimatePresence mode="wait">
             {isLoading ? (
               <p key="loading">Đang tải thông tin việc làm...</p>
             ) : displayJob ? (
               <motion.div
-                key={displayJob.id} // quan trọng để tạo hiệu ứng khi thay đổi
+                key={displayJob.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
                 className="p-4 rounded-lg bg-transparent"
               >
-                <div className="  rounded-lg  bg-transparent">
+                <div className="rounded-lg bg-transparent">
                   <div className="text-[90px] font-bold text-white-600">
                     {displayJob.name}
                   </div>
-                  <p className=" ">
+                  <p>
                     <span className="text-[20px] text-orange-300 font-thin text-white-600">
                       {displayJob.company.name}
                     </span>
@@ -289,7 +294,7 @@ const HotJobs = (props) => {
                   <p>
                     {Array.isArray(displayJob.skills) &&
                       displayJob.skills.length > 0 && (
-                        <div className="flex flex-wrap gap-2 ">
+                        <div className="flex flex-wrap gap-2">
                           {displayJob.skills.map((skill) => (
                             <span
                               key={skill.id}
@@ -302,7 +307,7 @@ const HotJobs = (props) => {
                       )}
                   </p>
                   <div className="flex">
-                    <p className="text-white ">
+                    <p className="text-white">
                       <span className="text-sm font-thin">
                         <FontAwesomeIcon icon={faSackDollar} />{" "}
                         {(displayJob.salary + "").replace(
@@ -312,7 +317,7 @@ const HotJobs = (props) => {
                         đ
                       </span>
                     </p>
-                    <p className="text-white text-sm font-thin ml-3 ">
+                    <p className="text-white text-sm font-thin ml-3">
                       <FontAwesomeIcon icon={faLocationDot} />{" "}
                       <span className="font-thin text-sm">
                         {displayJob.location}
@@ -325,7 +330,6 @@ const HotJobs = (props) => {
                       </span>
                     </p>
                   </div>
-                  {/* Bạn có thể thêm các thông tin khác của job tại đây */}
                   <div className="border w-[130px] pl-1 rounded-full h-[60px] cursor-pointer hover:border-orange-300">
                     <button
                       className="mt-2 px-4 py-2 bg-transparent rounded hover:text-orange-400 duration-500"
@@ -348,7 +352,7 @@ const HotJobs = (props) => {
                       <div
                         key={index}
                         style={{
-                          backgroundImage: `url(${backgrounds[index]})`, // ❗ Không dùng %
+                          backgroundImage: `url(${backgrounds[index]})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                           transition: "background-image 0.5s ease-in-out",

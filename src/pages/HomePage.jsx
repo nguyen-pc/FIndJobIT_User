@@ -348,7 +348,7 @@ const HomePage = (props) => {
           </Slider>
         </div>
         {/* -------- Featured Companies (đã chỉnh sửa để không cuộn ngang) -------- */}
-        <div className="HotCompany" style={{ padding: "0px" }}>
+        <div className="" style={{ padding: "0px" }}>
           {" "}
           {/* Bỏ ml-20 o */}
           <div className="mt-10 flex flex-col md:flex-row items-center md:justify-start ml-10">

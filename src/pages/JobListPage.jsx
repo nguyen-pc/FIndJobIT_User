@@ -25,14 +25,14 @@ const JobListPage = (props) => {
   //Lấy công việc mới nhất
   const [displayJob, setDisplayJob] = useState(null);
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(4);
+  const [pageSize, setPageSize] = useState(5);
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState("");
 
   //Lấy công việc phổ biến
   const [displayJobPopular, setDisplayJobPopular] = useState(null);
   const [currentPopular, setCurrenPopular] = useState(1);
-  const [pageSizePopular, setPageSizePopular] = useState(4);
+  const [pageSizePopular, setPageSizePopular] = useState(5);
   const [totalPopular, setTotalPopular] = useState(0);
   const [filterPopular, setFilterPopular] = useState("");
 
@@ -199,8 +199,8 @@ const JobListPage = (props) => {
       {showHeader && <Header />}
       <div>
         {/* Công việc mới nhất */}
-        <div className="HotCompany ml-20 " style={{ padding: "0px " }}>
-          <div className="mt-10  flex">
+        <div className="" style={{ padding: "0px " }}>
+          <div className="mt-10 ml-10  flex">
             <p
               className="text-2xl font-semibold text-center"
               style={{ color: "#1C9EAF" }}
@@ -268,15 +268,15 @@ const JobListPage = (props) => {
         </div>
 
         {/* Các công việc phổ biến */}
-        <div className="HotCompany ml-20 o" style={{ padding: "0px " }}>
-          <div className="mt-10  flex">
+        <div className="" style={{ padding: "0px " }}>
+          <div className="mt-10 ml-10 flex">
             <p
               className="text-2xl font-semibold text-center"
               style={{ color: "#1C9EAF" }}
             >
               CÔNG VIỆC PHỔ BIẾN
             </p>
-            <div className="rounded-full border md:w-auto h-[30px] pl-2.5 ml-[10px]">
+            <div className="rounded-full border md:w-auto h-[30px] pl-2.5 ">
               <div
                 className="width-30 cursor-pointer hover:text-[#1C9EAF] duration-300"
                 onClick={() => navigate("/")}
@@ -362,7 +362,7 @@ const JobListPage = (props) => {
         </div>
 
         {/* Công việc có thể phù hợp với bạn */}
-        <div className="HotCompany ml-20 o" style={{ padding: "0px " }}>
+        <div className="ml-10" style={{ padding: "0px " }}>
           <div className="mt-10  flex">
             <p
               className="text-2xl font-semibold text-center"

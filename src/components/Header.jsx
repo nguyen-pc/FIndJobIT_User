@@ -295,7 +295,7 @@ const Header = () => {
           </Link>
 
           {/* Thanh tìm kiếm nhỏ */}
-          <div className="flex-grow mr-4">
+          <div className="flex-grow  ">
             <input
               type="text"
               placeholder="Tìm công việc..."
@@ -308,28 +308,29 @@ const Header = () => {
         </div>
 
         {/* Menu điều hướng chính (hiển thị trên màn hình lớn) */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-5 ml-90 ">
           {navLinks.map((item) => (
             <div
               onClick={() => navigate(`${item.path}`)}
               // Thay đổi màu mặc định và loại bỏ gạch chân cho Link
-              className="text-sm text-[#1C9EAF] no-underline hover:text-[#177F8A] font-medium transition-colors duration-200 cursor-pointer"
+              className="text-sm text-[#1C9EAF] no-underline hover:text-[#177F8A] font-medium transition-colors duration-200 cursor-pointer w-[100px]"
             >
               {item.label}
             </div>
           ))}
-          <Dropdown menu={{ items: toolItems }} placement="bottom">
+          <Dropdown
+            menu={{ items: toolItems }}
+            placement="bottom"
+            overlayStyle={{ zIndex: 9999 }} // Tăng z-index để dropdown luôn hiển thị trên các phần tử khác
+          >
             <Button
               sx={{
-                // Áp dụng sx cho Button để thay đổi màu và bỏ gạch chân
                 color: "#1C9EAF",
                 textDecoration: "none",
                 "&:hover": {
                   color: "#177F8A",
-                  backgroundColor: "transparent", // Đảm bảo hover không thay đổi nền nếu không muốn
+                  backgroundColor: "transparent",
                 },
-                // Nếu muốn giữ các class Tailwind đã có, bạn có thể gộp sx và className
-                // hoặc định nghĩa style hoàn toàn trong sx
               }}
             >
               Công cụ
@@ -338,7 +339,7 @@ const Header = () => {
         </nav>
 
         {/* Phần người dùng/đăng nhập/hamburger menu */}
-        <div className="flex items-center gap-4">
+        <div className=" flex relative ml-30 top-right items-center gap-2 ">
           {user && isAuthenticated ? (
             <>
               {(user.role.name === "SUPER_ADMIN" ||
@@ -346,7 +347,7 @@ const Header = () => {
                 <Button
                   onClick={handleNavigate}
                   variant="outlined"
-                  className="hidden sm:block text-[#1C9EAF] border-[#1C9EAF] hover:bg-[#1C9EAF] hover:text-white transition-colors duration-200"
+                  className="hidden  sm:block text-[#1C9EAF] border-[#1C9EAF] hover:bg-[#1C9EAF] hover:text-white transition-colors duration-200"
                 >
                   Trang quản trị
                 </Button>
@@ -357,7 +358,7 @@ const Header = () => {
                 trigger={["click"]} // Trigger on click for better mobile experience
                 placement="bottomRight"
               >
-                <Button className="user-button flex items-center gap-2 p-2 rounded-full border border-gray-300 hover:bg-gray-100">
+                <Button className="user-button flex items-center  p-3 rounded-full border border-gray-300 hover:bg-gray-100 ">
                   <span className-="text-xl">👤</span>{" "}
                   <span className="hidden sm:block font-medium">
                     {user.name}
@@ -433,7 +434,7 @@ const Header = () => {
             ))}
             <ListItem button onClick={() => setDrawerOpen(false)}>
               <Dropdown menu={{ items: toolItems }} placement="bottomLeft">
-                <Button className="w-full justify-start normal-case">
+                <Button className=" justify-start normal-case">
                   <ListItemText
                     primary="Công cụ"
                     sx={{
@@ -470,7 +471,7 @@ const Header = () => {
                   />
                 </ListItem>
               )}
-            <div className="relative">
+            <div className="">
               {/* Các mục user menu (Quản lý việc làm, CV, Bảo mật, Đăng xuất) trong Drawer */}
               {user && isAuthenticated && (
                 <>
