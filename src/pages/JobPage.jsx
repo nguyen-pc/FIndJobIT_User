@@ -147,7 +147,7 @@ const JobPage = () => {
                       className="salary-icon"
                     />
                     <strong>Kinh nghiệm:</strong>
-                    <br /> Không có
+                    <br /> {jobDetail?.level || "Không có"}
                   </span>
                 </div>
 

@@ -1612,7 +1612,7 @@ footer {
     margin-bottom: 12px;
 }
 
-.job-company-logo {
+.job-company-logo-recommend {
     width: 24px;
     height: 24px;
     object-fit: contain;
@@ -3529,7 +3529,7 @@ section h2::after {
 /* --- GRID LAYOUTS --- */
 .categories-grid,
 .jobs-list {
-    display: flex;
+    /* display: flex; */
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     /* 3 cột trên màn hình lớn, co giãn */
     gap: 40px;

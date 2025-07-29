@@ -205,6 +205,7 @@ const Header = () => {
           target="_blank"
           rel="noopener noreferrer"
           href="https://www.antgroup.com"
+          onClick={() => navigate("/interview_question")}
           className="align-items-center flex gap-2 justify-center"
         >
           Câu hỏi phỏng vấn
@@ -241,22 +242,22 @@ const Header = () => {
             onClick={() => navigate("/hotjobs")}
             className="filter-select"
           >
-            Việc làm HOT
+            VIỆC LÀM HOT
           </button>
           <button
             onClick={() => navigate("/job_list")}
             className="filter-select"
           >
-            Việc làm
+            VIỆC LÀM
           </button>
           <button
             onClick={() => navigate("/company_list")}
             className="filter-select"
           >
-            Công ty
+            CÔNG TY
           </button>
           <Dropdown menu={{ items }} placement="bottom">
-            <Button className="filter-select text-transform-none">
+            <Button className="filter-select font-bold!">
               Công cụ
             </Button>
           </Dropdown>

@@ -40,7 +40,7 @@ import { sfIn } from "spring-filter-query-builder";
 
 const { Option } = Select; // Destructure Option từ Select
 
-const HotJobs = (props) => {
+const HotJobHome = (props) => {
   var settings = {
     dots: true,
     infinite: true,
@@ -257,7 +257,7 @@ const HotJobs = (props) => {
     <div className="homepage-wrapper">
       {showHeader && <Header />}
       <div
-        className="search_input3 text-white bg-cover bg-center relative"
+        className=" lg:ml-[-180px]! search_input3 text-white bg-cover bg-center relative"
         style={{
           backgroundImage: `url(${selectedBackground})`,
           minHeight: "80vh",
@@ -408,26 +408,11 @@ const HotJobs = (props) => {
         </div>
       </div>
       <main className="main-content">
-        {/* ======== THANH TÌM KIẾM ======== */}
-
-        {/* slide */}
         {/* -------- Featured Jobs (Giữ nguyên phần này nếu bạn muốn hiển thị danh sách job ở đây) -------- */}
-        <div className="ml-12">
+        <div className="ml-[50px]">
           <p className="text-2xl font-semibold " style={{ color: "#1C9EAF" }}>
             Việc làm nổi bật khác
           </p>
-          {/* Bạn có thể dùng lại CardJob ở đây để hiển thị các job khác (nếu fetchJob trả về mảng) */}
-          {/* Nếu fetchJob đã được sửa để chỉ set displayJob là một object duy nhất, bạn cần fetch job khác cho phần này */}
-          {/* HOẶC: bạn cần một state khác cho các job hiển thị ở đây */}
-          {/* Hiện tại, displayJob chỉ chứa 1 job, nên CardJob ở đây sẽ không hoạt động như mong muốn */}
-          {/* Để làm đúng, bạn cần 2 state riêng biệt: 1 cho job đơn ở search_input2, và 1 mảng cho CardJob này */}
-          {/* Để demo, tôi sẽ giả sử bạn vẫn muốn CardJob ở đây hiển thị nhiều job */}
-          {/* Do đó, bạn cần tạo một state mới, ví dụ: const [allDisplayJobs, setAllDisplayJobs] = useState([]); */}
-          {/* Và sửa lại fetchJob để set cả displayJob (job đơn) và allDisplayJobs (mảng) */}
-          {/* Ví dụ: */}
-          {/* <CardJob displayJob={allDisplayJobs} isLoading={isLoading} /> */}
-          {/* Để đơn giản, tôi sẽ tạm thời giữ lại CardJob với displayJob hiện tại */}
-          {/* Nhưng lưu ý rằng displayJob lúc này chỉ có 1 phần tử hoặc null */}
           <CardJob
             displayJob={displayJob ? [displayJob] : []}
             isLoading={isLoading}
@@ -465,79 +450,9 @@ const HotJobs = (props) => {
             </div>
           )}
         </div>
-        <div className="mt-10  ml-10" style={{ background: "" }}>
-          <p className="text-2xl font-semibold " style={{ color: "#1C9EAF" }}>
-            NHÀ TUYỂN DỤNG NỔI BẬT
-          </p>{" "}
-          <Slider {...settings}>
-            {displayCompanyLikest.map((c, i) => (
-              <div
-                key={i}
-                className="relative"
-                onMouseEnter={() => setHoveredFavoriteIndex(i)}
-                onMouseLeave={() => setHoveredFavoriteIndex(null)}
-              >
-                <CardCompany company={c} />
-              </div>
-            ))}
-          </Slider>
-        </div>
-        {/* -------- Featured Companies (đã chỉnh sửa để không cuộn ngang) -------- */}
-        <div className="HotCompany" style={{ padding: "0px" }}>
-          {" "}
-          {/* Bỏ ml-20 o */}
-          <div className="mt-10 flex flex-col md:flex-row items-center md:justify-start ml-10">
-            {" "}
-            {/* Thêm ml-10 và căn chỉnh */}
-            <p className="text-2xl font-semibold " style={{ color: "#1C9EAF" }}>
-              CÔNG TY ĐƯỢC YÊU THÍCH
-            </p>
-            <div className="rounded-full border md:w-auto h-[30px] pl-2.5 ml-[10px] mt-2 md:mt-0">
-              {" "}
-              {/* Thêm mt-2 md:mt-0 cho responsive */}
-              <div
-                className="width-30 cursor-pointer hover:text-[#1C9EAF] duration-300"
-                onClick={() => navigate("/companies")}
-              >
-                <span className=" text-xs mr-2 ">Xem thêm</span>
-                <FontAwesomeIcon
-                  icon={faAngleRight}
-                  className="text-xs mr-2 "
-                />
-              </div>
-            </div>
-          </div>
-          <div className="mb-20 ml-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
-              {displayCompanyLikest.map((c, i) => (
-                <div
-                  key={i}
-                  className="relative" // Bỏ mr-9
-                  onMouseEnter={() => setHoveredFavoriteIndex(i)}
-                  onMouseLeave={() => setHoveredFavoriteIndex(null)}
-                >
-                  <CompanyCard company={c} />
-                  <div
-                    className={`absolute top-3 -left-16 mt-2 z-50 transition-all duration-900
-                      ${
-                        hoveredFavoriteIndex === i
-                          ? "opacity-100 translate-y-0"
-                          : "opacity-0 -translate-y-2 pointer-events-none"
-                      }
-                    `}
-                  >
-                    <InfoCard company={c} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
 
-export default HotJobs;
+export default HotJobHome;

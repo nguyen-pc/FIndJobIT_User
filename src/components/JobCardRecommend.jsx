@@ -3,7 +3,8 @@ import { convertSlug, getLocationName } from "../config/utils";
 import { EnvironmentOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import { Spin } from "antd";
+import { Button, Spin } from "antd";
+import nen3 from "../assets/nen3.jpg";
 
 const JobCardRecommend = ({ jobs }) => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -21,44 +22,76 @@ const JobCardRecommend = ({ jobs }) => {
         {isLoading ? (
           <Spin spinning={isLoading} tip="Loading..."></Spin>
         ) : jobs && jobs.length > 0 ? (
-          jobs.map((job) => (
+          jobs.map((job, index) => (
             <div
-              className="job-card"
               key={job.id}
+              className="rounded-xl overflow-hidden cursor-pointer shadow-md hover:scale-[1.02] transition w-[250px] h-[350px] bg-transparent"
               onClick={() => handleViewDetailJob(job)}
             >
-              {/* Header gồm logo + tên công ty + nút yêu thích */}
-              <div className="job-card-header">
-                <img
-                  className="job-company-logo"
-                  src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
-                    job?.job?.logoUrl
-                  }`}
-                  alt={job.company}
-                />
-                <span className="job-company-name">
-                  {" "}
+              {/* Ảnh nền nửa trên */}
+              <div
+                className="h-1/3 bg-cover bg-center bg-no-repeat relative"
+                style={{ backgroundImage: `url(${nen3})` }}
+              >
+                {/* Hình ảnh công ty (logo) đè lên ảnh nền */}
+                <div className="absolute top-2 left-2 w-18 h-18 bg-white rounded p-1 shadow">
+                  <img
+                    src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
+                      job?.job?.logoUrl
+                    }`}
+                    alt={job.name}
+                    className="object-contain w-full h-full"
+                  />
+                </div>
+                <p className=" absolute top-20 left-2 text-xm italic text-white truncate">
                   {typeof job.company === "object"
                     ? job.company.name
                     : job.company}
-                </span>
+                </p>
+
+                {/* Nhãn ở góc trên trái */}
+                <div className="absolute top-2 right-2 flex gap-1">
+                  <span className="bg-green-600 text-white text-xs px-2 py-0.5 rounded font-semibold">
+                    {getLocationName(job.job.location)}
+                  </span>
+                </div>
               </div>
-              <h3>{job.job.title}</h3>
-              <div>
-                <ThunderboltOutlined style={{ color: "orange" }} />
-                &nbsp;
-                {(job.job.salary + "")?.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} đ
+
+              {/* Nội dung mô tả (nửa dưới) */}
+              <div className="h-1/2 p-3 text-black">
+                <h3 className="text-base font-bold truncate flex">
+                  <div className=" font-medium font-san serif text-xl text-[#1C9EAF]">
+                    {job.job.title}
+                  </div>
+                </h3>
+
+                <p className="text-sm text-gray-500 mt-1">
+                  Lương:{" "}
+                  {(job.job.salary + "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")} đ{" "}
+                  <br />
+                  <div className="flex mt-2">
+                    Yêu cầu:
+                    {Array.isArray(job.job.skills) && job.job.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-2 ml-2">
+                        {job.job.skills.map((skill) => (
+                          <span
+                            key={skill}
+                            className="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </p>
+                <p className="text-sm text-gray-400">
+                  {job.updatedAt
+                    ? dayjs(job.job.updatedAt).locale("en").fromNow()
+                    : dayjs(job.job.createAt).locale("en").fromNow()}
+                </p>
               </div>
-              <div>
-                <EnvironmentOutlined style={{ color: "#58aaab" }} />
-                &nbsp;{getLocationName(job.job.location)}
-              </div>
-              <div>
-                {job.updatedAt
-                  ? dayjs(job.job.updatedAt).locale("en").fromNow()
-                  : dayjs(job.job.createdAt).locale("en").fromNow()}
-              </div>
-              <button>Ứng tuyển ngay</button>
+              {/* <Button className="">Ứng tuyển ngay</Button> */}
             </div>
           ))
         ) : (

@@ -39,7 +39,7 @@ function HotCompany() {
         </div>
       </div>
 
-      <div className="w-full h-[400px] flex relative mb-20">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
         {displayCompany.map((c, i) => (
           <div
             key={i}

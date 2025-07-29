@@ -360,7 +360,7 @@ const JobListPage = () => {
         </div>
 
         {/* Công việc có thể phù hợp với bạn */}
-        <div className="HotCompany ml-20 o" style={{ padding: "0px " }}>
+        <div className="HotCompany ml-20" style={{ padding: "0px " }}>
           <div className="mt-10  flex">
             <p
               className="text-2xl font-semibold text-center"

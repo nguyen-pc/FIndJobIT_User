@@ -7,6 +7,7 @@ import InfoCard from "../components/InfoCard"; // Import InfoCard nếu bạn mu
 import CardJob from "../components/card/CardJob";
 import CardCompany from "../components/card/CardCompany";
 import HotJobs from "../pages/HotJobs";
+import HotJobHome from "../pages/HotJobHome";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -347,7 +348,7 @@ const HomePage = (props) => {
           </Slider>
         </div>
         {/* -------- Featured Companies (đã chỉnh sửa để không cuộn ngang) -------- */}
-        <div className="HotCompany" style={{ padding: "0px" }}>
+        <div className="HotCompany "  style={{ padding: "0px" }}>
           {" "}
           {/* Bỏ ml-20 o */}
           <div className="mt-10 flex flex-col md:flex-row items-center md:justify-start ml-10">
@@ -397,46 +398,8 @@ const HomePage = (props) => {
             </div>
           </div>
         </div>
-        <div className="-ml-47">
-          <HotJobs showHeader={false} />
-        </div>
-        {/* -------- Featured Jobs -------- */}
-        <div className="ml-25!">
-          <p className="text-2xl font-semibold " style={{ color: "#1C9EAF" }}>
-            Việc làm nổi bật
-          </p>
-          <CardJob displayJob={displayJob} isLoading={isLoading} />
-          {total > pageSize && (
-            <div className="pagination">
-              {current > 1 ? (
-                <span
-                  onClick={() =>
-                    handleOnchangePage({ current: current - 1, pageSize })
-                  }
-                >
-                  <FontAwesomeIcon icon={faArrowLeft} />
-                </span>
-              ) : (
-                <span className="disabled">
-                  <FontAwesomeIcon icon={faArrowLeft} />
-                </span>
-              )}
-
-              {current < totalJobPages ? (
-                <span
-                  onClick={() =>
-                    handleOnchangePage({ current: current + 1, pageSize })
-                  }
-                >
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </span>
-              ) : (
-                <span className="disabled">
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </span>
-              )}
-            </div>
-          )}
+        <div className="">
+          <HotJobHome showHeader={false} />
         </div>
       </main>
 
