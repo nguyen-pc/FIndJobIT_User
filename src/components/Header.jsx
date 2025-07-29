@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // Bỏ useLocation vì không cần thiết cho search
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Dropdown, notification } from "antd";
 import { callLogout } from "../config/api"; // Bỏ callFetchAllSkill, LOCATION_LIST
-import { Dropdown, notification } from "antd"; // Bỏ Select
+
 import profile from "../assets/profile 1.png";
 import job from "../assets/job.png";
 import CV from "../assets/cv.png";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setLogoutAction } from "../redux/slice/accountSlide";
 import Button from "@mui/material/Button";
-
-// Bỏ queryString, sfIn
 import {
   Box,
   Drawer,
@@ -23,25 +22,27 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import queryString from "query-string";
 
+// Hàm sfIn giả định (nếu bạn vẫn sử dụng nó ở đâu đó, hãy định nghĩa lại hoặc xóa)
+const sfIn = (field, values) => {
+  if (!values || values.length === 0) return "";
+  return `${field} in (${values.map((v) => `'${v}'`).join(",")})`;
+};
+
 const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [selectedLocation, setSelectedLocation] = useState([]);
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  // Bỏ useLocation
   const dispatch = useAppDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const [searchParams, setSearchParams] = useState({
     name: "",
     salary: "",
     level: [],
-    current: 1, // Đây là current cho việc search, không phải cho pagination của job
-    pageSize: 15, // Đây là pageSize cho việc search, không phải cho pagination của job
+    current: 1,
+    pageSize: 15,
   });
+
   const handleSearchChange = (e) => {
     setSearchParams({ ...searchParams, name: e.target.value });
   };
@@ -83,61 +84,28 @@ const Header = () => {
     } else {
       temp = `${temp}&${sortBy}`;
     }
-    // console.log("Base query:", temp); // Giữ console.log để debug nếu cần
     return temp;
   };
 
-  const [quickSearchTerm, setQuickSearchTerm] = useState("");
-
   const handleQuickSearchKeyDown = (e) => {
     if (e.key === "Enter") {
-      const baseQuery = buildQuery(searchParams, {}, null);
-      let extraQuery = "";
-      if (selectedLocation.length) {
-        extraQuery += `&location=${selectedLocation.join(",")}`;
-      }
-      if (selectedSkills.length) {
-        extraQuery += `&skills=${selectedSkills.join(",")}`;
-      }
-      const finalQuery = baseQuery + extraQuery;
-
+      const finalQuery = buildQuery(searchParams, {}, null);
       if (!finalQuery) {
         notification.error({
           message: "Có lỗi xảy ra",
-          description: "Vui lòng chọn tiêu chí để search",
+          description: "Vui lòng nhập từ khóa để tìm kiếm",
         });
         return;
       }
       navigate(`/search_job?${finalQuery}`);
+      setDrawerOpen(false); // Đóng drawer sau khi tìm kiếm
     }
   };
-
-  // Bỏ optionsLocation, optionsSkills, selectedLocation, selectedSkills, searchOpacity, headerHeight, searchParams
-
-  const [showJobManagementDropdown, setShowJobManagementDropdown] =
-    useState(false);
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const [showCvManagementDropdown, setShowCvManagementDropdown] =
-    useState(false);
-  const [showSecurityDropdown, setShowSecurityDropdown] = useState(false);
 
   const isAuthenticated = useAppSelector(
     (state) => state.account.isAuthenticated
   );
   const user = useAppSelector((state) => state.account.user);
-
-  const handleSelectChange = (e) => {
-    const value = e.target.value;
-    if (value === "jobs" || value === "featured-jobs") {
-      navigate("/job-list");
-    } else if (value) {
-      const section = document.getElementById(value);
-      if (section) {
-        section.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-    e.target.value = "";
-  };
 
   const handleNavigate = () => {
     if (user.role.name === "COMPANY") {
@@ -158,367 +126,459 @@ const Header = () => {
     }
   };
 
-  // Bỏ useEffect để fetch skill và useEffect lắng nghe scroll (vì không còn search bar)
+  // Menu items for the main navigation and Drawer
+  const navLinks = [
+    { label: "Việc làm HOT", path: "/hotjobs" },
+    { label: "Việc làm", path: "/job_list" },
+    { label: "Công ty", path: "/company_list" },
+  ];
 
-  // Bỏ handleClearFilters, onFinish, handleSearchChange, buildQuery, handleSearch
-
-  const navItems = (
-    <List>
-      <ListItem
-        button
-        onClick={() => {
-          navigate("/job_list");
-          setDrawerOpen(false);
-        }}
-      >
-        <ListItemText primary="Việc làm HOT" />
-      </ListItem>
-      <ListItem
-        button
-        onClick={() => {
-          navigate("/job_list");
-          setDrawerOpen(false);
-        }}
-      >
-        <ListItemText primary="Việc làm" />
-      </ListItem>
-      <ListItem
-        button
-        onClick={() => {
-          navigate("/company_list");
-          setDrawerOpen(false);
-        }}
-      >
-        <ListItemText primary="Công ty" />
-      </ListItem>
-      <ListItem>
-        <ListItemText primary="Công cụ" />
-      </ListItem>
-    </List>
-  );
-
-  const items = [
+  const toolItems = [
     {
-      key: "1",
+      key: "interview-question",
       label: (
-        <p
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-          onClick={() => navigate("/interview_question")}
-          className="align-items-center flex gap-2 justify-center"
+        // Áp dụng Tailwind classes trực tiếp cho Link trong Dropdown
+        <Link
+          to="/interview_question"
+          onClick={() => setDrawerOpen(false)}
+          className="text-[#1C9EAF] no-underline hover:text-[#177F8A]" // Thêm no-underline
         >
           Câu hỏi phỏng vấn
-        </p>
+        </Link>
       ),
+    },
+    // Add other tool items here
+  ];
+
+  // User dropdown menu items
+  const userMenuItems = [
+    {
+      label: (
+        <div className="flex items-center gap-2">
+          <img className="w-4 h-4" src={job} alt="job-management" />
+          Quản lý việc làm
+        </div>
+      ),
+      children: [
+        {
+          key: "job-follow",
+          label: (
+            <Link
+              to="/job-follow"
+              className="text-gray-700 hover:text-[#1C9EAF] no-underline"
+            >
+              Việc làm yêu thích
+            </Link>
+          ),
+        },
+        {
+          key: "applied-jobs",
+          label: (
+            <Link
+              to="/applied-jobs"
+              className="text-gray-700 hover:text-[#1C9EAF] no-underline"
+            >
+              Việc làm đã ứng tuyển
+            </Link>
+          ),
+        },
+        {
+          key: "company-follow",
+          label: (
+            <Link
+              to="/company_follow"
+              className="text-gray-700 hover:text-[#1C9EAF] no-underline"
+            >
+              Công ty đã lưu
+            </Link>
+          ),
+        },
+      ],
+    },
+    {
+      label: (
+        <div className="flex items-center gap-2">
+          <img className="w-4 h-4" src={CV} alt="manage-cv" />
+          Quản lý CV
+        </div>
+      ),
+      children: [
+        {
+          key: "my-cv",
+          label: (
+            <Link
+              to="/my-cv"
+              className="text-gray-700 hover:text-[#1C9EAF] no-underline"
+            >
+              CV của tôi
+            </Link>
+          ),
+        },
+        {
+          key: "recruiters-view-profile",
+          label: (
+            <Link
+              to="/recruiters-view-profile"
+              className="text-gray-700 hover:text-[#1C9EAF] no-underline"
+            >
+              Nhà tuyển dụng xem hồ sơ
+            </Link>
+          ),
+        },
+      ],
+    },
+    {
+      label: (
+        <div className="flex items-center gap-2">
+          <img
+            className="w-4 h-4"
+            src="https://img.icons8.com/ios-glyphs/30/resume.png"
+            alt="profile-security"
+          />
+          Cá nhân và bảo mật
+        </div>
+      ),
+      children: [
+        {
+          key: "profile",
+          label: (
+            <Link
+              to="/profile"
+              className="text-gray-700 hover:text-[#1C9EAF] no-underline"
+            >
+              Cài đặt thông tin cá nhân
+            </Link>
+          ),
+        },
+        {
+          key: "change-password",
+          label: (
+            <Link
+              to="/forgotpassword"
+              className="text-gray-700 hover:text-[#1C9EAF] no-underline"
+            >
+              Đổi mật khẩu
+            </Link>
+          ),
+        },
+      ],
+    },
+    {
+      type: "divider", // Add a divider for separation
+    },
+    {
+      label: (
+        <div className="flex items-center gap-2 text-red-500">
+          <img
+            className="w-4 h-4"
+            src="https://img.icons8.com/ios-glyphs/30/exit.png"
+            alt="logout"
+          />
+          Đăng xuất
+        </div>
+      ),
+      key: "logout",
+      onClick: handleLogout,
     },
   ];
 
   return (
-    <header
-      className="header"
-      // Loại bỏ style height và transition liên quan đến search bar
-      style={{ overflow: "visible" }}
-    >
-      <div className="header-top flex-nowrap flex items-center justify-between px-4 ">
-        <div className="flex items-center gap-2">
-          <Link to="/" className="logo text-2xl font-bold text-[#1C9EAF]">
+    <header className="header bg-white shadow-md sticky top-0 z-50 ">
+      <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
+        {/* Logo và Thanh tìm kiếm */}
+        <div className="flex gap-4 absolute left-10">
+          <Link
+            to="/"
+            className="logo text-2xl font-bold text-[#1C9EAF] flex-shrink-0"
+          >
             NextDev
           </Link>
 
-          {/* Thanh tìm kiếm nhỏ cạnh logo */}
-          <input
-            type="text"
-            placeholder="Tìm công việc..."
-            value={searchParams.name}
-            onChange={handleSearchChange}
-            onKeyDown={handleQuickSearchKeyDown}
-            className="hidden sm:block px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] w-70"
-          />
+          {/* Thanh tìm kiếm nhỏ */}
+          <div className="flex-grow  ">
+            <input
+              type="text"
+              placeholder="Tìm công việc..."
+              value={searchParams.name}
+              onChange={handleSearchChange}
+              onKeyDown={handleQuickSearchKeyDown}
+              className="hidden sm:block px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] w-full max-w-xs"
+            />
+          </div>
         </div>
 
-        <nav className="nav-menu md:block! hidden!">
-          <button
-            onClick={() => navigate("/hotjobs")}
-            className="filter-select"
+        {/* Menu điều hướng chính (hiển thị trên màn hình lớn) */}
+        <nav className="hidden md:flex items-center gap-5 ml-90 ">
+          {navLinks.map((item) => (
+            <div
+              onClick={() => navigate(`${item.path}`)}
+              // Thay đổi màu mặc định và loại bỏ gạch chân cho Link
+              className="text-sm text-[#1C9EAF] no-underline hover:text-[#177F8A] font-medium transition-colors duration-200 cursor-pointer w-[100px]"
+            >
+              {item.label}
+            </div>
+          ))}
+          <Dropdown
+            menu={{ items: toolItems }}
+            placement="bottom"
+            overlayStyle={{ zIndex: 9999 }} // Tăng z-index để dropdown luôn hiển thị trên các phần tử khác
           >
-            VIỆC LÀM HOT
-          </button>
-          <button
-            onClick={() => navigate("/job_list")}
-            className="filter-select"
-          >
-            VIỆC LÀM
-          </button>
-          <button
-            onClick={() => navigate("/company_list")}
-            className="filter-select"
-          >
-            CÔNG TY
-          </button>
-          <Dropdown menu={{ items }} placement="bottom">
-            <Button className="filter-select font-bold!">
+            <Button
+              sx={{
+                color: "#1C9EAF",
+                textDecoration: "none",
+                "&:hover": {
+                  color: "#177F8A",
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
               Công cụ
             </Button>
           </Dropdown>
         </nav>
 
-        {user && isAuthenticated ? (
-          <>
-            {(user.role.name === "SUPER_ADMIN" ||
-              user.role.name === "COMPANY") && (
-              <Button onClick={() => handleNavigate()} variant="outlined">
-                Trang quản trị
-              </Button>
-            )}
-            <div
-              className="user-menu-container"
-              onMouseEnter={() => setShowUserDropdown(true)}
-              onMouseLeave={() => setShowUserDropdown(false)}
-            >
-              <button className="user-button">
-                <span className="user-icon">👤</span> {user.name}
-              </button>
-
-              {showUserDropdown && (
-                <div className="user-dropdown">
-                  <div className="dropdown-header">
-                    <img
-                      className="dropdown-avatar"
-                      src={profile}
-                      alt="avatar"
-                    />
-                    <div className="user-info-text">
-                      <span className="user-name">{user.name}</span>
-                      <span className="user-email">{user.email}</span>
-                      <span className="user-role">Ứng viên</span>
-                    </div>
-                  </div>
-
-                  <div
-                    className="dropdown-item job-management-item"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowJobManagementDropdown(!showJobManagementDropdown);
-                    }}
-                  >
-                    <div className="job-management-header">
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                        }}
-                      >
-                        <img
-                          width="18px"
-                          height="18px"
-                          src={job}
-                          alt="job-management"
-                        />
-                        Quản lý việc làm
-                      </div>
-                      <span
-                        className="dropdown-arrow"
-                        style={{
-                          transform: showJobManagementDropdown
-                            ? "rotate(180deg)"
-                            : "rotate(0deg)",
-                        }}
-                      >
-                        &#9660;
-                      </span>
-                    </div>
-
-                    {showJobManagementDropdown && (
-                      <div className="sub-dropdown">
-                        <div
-                          className="dropdown-item"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate("/job-follow");
-                          }}
-                        >
-                          Việc làm yêu thích
-                        </div>
-                        <div
-                          className="dropdown-item"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate("/applied-jobs");
-                          }}
-                        >
-                          Việc làm đã ứng tuyển
-                        </div>
-                        <div
-                          className="dropdown-item"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate("/company_follow");
-                          }}
-                        >
-                          Công ty đã lưu
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div
-                    className="dropdown-item cv-management-item"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowCvManagementDropdown(!showCvManagementDropdown);
-                    }}
-                  >
-                    <div className="cv-management-header">
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                        }}
-                      >
-                        <img
-                          width="18px"
-                          height="18px"
-                          src={CV}
-                          alt="manage-cv"
-                        />
-                        Quản lý CV
-                      </div>
-                      <span
-                        className="dropdown-arrow"
-                        style={{
-                          transform: showCvManagementDropdown
-                            ? "rotate(180deg)"
-                            : "rotate(0deg)",
-                        }}
-                      >
-                        &#9660;
-                      </span>
-                    </div>
-
-                    {showCvManagementDropdown && (
-                      <div className="sub-dropdown">
-                        <div
-                          className="dropdown-item"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate("/my-cv");
-                          }}
-                        >
-                          CV của tôi
-                        </div>
-                        <div
-                          className="dropdown-item"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate("/recruiters-view-profile");
-                          }}
-                        >
-                          Nhà tuyển dụng xem hồ sơ
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div
-                    className="dropdown-item security-item"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowSecurityDropdown(!showSecurityDropdown);
-                    }}
-                  >
-                    <div className="security-header">
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                        }}
-                      >
-                        <img
-                          width="18px"
-                          height="18px"
-                          src="https://img.icons8.com/ios-glyphs/30/resume.png"
-                          alt="profile-security"
-                        />
-                        Cá nhân và bảo mật
-                      </div>
-                      <span
-                        className="dropdown-arrow"
-                        style={{
-                          transform: showSecurityDropdown
-                            ? "rotate(180deg)"
-                            : "rotate(0deg)",
-                        }}
-                      >
-                        &#9660;
-                      </span>
-                    </div>
-
-                    {showSecurityDropdown && (
-                      <div className="sub-dropdown">
-                        <div
-                          className="dropdown-item"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate("/profile");
-                          }}
-                        >
-                          Cài đặt thông tin cá nhân
-                        </div>
-                        <div
-                          className="dropdown-item"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate("/forgotpassword");
-                          }}
-                        >
-                          Đổi mật khẩu
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div
-                    className="dropdown-item logout-item"
-                    onClick={() => handleLogout()}
-                  >
-                    <img
-                      width="18px"
-                      height="18px"
-                      src="https://img.icons8.com/ios-glyphs/30/exit.png"
-                      alt="logout"
-                    />
-                    Đăng xuất
-                  </div>
-                </div>
+        {/* Phần người dùng/đăng nhập/hamburger menu */}
+        <div className=" flex relative ml-30 top-right items-center gap-2 ">
+          {user && isAuthenticated ? (
+            <>
+              {(user.role.name === "SUPER_ADMIN" ||
+                user.role.name === "COMPANY") && (
+                <Button
+                  onClick={handleNavigate}
+                  variant="outlined"
+                  className="hidden  sm:block text-[#1C9EAF] border-[#1C9EAF] hover:bg-[#1C9EAF] hover:text-white transition-colors duration-200"
+                >
+                  Trang quản trị
+                </Button>
               )}
-            </div>
-          </>
-        ) : (
-          <div>
-            <button
+              {/* Dropdown người dùng Ant Design */}
+              <Dropdown
+                menu={{ items: userMenuItems }}
+                trigger={["click"]} // Trigger on click for better mobile experience
+                placement="bottomRight"
+              >
+                <Button className="user-button flex items-center  p-3 rounded-full border border-gray-300 hover:bg-gray-100 ">
+                  <span className-="text-xl">👤</span>{" "}
+                  <span className="hidden sm:block font-medium">
+                    {user.name}
+                  </span>
+                </Button>
+              </Dropdown>
+            </>
+          ) : (
+            <Button
               onClick={() => navigate("/signin")}
-              className="p-2 rounded bg-[#1C9EAF] text-white :hover:bg-[#1C9EAF]/90 "
+              variant="contained"
+              sx={{
+                bgcolor: "#1C9EAF",
+                "&:hover": {
+                  bgcolor: "#177F8A",
+                },
+                textTransform: "none",
+                px: 3, // Thêm padding x
+                py: 1, // Thêm padding y
+              }}
             >
               Đăng nhập
-            </button>
-          </div>
-        )}
-        {(isMobile || isTablet) && (
-          <IconButton onClick={() => setDrawerOpen(true)}>
-            <MenuIcon />
-          </IconButton>
-        )}
+            </Button>
+          )}
+
+          {/* Hamburger menu icon cho màn hình nhỏ */}
+          {isSmallScreen && (
+            <IconButton onClick={() => setDrawerOpen(true)} color="inherit">
+              <MenuIcon />
+            </IconButton>
+          )}
+        </div>
       </div>
+
+      {/* Drawer (Menu di động) */}
       <Drawer
         anchor="left"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
       >
-        <Box sx={{ width: "50vw" }}>{navItems}</Box>
+        <Box sx={{ width: 250 }} role="presentation">
+          <List>
+            {/* Thanh tìm kiếm trong Drawer cho màn hình nhỏ */}
+            <ListItem>
+              <input
+                type="text"
+                placeholder="Tìm công việc..."
+                value={searchParams.name}
+                onChange={handleSearchChange}
+                onKeyDown={handleQuickSearchKeyDown}
+                className="px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] w-full"
+              />
+            </ListItem>
+            {navLinks.map((item) => (
+              <ListItem
+                button
+                key={item.path}
+                onClick={() => {
+                  navigate(item.path);
+                  setDrawerOpen(false);
+                }}
+              >
+                <ListItemText
+                  primary={item.label}
+                  sx={{
+                    "& .MuiListItemText-primary": {
+                      color: "#1c9eaf",
+                      textDecoration: "none",
+                    },
+                  }}
+                />
+              </ListItem>
+            ))}
+            <ListItem button onClick={() => setDrawerOpen(false)}>
+              <Dropdown menu={{ items: toolItems }} placement="bottomLeft">
+                <Button className=" justify-start normal-case">
+                  <ListItemText
+                    primary="Công cụ"
+                    sx={{
+                      "& .MuiListItemText-primary": {
+                        color: "#1c9eaf",
+                        textDecoration: "none",
+                      },
+                    }}
+                  />
+                </Button>
+              </Dropdown>
+            </ListItem>
+
+            {/* Mục quản trị trong Drawer nếu người dùng là admin/company */}
+            {user &&
+              isAuthenticated &&
+              (user.role.name === "SUPER_ADMIN" ||
+                user.role.name === "COMPANY") && (
+                <ListItem
+                  button
+                  onClick={() => {
+                    handleNavigate();
+                    setDrawerOpen(false);
+                  }}
+                >
+                  <ListItemText
+                    primary="Trang quản trị"
+                    sx={{
+                      "& .MuiListItemText-primary": {
+                        color: "#1c9eaf",
+                        textDecoration: "none",
+                      },
+                    }}
+                  />
+                </ListItem>
+              )}
+            <div className="">
+              {/* Các mục user menu (Quản lý việc làm, CV, Bảo mật, Đăng xuất) trong Drawer */}
+              {user && isAuthenticated && (
+                <>
+                  <div className="absolute right-0">
+                    <ListItem button onClick={() => navigate("/job-follow")}>
+                      <ListItemText
+                        primary="Việc làm yêu thích"
+                        sx={{
+                          "& .MuiListItemText-primary": {
+                            color: "#1c9eaf",
+                            textDecoration: "none",
+                          },
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem button onClick={() => navigate("/applied-jobs")}>
+                      <ListItemText
+                        primary="Việc làm đã ứng tuyển"
+                        sx={{
+                          "& .MuiListItemText-primary": {
+                            color: "#1c9eaf",
+                            textDecoration: "none",
+                          },
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem
+                      button
+                      onClick={() => navigate("/company_follow")}
+                    >
+                      <ListItemText
+                        primary="Công ty đã lưu"
+                        sx={{
+                          "& .MuiListItemText-primary": {
+                            color: "#1c9eaf",
+                            textDecoration: "none",
+                          },
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem button onClick={() => navigate("/my-cv")}>
+                      <ListItemText
+                        primary="CV của tôi"
+                        sx={{
+                          "& .MuiListItemText-primary": {
+                            color: "#1c9eaf",
+                            textDecoration: "none",
+                          },
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem
+                      button
+                      onClick={() => navigate("/recruiters-view-profile")}
+                    >
+                      <ListItemText
+                        primary="Nhà tuyển dụng xem hồ sơ"
+                        sx={{
+                          "& .MuiListItemText-primary": {
+                            color: "#1c9eaf",
+                            textDecoration: "none",
+                          },
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem button onClick={() => navigate("/profile")}>
+                      <ListItemText
+                        primary="Cài đặt thông tin cá nhân"
+                        sx={{
+                          "& .MuiListItemText-primary": {
+                            color: "#1c9eaf",
+                            textDecoration: "none",
+                          },
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem
+                      button
+                      onClick={() => navigate("/forgotpassword")}
+                    >
+                      <ListItemText
+                        primary="Đổi mật khẩu"
+                        sx={{
+                          "& .MuiListItemText-primary": {
+                            color: "#1c9eaf",
+                            textDecoration: "none",
+                          },
+                        }}
+                      />
+                    </ListItem>
+                    <ListItem button onClick={handleLogout}>
+                      <ListItemText
+                        primary="Đăng xuất"
+                        sx={{
+                          "& .MuiListItemText-primary": {
+                            color: "#ef4444",
+                            textDecoration: "none",
+                          },
+                        }}
+                      />
+                    </ListItem>
+                  </div>
+                </>
+              )}
+            </div>
+          </List>
+        </Box>
       </Drawer>
     </header>
   );
