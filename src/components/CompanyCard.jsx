@@ -11,7 +11,7 @@ function CompanyCard({ company }) {
     }
   };
   return (
-    <div className="mt-10 mb-10 w-full sm:w-[200px] md:w-[200px] lg:w-[250px] bg-white rounded shadow-md h-[320px] transition-all duration-300 hover:shadow-lg  cursor-pointer">
+    <div className="mt-10 mb-10 sm:w-[200px] md:w-[200px] lg:w-[200px] bg-white rounded shadow-md h-[320px] transition-all duration-300 hover:shadow-lg  cursor-pointer">
       <div className="relative">
         <img
           src={`${import.meta.env.VITE_BACKEND_URL}/storage/company/${
@@ -30,12 +30,14 @@ function CompanyCard({ company }) {
           />
         </div>
       </div>
-      <div className="p-4">
-        <div className="text-base font-semibold mb-2">{company.name}</div>
+      <div className="p-4 relative">
+        <div className="text-base font-semibold mb-2 line-clamp-2">
+          {company.name}
+        </div>
         <div className="text-sm text-gray-600 line-clamp-3">
           {parse(company.description ?? "")}
         </div>
-        <div className="border-1 rounded text-center mt-3 text-[#1C9EAF] h-8 pt-1 text-sm w-30 ml-1 hover:bg-[#1C9EAF] hover:text-white duration-300">
+        <div className="absolute top-33 border-1 rounded text-center mt-3 text-[#1C9EAF] h-8 p-1 text-xs w-20  hover:bg-[#1C9EAF] hover:text-white duration-300">
           <button
             onClick={() =>
               handleViewDetailCompanyJob(company?.name, company?.id)

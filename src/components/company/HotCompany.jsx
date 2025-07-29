@@ -14,6 +14,7 @@ function HotCompany() {
   useEffect(() => {
     fetchCompany();
   }, []);
+
   const fetchCompany = async () => {
     const res0 = await callFetchCompany();
     if (res0?.data?.result) {
@@ -23,44 +24,59 @@ function HotCompany() {
   };
 
   return (
-    <div className="HotCompany ml-20">
-      <div className="mt-10 flex">
-        <p className="text-2xl font-semibold" style={{ color: "#1C9EAF" }}>
+    <div className="HotCompany px-4 sm:ml-20">
+      {/* Tiêu đề */}
+      <div className="mt-10 flex items-center flex-wrap gap-2">
+        <p className="text-xl sm:text-2xl font-semibold text-[#1C9EAF]">
           CÔNG TY ĐƯỢC NỔI BẬT
         </p>
-        <div className="rounded-full border md:w-auto h-[30px] pl-2.5 ml-[10px]">
-          <div
-            className="width-30 cursor-pointer hover:text-[#1C9EAF] duration-300"
-            onClick={() => navigate("/")}
-          >
-            <span className=" text-xs mr-2">Xem thêm</span>
-            <FontAwesomeIcon icon={faAngleRight} className="text-xs mr-2" />
-          </div>
+        <div
+          className="rounded-full border h-[30px] px-3 cursor-pointer hover:text-[#1C9EAF] duration-300 text-xs flex items-center"
+          onClick={() => navigate("/")}
+        >
+          <span className="mr-2">Xem thêm</span>
+          <FontAwesomeIcon icon={faAngleRight} />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
-        {displayCompany.map((c, i) => (
-          <div
-            key={i}
-            className="relative mr-9"
-            onMouseEnter={() => setHoveredFavoriteIndex(i)}
-            onMouseLeave={() => setHoveredFavoriteIndex(null)}
-          >
-            <CompanyCard company={c} />
-            <div
-              className={`absolute top-3 -left-16 mt-2 z-50 transition-all duration-900
-                ${
-                  hoveredFavoriteIndex === i
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 -translate-y-2 pointer-events-none"
-                }
-              `}
-            >
-              <InfoCard company={c} />
-            </div>
+      {/* Danh sách công ty */}
+      <div className="w-full mt-6 mb-20">
+        {/* ✅ Mobile: cuộn ngang */}
+        <div className="block sm:hidden overflow-x-auto">
+          <div className="flex gap-4 w-max pb-2">
+            {displayCompany.map((c, i) => (
+              <div key={i} className="w-[40vw] flex-shrink-0">
+                <CompanyCard company={c} />
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* ✅ Desktop: dạng lưới có hover InfoCard */}
+        <div className="hidden sm:flex flex-wrap gap-6 relative">
+          {displayCompany.map((c, i) => (
+            <div
+              key={i}
+              className="relative"
+              onMouseEnter={() => setHoveredFavoriteIndex(i)}
+              onMouseLeave={() => setHoveredFavoriteIndex(null)}
+            >
+              <CompanyCard company={c} />
+              {/* ✅ InfoCard chỉ hiển thị khi hover trên desktop */}
+              <div
+                className={`absolute top-3 -left-16 mt-2 z-50 transition-all duration-500
+                  ${
+                    hoveredFavoriteIndex === i
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 -translate-y-2 pointer-events-none"
+                  }
+                `}
+              >
+                <InfoCard company={c} />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
