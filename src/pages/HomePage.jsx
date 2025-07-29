@@ -2,12 +2,8 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CompanyCard from "../components/CompanyCard"; // Import CompanyCard
-
-import InfoCard from "../components/InfoCard"; // Import InfoCard nếu bạn muốn hover effect
-import CardJob from "../components/card/CardJob";
-import CardCompany from "../components/card/CardCompany";
-import HotJobs from "../pages/HotJobs";
-import HotJobHome from "../pages/HotJobHome";
+import InfoCard from "../components/InfoCard"; // Import InfoCard for hover effect
+import CardJob from "../components/card/CardJob"; // Make sure this is still needed or remove if unused
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -16,53 +12,74 @@ import {
   callFetchJob,
   callFetchCompanyLikest,
   callFetchAllSkill,
-} from "../config/api"; // Import callFetchAllSkill và các API khác
+} from "../config/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faArrowLeft,
-  faArrowRight,
-  faAngleRight, // Thêm faAngleRight cho nút "Xem thêm"
+  faAngleRight, // Used for "Xem thêm" button
 } from "@fortawesome/free-solid-svg-icons";
 
-// Import các thành phần Ant Design và utils cần thiết cho thanh tìm kiếm
-import { Select, notification } from "antd";
+// Import Ant Design components and utils
+import { Select, notification, Input } from "antd"; // Import Input from Ant Design
 import { LOCATION_LIST } from "../config/utils";
 import queryString from "query-string";
 import { sfIn } from "spring-filter-query-builder";
+import HotJobHome from "../pages/HotJobHome"; // Make sure this component is correctly implemented and used
+import HotJobs from "./HotJobs";
+const { Option } = Select;
 
-const { Option } = Select; // Destructure Option từ Select
-
-const HomePage = (props) => {
-  var settings = {
+const HomePage = () => {
+  // Slider settings for "Nhà tuyển dụng nổi bật"
+  const sliderSettings = {
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 4,
-    slidesToScroll: 3,
-    arrows: true,
-    autoplay: true, // ← Bật tự động chạy
-    autoplaySpeed: 1000, // ← Thời gian giữa mỗi lần chuyển (ms)
-    className: "myCustomCarousel",
+    slidesToScroll: 1, // Change to 1 for smoother transitions
+    autoplay: true,
+    autoplaySpeed: 3000, // Adjusted autoplay speed for better user experience
+    arrows: true, // Keep arrows for navigation
+    responsive: [
+      {
+        breakpoint: 1200, // lg
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 992, // md
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 600, // sm
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: false, // Hide arrows on small screens for better touch experience
+        },
+      },
+    ],
   };
-  const { showPagination = false } = props;
 
   const [displayJob, setDisplayJob] = useState(null);
   const [displayCompanyLikest, setDisplayCompanyLikest] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Consider using for loading states in general
 
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(4);
+  const [pageSize, setPageSize] = useState(4); // For general job fetching (if applicable)
   const [total, setTotal] = useState(0);
   const [filter, setFilter] = useState("");
   const [sortQuery, setSortQuery] = useState("sort=updatedAt,desc");
   const navigate = useNavigate();
-  const [searchParamsUrl, setSearchParamsUrl] = useSearchParams(); // Đổi tên để tránh xung đột nếu có
+  const location = useLocation(); // For reacting to URL changes
 
-  // === THÊM DÒNG NÀY ĐỂ KHẮC PHỤC LỖI ===
+  // State for hover effect on "Công ty được yêu thích" section
   const [hoveredFavoriteIndex, setHoveredFavoriteIndex] = useState(null);
-  // ======================================
 
-  // === THÊM CÁC STATE VÀ LOGIC TỪ HEADER SANG ĐÂY ===
+  // States and logic for the search bar (transferred from Header)
   const optionsLocation = LOCATION_LIST;
   const [optionsSkills, setOptionsSkills] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
@@ -71,11 +88,11 @@ const HomePage = (props) => {
     name: "",
     salary: "",
     level: [],
-    current: 1, // Đây là current cho việc search, không phải cho pagination của job
-    pageSize: 15, // Đây là pageSize cho việc search, không phải cho pagination của job
+    current: 1,
+    pageSize: 15,
   });
 
-  // Fetch danh sách skill từ backend (chuyển từ Header)
+  // Fetch skill list from backend
   useEffect(() => {
     const fetchSkill = async () => {
       let query = `page=1&size=100&sort=createdAt,desc`;
@@ -96,6 +113,7 @@ const HomePage = (props) => {
     setSearchParams({ ...searchParams, name: e.target.value });
   };
 
+  // Function to build query string for search
   const buildQuery = (params, sort, filter) => {
     const clone = { ...params };
     let parts = [];
@@ -133,7 +151,6 @@ const HomePage = (props) => {
     } else {
       temp = `${temp}&${sortBy}`;
     }
-    // console.log("Base query:", temp); // Giữ console.log để debug nếu cần
     return temp;
   };
 
@@ -150,8 +167,8 @@ const HomePage = (props) => {
 
     if (!finalQuery) {
       notification.error({
-        message: "Có lỗi xảy ra",
-        description: "Vui lòng chọn tiêu chí để search",
+        message: "Lỗi tìm kiếm",
+        description: "Vui lòng nhập từ khóa hoặc chọn tiêu chí để tìm kiếm.",
       });
       return;
     }
@@ -169,13 +186,11 @@ const HomePage = (props) => {
       pageSize: 15,
     });
   };
-  // === KẾT THÚC THÊM CÁC STATE VÀ LOGIC TỪ HEADER ===
 
-  const location = useLocation(); // Giữ location vì nó vẫn được dùng trong useEffect fetchJob
-
+  // Fetch jobs (if any section on homepage displays them directly)
   useEffect(() => {
     fetchJob();
-    fetchCompanyLikest(); // Gọi API để lấy danh sách công ty được yêu thích
+    fetchCompanyLikest(); // Fetch liked companies
   }, [current, pageSize, filter, sortQuery, location]);
 
   const fetchJob = async () => {
@@ -189,7 +204,6 @@ const HomePage = (props) => {
     }
 
     const res = await callFetchJob(query);
-    console.log("res job", res);
     if (res && res.data) {
       setDisplayJob(res.data.result);
       setTotal(res.data.meta.total);
@@ -200,14 +214,14 @@ const HomePage = (props) => {
   const fetchCompanyLikest = async () => {
     setIsLoading(true);
     const res = await callFetchCompanyLikest();
-    console.log("res likest company", res);
     if (res && res.data) {
-      // Chỉ lấy 4 công ty đầu tiên nếu có nhiều hơn
+      // Slice to display only 4 companies for the "yêu thích" section
       setDisplayCompanyLikest(res.data.slice(0, 4));
     }
     setIsLoading(false);
   };
 
+  // Pagination for general jobs (if any)
   const handleOnchangePage = (pagination) => {
     if (pagination.current < 1) return;
 
@@ -227,10 +241,13 @@ const HomePage = (props) => {
   const totalJobPages = Math.ceil(total / pageSize);
 
   const renderPageNumbers = (totalPages, currentPage, onChange) => {
+    // Only render pagination if needed
+    if (totalPages <= 1) return null;
+
     return Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
       <span
         key={num}
-        className={currentPage === num ? "active" : ""}
+        className={currentPage === num ? "active" : ""} // Consider converting to Tailwind classes
         onClick={() => onChange({ current: num, pageSize })}
       >
         {num}
@@ -239,27 +256,82 @@ const HomePage = (props) => {
   };
 
   return (
-    <div className="homepage-wrapper">
+    <div className="overflow-x-hidden homepage-wrapper bg-gray-50 min-h-screen">
       <Header />
-      <div className="search_input ">
-        <div className="search-section my-12 px-4">
-          <div className="text-3xl md:text-4xl font-bold text-center text-white  mb-8">
+
+      {/* ======== SEARCH SECTION ======== */}
+      <div className="search_input">
+        <div className="search-section  py-12 px-4 shadow-inner">
+          <div className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white text-center mb-8 drop-shadow-md">
             Tìm kiếm công việc mơ ước của bạn
           </div>
 
-          <div className=" p-6 rounded-xl shadow-lg max-w-screen-lg mx-auto">
-            <div className=" flex flex-wrap gap-4 justify-between">
-              {/* Ô nhập nội dung tìm kiếm */}
-              <input
-                type="text"
-                placeholder="Tìm kiếm theo công việc, công ty..."
-                value={searchParams.name}
-                onChange={handleSearchChange}
-                className="flex-1 bg-white ml-3 min-w-[720px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1C9EAF]"
-              />
-              {/* Nút Tìm kiếm */}
+          <div className="bg-white p-6 md:p-8 rounded-xl shadow-xl max-w-screen-lg mx-auto border border-gray-100">
+            <div className="flex flex-col md:flex-row gap-4 justify-center items-stretch md:items-end">
+              {/* Search Input */}
+              <div className="flex-grow">
+                <label htmlFor="job-search" className="sr-only">
+                  Tìm kiếm theo công việc, công ty...
+                </label>
+                <Input
+                  id="job-search"
+                  type="text"
+                  placeholder="Tìm kiếm theo công việc, công ty..."
+                  value={searchParams.name}
+                  onChange={handleSearchChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] focus:border-transparent text-base"
+                />
+              </div>
+
+              {/* Location Filter */}
+              <div className="w-full md:w-auto md:min-w-[200px]">
+                <label htmlFor="location-filter" className="sr-only">
+                  Địa điểm
+                </label>
+                <Select
+                  id="location-filter"
+                  mode="multiple"
+                  allowClear
+                  placeholder="Địa điểm"
+                  style={{ width: "100%" }}
+                  value={selectedLocation}
+                  onChange={(value) => setSelectedLocation(value)}
+                  className="custom-select-antd h-[44px]" // Ensure height matches input
+                >
+                  {optionsLocation.map((loc) => (
+                    <Option key={loc.value} value={loc.value}>
+                      {loc.label}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+
+              {/* Skills Filter */}
+              <div className="w-full md:w-auto md:min-w-[200px]">
+                <label htmlFor="skills-filter" className="sr-only">
+                  Kỹ năng
+                </label>
+                <Select
+                  id="skills-filter"
+                  mode="multiple"
+                  allowClear
+                  placeholder="Kỹ năng"
+                  style={{ width: "100%" }}
+                  value={selectedSkills}
+                  onChange={(value) => setSelectedSkills(value)}
+                  className="custom-select-antd h-[44px]" // Ensure height matches input
+                >
+                  {optionsSkills.map((skill) => (
+                    <Option key={skill.value} value={skill.value}>
+                      {skill.label}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+
+              {/* Search Button */}
               <button
-                className="bg-[#1C9EAF] rounded text-white px-4 py-2 rounded-lg hover:bg-[#1C9EAF]/90 focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] flex items-center justify-center gap-2"
+                className="w-full md:w-auto bg-[#1C9EAF] text-white px-6 py-3 rounded hover:bg-[#167D8D] focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] focus:ring-opacity-50 flex items-center justify-center gap-2 text-base font-semibold transition-colors duration-300"
                 onClick={handleSearch}
               >
                 <svg
@@ -276,47 +348,10 @@ const HomePage = (props) => {
                 </svg>
                 Tìm kiếm
               </button>
-              {/* Lọc địa điểm */}
-              <div className="min-w-[250px] flex-1">
-                <Select
-                  mode="multiple"
-                  allowClear
-                  placeholder="Địa điểm"
-                  style={{ width: "100%" }}
-                  value={selectedLocation}
-                  onChange={(value) => setSelectedLocation(value)}
-                  className="custom-select"
-                >
-                  {optionsLocation.map((loc) => (
-                    <Option key={loc.value} value={loc.value}>
-                      {loc.label}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
 
-              {/* Lọc kỹ năng */}
-              <div className="min-w-[200px] flex-1">
-                <Select
-                  mode="multiple"
-                  allowClear
-                  placeholder="Kỹ năng"
-                  style={{ width: "100%" }}
-                  value={selectedSkills}
-                  onChange={(value) => setSelectedSkills(value)}
-                  className="custom-select"
-                >
-                  {optionsSkills.map((skill) => (
-                    <Option key={skill.value} value={skill.value}>
-                      {skill.label}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
-
-              {/* Nút Xóa bộ lọc */}
+              {/* Clear Filters Button */}
               <button
-                className=" rounded bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                className="w-full md:w-auto bg-gray-200 text-gray-700 px-6 py-3 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 text-base font-semibold transition-colors duration-300"
                 onClick={handleClearFilters}
               >
                 Xóa lọc
@@ -325,65 +360,57 @@ const HomePage = (props) => {
           </div>
         </div>
       </div>
-
-      <main className="main-content">
-        {/* ======== THANH TÌM KIẾM ======== */}
-
-        {/* slide */}
-        <div className="mt-10  ml-10" style={{ background: "" }}>
-          <p className="text-2xl font-semibold " style={{ color: "#1C9EAF" }}>
+      <main className="main-content px-4 py-8 md:px-10 lg:px-20">
+        {/* ======== FEATURED RECRUITERS SLIDER ======== */}
+        <section className="mt-10 mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#1C9EAF] mb-6 text-center md:text-left">
             NHÀ TUYỂN DỤNG NỔI BẬT
-          </p>{" "}
-          <Slider {...settings}>
-            {displayCompanyLikest.map((c, i) => (
-              <div
-                key={i}
-                className="relative"
-                onMouseEnter={() => setHoveredFavoriteIndex(i)}
-                onMouseLeave={() => setHoveredFavoriteIndex(null)}
-              >
-                <CardCompany company={c} />
+          </h2>
+          <Slider {...sliderSettings}>
+            {displayCompanyLikest.length > 0 ? (
+              displayCompanyLikest.map((c, i) => (
+                <div key={i} className="px-2">
+                  {" "}
+                  {/* Added padding for slider items */}
+                  <CompanyCard company={c} />{" "}
+                  {/* Use CompanyCard directly here */}
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-500 py-10">
+                Không có nhà tuyển dụng nổi bật nào để hiển thị.
               </div>
-            ))}
+            )}
           </Slider>
-        </div>
-        {/* -------- Featured Companies (đã chỉnh sửa để không cuộn ngang) -------- */}
-        <div className="HotCompany "  style={{ padding: "0px" }}>
-          {" "}
-          {/* Bỏ ml-20 o */}
-          <div className="mt-10 flex flex-col md:flex-row items-center md:justify-start ml-10">
-            {" "}
-            {/* Thêm ml-10 và căn chỉnh */}
-            <p className="text-2xl font-semibold " style={{ color: "#1C9EAF" }}>
+        </section>
+
+        {/* ======== MOST LIKED COMPANIES GRID ======== */}
+        <section className="mt-10 mb-16">
+          <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1C9EAF] mb-3 md:mb-0 text-center md:text-left">
               CÔNG TY ĐƯỢC YÊU THÍCH
-            </p>
-            <div className="rounded-full border md:w-auto h-[30px] pl-2.5 ml-[10px] mt-2 md:mt-0">
-              {" "}
-              {/* Thêm mt-2 md:mt-0 cho responsive */}
-              <div
-                className="width-30 cursor-pointer hover:text-[#1C9EAF] duration-300"
-                onClick={() => navigate("/company_list")}
-              >
-                <span className=" text-xs mr-2 ">Xem thêm</span>
-                <FontAwesomeIcon
-                  icon={faAngleRight}
-                  className="text-xs mr-2 "
-                />
-              </div>
+            </h2>
+            <div
+              className="inline-flex items-center rounded-full border border-gray-300 h-[38px] px-4 cursor-pointer text-sm text-gray-700 hover:text-[#1C9EAF] hover:border-[#1C9EAF] transition-colors duration-300"
+              onClick={() => navigate("/company_list")}
+            >
+              <span className="mr-2">Xem thêm</span>
+              <FontAwesomeIcon icon={faAngleRight} />
             </div>
           </div>
-          <div className="mb-20 ml-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
-              {displayCompanyLikest.map((c, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+            {displayCompanyLikest.length > 0 ? (
+              displayCompanyLikest.map((c, i) => (
                 <div
                   key={i}
-                  className="relative" // Bỏ mr-9
+                  className="relative group" // Added group class for hover
                   onMouseEnter={() => setHoveredFavoriteIndex(i)}
                   onMouseLeave={() => setHoveredFavoriteIndex(null)}
                 >
                   <CompanyCard company={c} />
+                  {/* InfoCard appears on hover, hidden on small screens */}
                   <div
-                    className={`absolute top-3 -left-16 mt-2 z-50 transition-all duration-900
+                    className={`absolute top-3 left-1/2 -translate-x-1/2 mt-2 w-[300px] z-50 transition-all duration-300 hidden md:block
                       ${
                         hoveredFavoriteIndex === i
                           ? "opacity-100 translate-y-0"
@@ -394,15 +421,20 @@ const HomePage = (props) => {
                     <InfoCard company={c} />
                   </div>
                 </div>
-              ))}
-            </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center text-gray-500 py-10">
+                Không có công ty nào được yêu thích để hiển thị.
+              </div>
+            )}
           </div>
-        </div>
-        <div className="">
-          <HotJobHome showHeader={false} />
-        </div>
+        </section>
       </main>
-
+      {/* ======== HOT JOBS SECTION (from HotJobHome component) ======== */}
+      <section className="mt-10">
+        <HotJobs showHeader={false} />{" "}
+        {/* Assuming HotJobHome handles its own title */}
+      </section>
       <Footer />
     </div>
   );

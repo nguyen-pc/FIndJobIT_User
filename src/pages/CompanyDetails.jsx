@@ -125,7 +125,7 @@ function CompanyDetails() {
   };
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <Header />
 
       <CompanyBanner company={companyDetail} />
@@ -148,33 +148,40 @@ function CompanyDetails() {
         </div>
 
         {/* Cột phải: Danh sách việc làm */}
-        <div className="lg:w-2/4 w-full -ml-6">
-          <div className="flex gap-2 mb-4 bg-white rounded p-2 text-xs">
-            <div className="text-gray-800 mt-3 ml-20 mr-10 ">
+        <div className="lg:w-2/4 w-full ">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 md:gap-4 mb-4 bg-white rounded-lg p-3 sm:p-4 shadow-sm">
+            {/* Follower Count */}
+            <div className="text-gray-800 text-sm md:text-base font-medium flex-shrink-0">
               {followerCount} người đang theo dõi
             </div>
-            <button
-              onClick={handleFollowClick}
-              className={`block items-center gap-2 px-4 py-2 font-semibold rounded hover:text-[#1c9eaf] ${
-                isFollowing ? " text-[#1c9eaf]" : " "
-              }`}
-            >
-              <FaHeart
-                className={`inline w-5 h-5 mr-2 mb-1 ${
-                  isFollowing ? "text-[#1c9eaf]" : " hover:text-[#1c9eaf]"
-                }`}
-              />
-              <div>{isFollowing ? "Đang theo dõi" : "Theo dõi"}</div>
-            </button>
 
-            <button
-              onClick={handleCopy}
-              className={`block items-center gap-2 px-4 py-2 rounded hover:text-[#1c9eaf]
-              `}
-            >
-              <FaCopy className={`  inline w-5 h-5 mr-2 mb-1 `} />
-              <div className=" font-semibold"> Sao chép Link</div>
-            </button>
+            <div className="flex flex-col sm:flex-row  items-center gap-3">
+              {/* Follow Button */}
+              <button
+                onClick={handleFollowClick}
+                className={`flex items-center gap-2 rounded px-4 py-2 text-sm sm:text-base font-semibold rounded-full border transition-all duration-300
+        ${
+          isFollowing
+            ? "bg-[#1C9EAF] text-white border-[#1C9EAF] hover:bg-[#167D8D] hover:border-[#167D8D]"
+            : "text-[#1C9EAF] border-[#1C9EAF] hover:bg-[#1C9EAF] hover:text-white"
+        }
+      `}
+              >
+                <FaHeart className="w-4 h-4" />{" "}
+                {/* Reduced icon size for better fit */}
+                <span>{isFollowing ? "Đang theo dõi" : "Theo dõi"}</span>
+              </button>
+
+              {/* Copy Link Button */}
+              <button
+                onClick={handleCopy}
+                className="flex rounded items-center gap-2 px-4 py-2 text-sm sm:text-base font-semibold rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-all duration-300"
+              >
+                <FaCopy className="w-4 h-4" />{" "}
+                {/* Reduced icon size for better fit */}
+                <span>Sao chép Link</span>
+              </button>
+            </div>
           </div>
 
           {jobOfCompany && jobOfCompany.length > 0 ? (
