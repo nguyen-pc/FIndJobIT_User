@@ -289,7 +289,7 @@ const Header = () => {
         <div className="flex gap-4 absolute left-10">
           <Link
             to="/"
-            className="logo text-2xl font-bold text-[#1C9EAF] flex-shrink-0"
+            className="logo ml-[30px]text-2xl font-bold text-[#1C9EAF] flex-shrink-0"
           >
             NextDev
           </Link>
@@ -327,13 +327,15 @@ const Header = () => {
               sx={{
                 color: "#1C9EAF",
                 textDecoration: "none",
+                textTransform: "none",
+                whiteSpace: "nowrap",
                 "&:hover": {
                   color: "#177F8A",
                   backgroundColor: "transparent",
                 },
               }}
             >
-              Công cụ
+              <span className="text-sm font-medium">Công cụ</span>
             </Button>
           </Dropdown>
         </nav>

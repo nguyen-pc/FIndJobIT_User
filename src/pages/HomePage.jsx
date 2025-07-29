@@ -266,7 +266,7 @@ const HomePage = () => {
             Tìm kiếm công việc mơ ước của bạn
           </div>
 
-          <div className="bg-white p-6 md:p-8 rounded-xl shadow-xl max-w-screen-lg mx-auto border border-gray-100">
+          <div className="bg-white-opacity-30 p-6 md:p-8 rounded-xl shadow-xl max-w-screen-lg mx-auto border border-gray-100">
             <div className="flex flex-col md:flex-row gap-4 justify-center items-stretch md:items-end">
               {/* Search Input */}
               <div className="flex-grow">
@@ -279,7 +279,7 @@ const HomePage = () => {
                   placeholder="Tìm kiếm theo công việc, công ty..."
                   value={searchParams.name}
                   onChange={handleSearchChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] focus:border-transparent text-base"
+                  className="w-full p-[0.6rem]! border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1C9EAF] focus:border-transparent text-base "
                 />
               </div>
 
@@ -435,7 +435,7 @@ const HomePage = () => {
         <HotJobs showHeader={false} />{" "}
         {/* Assuming HotJobHome handles its own title */}
       </section>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
