@@ -286,7 +286,7 @@ const Header = () => {
     <header className="header bg-white shadow-md sticky top-0 z-50 ">
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
         {/* Logo và Thanh tìm kiếm */}
-        <div className="flex gap-4 absolute left-10">
+        <div className="flex gap-4 absolute ml-[-40px]">
           <Link
             to="/"
             className="logo ml-[30px]text-2xl font-bold text-[#1C9EAF] flex-shrink-0"
@@ -313,7 +313,7 @@ const Header = () => {
             <div
               onClick={() => navigate(`${item.path}`)}
               // Thay đổi màu mặc định và loại bỏ gạch chân cho Link
-              className="text-sm text-[#1C9EAF] no-underline hover:text-[#177F8A] font-medium transition-colors duration-200 cursor-pointer w-[100px]"
+              className="text-l text-[#1C9EAF] no-underline hover:text-[#177F8A] font-medium transition-colors duration-200 cursor-pointer w-[100px]"
             >
               {item.label}
             </div>
@@ -335,7 +335,7 @@ const Header = () => {
                 },
               }}
             >
-              <span className="text-sm font-medium">Công cụ</span>
+              <span className="text-l font-medium">Công cụ</span>
             </Button>
           </Dropdown>
         </nav>

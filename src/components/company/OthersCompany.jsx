@@ -92,7 +92,7 @@ const OtherCompanies = () => {
       </div>
 
       {/* Danh sách công ty */}
-      <div className="w-full mt-6 mb-20">
+      <div className="w-full mb-20">
         {/* ✅ Mobile: cuộn ngang */}
         <div className="block sm:hidden overflow-x-auto">
           <div className="flex gap-4 w-max pb-2">
@@ -105,11 +105,11 @@ const OtherCompanies = () => {
         </div>
 
         {/* ✅ Desktop: dạng lưới có hover InfoCard */}
-        <div className="hidden sm:flex flex-wrap gap-6 relative">
+        <div className="hidden sm:flex flex-wrap gap-6 relative ">
           {allCompany.map((c, i) => (
             <div
               key={i}
-              className="relative"
+              className="relative mr-6"
               onMouseEnter={() => setHoveredOtherIndex(i)}
               onMouseLeave={() => setHoveredOtherIndex(null)}
             >

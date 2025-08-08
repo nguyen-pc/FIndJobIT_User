@@ -386,8 +386,8 @@ const HomePage = () => {
 
         {/* ======== MOST LIKED COMPANIES GRID ======== */}
         <section className="mt-10 mb-16">
-          <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-[#1C9EAF] mb-3 md:mb-0 text-center md:text-left">
+          {/* <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#1C9EAF] mb-3 md:mb-0 text-center md:text-left justify-center">
               CÔNG TY ĐƯỢC YÊU THÍCH
             </h2>
             <div
@@ -397,7 +397,10 @@ const HomePage = () => {
               <span className="mr-2">Xem thêm</span>
               <FontAwesomeIcon icon={faAngleRight} />
             </div>
-          </div>
+          </div> */}
+          <h2 className="text-2xl md:text-3xl font-bold text-[#1C9EAF] mb-6 text-center md:text-left">
+            DANH SÁCH CÔNG TY ĐƯỢC YÊU THÍCH
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
             {displayCompanyLikest.length > 0 ? (
               displayCompanyLikest.map((c, i) => (

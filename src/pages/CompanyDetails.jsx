@@ -131,7 +131,7 @@ function CompanyDetails() {
       <CompanyBanner company={companyDetail} />
 
       {/* Layout 2 cột */}
-      <div className="flex flex-col lg:flex-row gap-8 px-8 mt-8">
+      <div className="flex flex-col lg:flex-row gap-8 px-8 mt-8 ml-8 mr-8">
         {/* Cột trái: Giới thiệu & Liên hệ */}
         <div className="lg:w-2/4 w-full ">
           <CompanyAboutUs
@@ -141,6 +141,7 @@ function CompanyDetails() {
             bulletPoints={bulletPoints}
             onSeeMore={handleSeeMore}
           />
+          <div className="mt-10"></div>
           <CompanyContact
             title="Thông tin liên hệ"
             address={companyDetail?.address}

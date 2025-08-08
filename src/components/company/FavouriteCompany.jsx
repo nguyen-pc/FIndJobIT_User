@@ -56,7 +56,7 @@ function FavoriteCompany() {
           {displayCompany.map((c, i) => (
             <div
               key={i}
-              className="relative"
+              className="relative mr-6"
               onMouseEnter={() => setHoveredFavoriteIndex(i)}
               onMouseLeave={() => setHoveredFavoriteIndex(null)}
             >
