@@ -15,7 +15,7 @@ const mockCompany = {
   description: `<p><strong>NextDev</strong> là công ty chuyên phát triển giải pháp phần mềm và hỗ trợ sinh viên ngành CNTT tiếp cận thị trường việc làm.</p><ul><li>Giải pháp công nghệ tuyển dụng</li><li>Hệ thống hỗ trợ sinh viên</li><li>Dịch vụ tư vấn nhân sự</li></ul>`,
 };
 
-const CompanyManagement = () => {
+const CompanyManagement = ({isLoading}) => {
   const navigate = useNavigate();
   const [displayUser, setDisplayUser] = useState(null);
   const [companyDetails, setCompanyDetails] = useState(null);

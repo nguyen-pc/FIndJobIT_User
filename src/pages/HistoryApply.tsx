@@ -46,6 +46,28 @@ const HistoryApply = () => {
     {
       title: "Trạng thái",
       dataIndex: "status",
+      render: (status: string) => {
+        let color = "";
+        // Chuyển đổi trạng thái về chữ thường để so sánh
+        switch (status.toLowerCase()) {
+          case "reject":
+          case "rejected":
+            color = "red";
+            break;
+          case "pending":
+            color = "orange";
+            break;
+          case "approved":
+            color = "green";
+            break;
+          case "review":
+            color = "blue";
+            break;
+          default:
+            color = "black";
+        }
+        return <span style={{ color }}>{status}</span>;
+      },
     },
     {
       title: "Ngày rải CV",
@@ -75,7 +97,7 @@ const HistoryApply = () => {
     <div className="">
       <Header />
       <div className="main-content">
-        <div className="text-3xl text-[#1C9EAF]  text-center mb-4 font-medium  ">
+        <div className="text-3xl text-[#1C9EAF] text-center mb-4 font-medium">
           Lịch sử ứng tuyển
         </div>
         <Table<IResume>
